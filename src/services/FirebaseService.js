@@ -4,6 +4,7 @@ import "firebase/auth";
 import store from "../store.js";
 const POSTS = "posts";
 const PORTFOLIOS = "portfolios";
+const AUTHS = "auths";
 
 // Setup Firebase
 const config = {
@@ -20,6 +21,26 @@ firebase.initializeApp(config);
 const firestore = firebase.firestore();
 
 export default {
+  getAuth() {
+    const authsCollection = firestore.collection(AUTHS);
+    return authsCollection
+      .orderBy("created_at", "desc")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          return data;
+        });
+      });
+  },
+  postAuth(uid, myauth, providerId) {
+    return firestore.collection(AUTHS).add({
+      uid,
+      myauth,
+      providerId,
+      created_at: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  },
   getPosts() {
     const postsCollection = firestore.collection(POSTS);
     return postsCollection
@@ -60,6 +81,25 @@ export default {
       img,
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
+  },
+  findAuth(uid, pId) {
+    let flag = false;
+    let authInfo = this.getAuth();
+    authInfo.then(r => {
+      for (let i = 0; i < r.length; i++) {
+        if (r[i].providerId == pId) {
+          if (r[i].uid == uid) {
+            flag = true;
+            break;
+          }
+        }
+      }
+      if (!flag) {
+        this.postAuth(uid, "visitor", pId);
+      }
+    });
+    // console.log(authInfo);
+    // console.log(authInfo.PromiseValue);
   },
   loginWithGoogle() {
     let provider = new firebase.auth.GoogleAuthProvider();
