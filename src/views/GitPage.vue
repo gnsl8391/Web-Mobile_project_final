@@ -22,8 +22,6 @@ export default {
   name: "GitPage",
   data: () => ({
     commits: [],
-    events: "",
-    me: "",
     merges: ""
   }),
   components: {
@@ -44,9 +42,11 @@ export default {
       this.commits.push(event_1);
       const response2 = GitlabService.getMerges(projectID);
       this.merges = response2;
+      // console.log(this.commits);
+      // console.log(this.merges);
     },
     init() {
-      let branches = [];
+      // let branches = [];
       const graphContainer = document.getElementById("gitGraph");
       const gitgraph = createGitgraph(graphContainer, {
         orientation: "vertical-reverse"
@@ -59,88 +59,108 @@ export default {
         subject: "Start project",
         author: "tastera"
       });
+      const develop = gitgraph.branch({
+        name: "develop",
+        author: "tastera"
+      });
       const commits = this.commits;
-      branches.push(master);
+      // branches.push(master);
       for (let k = 0; k < commits.length; k++) {
-        commits[k].then(r => {
-          for (let i = r.data.length - 1; i >= 0; i--) {
-            if (r.data[i].action_name == "pushed new") {
-              var b = gitgraph.branch(r.data[i].push_data.ref);
-              b.commit({
-                subject: r.data[i].push_data.commit_title,
-                author: r.data[i].author.username,
-                onClick() {
-                  window.open(
-                    `https://lab.ssafy.com/tastera/webmobile-sub2/commit/${
-                      r.data[i].push_data.commit_to
-                    }`
-                  );
-                },
-                onMessageClick() {
-                  window.open(
-                    `https://lab.ssafy.com/tastera/webmobile-sub2/commit/${
-                      r.data[i].push_data.commit_to
-                    }`
-                  );
-                }
-              });
-              b.checkout();
-              branches.push(b);
-            } else if (r.data[i].action_name == "accepted") {
-              branches.forEach(e => {
-                const merges = this.merges;
-                merges.then(m => {
-                  for (let j = 0; j < m.data.length; j++) {
-                    if (r.data[i].target_title == m.data[j].title) {
-                      if (e.name == m.data[j].source_branch) {
-                        master.merge({
-                          branch: e,
-                          commitOptions: {
-                            subject: r.data[i].target_title,
-                            author: r.data[i].author.username
-                          },
-                          onClick() {
-                            window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
-                                  ${r.data[i].push_data.commit_to}`);
-                          },
-                          onMessageClick() {
-                            window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
-                                  ${r.data[i].push_data.commit_to}`);
-                          }
-                        });
-                        return false;
-                      }
-                      return false;
-                    }
-                  }
-                });
-              });
-            } else if (r.data[i].action_name == "pushed to") {
-              branches.forEach(e => {
-                if (e.name == r.data[i].push_data.ref) {
-                  var title = r.data[i].push_data.commit_title;
-                  if (title.substr(0, 5) != "Merge") {
-                    e.commit({
-                      subject: r.data[i].push_data.commit_title,
-                      author: r.data[i].author.username,
-                      onClick() {
-                        window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
-                            ${r.data[i].push_data.commit_to}`);
-                      },
-                      onMessageClick() {
-                        window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
-                            ${r.data[i].push_data.commit_to}`);
-                      }
-                    });
-                    e.checkout();
-                    return false;
-                  }
-                  return false;
-                }
-              });
+        commits[k].then(response => {
+          for (let i = response.data.length - 1; i > -1; i--) {
+            console.log(response.data[i]);
+            if (
+              response.data[i].action_name == "pushed new" &&
+              response.data[i].push_data.ref != "master" &&
+              response.data[i].push_data.ref != "developers" &&
+              response.data[i].push_data.ref != "develop"
+            ) {
+              var exbranch = gitgraph.branch(response.data[i].push_data.ref);
+              exbranch.checkout();
+            } else if (response.data[i].action_name == "pushed to") {
+              console.log("hello")
             }
           }
-        });
+        })
+      //   commits[k].then(r => {
+      //     for (let i = r.data.length - 1; i >= 0; i--) {
+      //       if (r.data[i].action_name == "pushed new") {
+      //         var b = gitgraph.branch(r.data[i].push_data.ref);
+      //         b.commit({
+      //           subject: r.data[i].push_data.commit_title,
+      //           author: r.data[i].author.username,
+      //           onClick() {
+      //             window.open(
+      //               `https://lab.ssafy.com/tastera/webmobile-sub2/commit/${
+      //                 r.data[i].push_data.commit_to
+      //               }`
+      //             );
+      //           },
+      //           onMessageClick() {
+      //             window.open(
+      //               `https://lab.ssafy.com/tastera/webmobile-sub2/commit/${
+      //                 r.data[i].push_data.commit_to
+      //               }`
+      //             );
+      //           }
+      //         });
+      //         b.checkout();
+      //         branches.push(b);
+      //       } else if (r.data[i].action_name == "accepted") {
+      //         branches.forEach(e => {
+      //           const merges = this.merges;
+      //           merges.then(m => {
+      //             for (let j = 0; j < m.data.length; j++) {
+      //               if (r.data[i].target_title == m.data[j].title) {
+      //                 if (e.name == m.data[j].source_branch) {
+      //                   master.merge({
+      //                     branch: e,
+      //                     commitOptions: {
+      //                       subject: r.data[i].target_title,
+      //                       author: r.data[i].author.username
+      //                     },
+      //                     onClick() {
+      //                       window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
+      //                             ${r.data[i].push_data.commit_to}`);
+      //                     },
+      //                     onMessageClick() {
+      //                       window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
+      //                             ${r.data[i].push_data.commit_to}`);
+      //                     }
+      //                   });
+      //                   return false;
+      //                 }
+      //                 return false;
+      //               }
+      //             }
+      //           });
+      //         });
+      //       } else if (r.data[i].action_name == "pushed to") {
+      //         branches.forEach(e => {
+      //           if (e.name == r.data[i].push_data.ref) {
+      //             var title = r.data[i].push_data.commit_title;
+      //             if (title.substr(0, 5) != "Merge") {
+      //               e.commit({
+      //                 subject: r.data[i].push_data.commit_title,
+      //                 author: r.data[i].author.username,
+      //                 onClick() {
+      //                   window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
+      //                       ${r.data[i].push_data.commit_to}`);
+      //                 },
+      //                 onMessageClick() {
+      //                   window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
+      //                       ${r.data[i].push_data.commit_to}`);
+      //                 }
+      //               });
+      //               e.checkout();
+      //               return false;
+      //             }
+      //             return false;
+      //           }
+      //         });
+      //       }
+      //     }
+      //   });
       }
     }
   }
