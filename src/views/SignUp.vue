@@ -30,12 +30,10 @@
           <v-flex xs12 sm5>
             <v-text-field
               :append-icon="show4 ? 'visibility' : 'visibility_off'"
-              :rules="[rules.required, rules.emailMatch]"
+              :rules="[rules.required]"
               :type="show4 ? 'text' : 'password'"
               label="비밀번호 확인"
-              hint="비밀번호가 일치하지 않"
-              value="Pa"
-              error
+              hint="일치하는 비밀번호를 입력하세요."
               @click:append="show4 = !show4"
             ></v-text-field>
           </v-flex>
@@ -48,27 +46,20 @@
           required
         ></v-text-field>
         <v-text-field
-          v-model="name"
+          v-model="phone"
           :counter="10"
-          :rules="nameRules"
           label="전화번호"
           required
         ></v-text-field>
-        <v-checkbox
-          v-model="checkbox"
-          :rules="[v => !!v || 'You must agree to continue!']"
-          label="Do you agree?"
-          required
-        ></v-checkbox>
-        <v-btn :disabled="!valid" color="success" @click="validate">
-          Validate
-        </v-btn>
-        <v-btn color="error" @click="reset">
-          Reset Form
-        </v-btn>
-        <v-btn color="warning" @click="resetValidation">
-          Reset Validation
-        </v-btn>
+        <v-layout style="float:right; margin : 10px 0px;">
+          <v-btn :disabled="!valid" outline color="indigo" @click="validate">
+            회원가입
+          </v-btn>
+          <v-btn outline color="warning" @click="reset">
+            초기화
+          </v-btn>
+        </v-layout>
+        <div style="clear:both;" />
       </v-form>
     </v-container>
   </div>
@@ -86,6 +77,7 @@ export default {
       v => !!v || "Name is required",
       v => (v && v.length <= 10) || "Name must be less than 10 characters"
     ],
+    phone: "",
     email: "",
     emailRules: [
       v => !!v || "E-mail is required",
@@ -98,7 +90,7 @@ export default {
     show4: false,
     rules: {
       required: value => !!value || "Required.",
-      min: v => v.length >= 8 || "Min 8 characters",
+      min: v => (v && v.length >= 8) || "Min 8 characters",
       emailMatch: () => "The email and password you entered don't match"
     }
   }),
