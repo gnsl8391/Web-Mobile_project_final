@@ -82,12 +82,14 @@ export default {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
+      FirebaseService.findAuth(result.user.uid, "google.com");
       this.$router.push("/");
     },
     async loginWithFacebook() {
       const result = await FirebaseService.loginWithFacebook();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
+      FirebaseService.findAuth(result.user.uid, "facebook.com");
       this.$router.push("/");
     },
     async createAccount() {
