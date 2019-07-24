@@ -5,10 +5,7 @@
     </v-flex>
     <v-flex sm12 hidden-xs-only>
       <h1 style="color:#6666ff; margin-left : 10%">Git Graph</h1>
-      <div
-        id="gitGraph"
-        style="overflow:scroll; width:90%; height:1000px; margin:0 auto;"
-      ></div>
+      <div id="gitGraph"></div>
     </v-flex>
   </v-layout>
 </template>
@@ -42,29 +39,31 @@ export default {
       this.commits.push(event_1);
       const response2 = GitlabService.getMerges(projectID);
       this.merges = response2;
-      // console.log(this.commits);
-      // console.log(this.merges);
+      console.log(this.merges);
     },
     init() {
-      // let branches = [];
+      let branches = [];
       const graphContainer = document.getElementById("gitGraph");
       const gitgraph = createGitgraph(graphContainer, {
         orientation: "vertical-reverse"
       });
       const master = gitgraph.branch({
         name: "master",
-        author: "tastera"
+        author: "tastera <SONG KUNHEE>"
       });
       master.commit({
         subject: "Start project",
-        author: "tastera"
+        author: "tastera <SONG KUNHEE>"
       });
       const develop = gitgraph.branch({
         name: "develop",
-        author: "tastera"
+        author: "tastera <SONG KUNHEE>"
+      });
+      develop.commit({
+        subject: "Develop branch generate",
+        author: "tastera <SONG KUNHEE>"
       });
       const commits = this.commits;
-      // branches.push(master);
       for (let k = 0; k < commits.length; k++) {
         commits[k].then(response => {
           for (let i = response.data.length - 1; i > -1; i--) {
@@ -77,11 +76,47 @@ export default {
             ) {
               var exbranch = gitgraph.branch(response.data[i].push_data.ref);
               exbranch.checkout();
+              branches.push(exbranch);
             } else if (response.data[i].action_name == "pushed to") {
-              console.log("hello")
+              branches.forEach(e_branch => {
+                if (e_branch.name == response.data[i].push_data.ref) {
+                  console.log(e_branch);
+                  e_branch.commit({
+                    subject: response.data[i].push_data.commit_title,
+                    author: `${response.data[i].author.username} <${
+                      response.data[i].author.name
+                    }>`
+                  });
+                  e_branch.checkout();
+                  return false;
+                }
+              });
+            } else if (response.data[i].action_name == "accepted") {
+              const merges = this.merges;
+              branches.forEach(e_branch => {
+                merges.then(e_merge => {
+                  for (let j = 0; j < e_merge.data.length; j++) {
+                    if (
+                      response.data[i].target_title == e_merge.data[j].title
+                    ) {
+                      if (e_branch.name == e_merge.data[j].source_branch) {
+                        develop.merge({
+                          branch: e_branch.name,
+                          commitOptions: {
+                            subject: response.data[i].target_title,
+                            author: `${response.data[i].author.username} <${
+                              response.data[i].author.name
+                            }>`
+                          }
+                        });
+                      }
+                    }
+                  }
+                });
+              });
             }
           }
-        })
+        });
       //   commits[k].then(r => {
       //     for (let i = r.data.length - 1; i >= 0; i--) {
       //       if (r.data[i].action_name == "pushed new") {
@@ -162,6 +197,7 @@ export default {
       //     }
       //   });
       }
+      console.log(branches)
     }
   }
 };
@@ -184,7 +220,7 @@ path {
 }
 svg {
   transform: scale(0.5);
-  margin-left: -600px;
-  margin-top: -2700px;
+  margin-left: -380px;
+  margin-top: -750px;
 }
 </style>
