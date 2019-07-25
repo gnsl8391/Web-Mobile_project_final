@@ -6,6 +6,8 @@ import PortfolioPage from "./views/PortfolioPage.vue";
 import LoginPage from "./views/LoginPage.vue";
 import GitPage from "./views/GitPage.vue";
 import SignUp from "./views/SignUp.vue";
+import AdminPage from "./views/AdminPage.vue";
+
 Vue.use(Router);
 
 export default new Router({
@@ -41,6 +43,11 @@ export default new Router({
       path: "/git",
       name: "git",
       component: GitPage
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: AdminPage
     }
   ]
 });

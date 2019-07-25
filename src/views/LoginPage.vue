@@ -40,7 +40,7 @@
             v-on:click="loginWithGoogle"
             style="width: 100%;"
           >
-            <v-icon size="25" class="mr-2">fa-google</v-icon>
+            <v-icon size="25" class="mr-2">fab fa-google</v-icon>
             Google 로그인
           </v-btn>
           <v-btn
@@ -50,7 +50,7 @@
             v-on:click="loginWithFacebook"
             style="width: 100%;"
           >
-            <v-icon size="25" class="mr-2">fa-facebook-square</v-icon>
+            <v-icon size="25" class="mr-2">fab fa-facebook-square</v-icon>
             Facebook 로그인
           </v-btn>
         </v-flex>
@@ -82,14 +82,18 @@ export default {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
-      FirebaseService.findAuth(result.user.uid, "google.com");
+      FirebaseService.postAuth(result.user.uid,"visitor",this.$store.state.user.email)
       this.$router.push("/");
     },
     async loginWithFacebook() {
       const result = await FirebaseService.loginWithFacebook();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
-      FirebaseService.findAuth(result.user.uid, "facebook.com");
+      if(this.$store.state.user.email){
+      FirebaseService.postAuth(result.user.uid,"visitor",this.$store.state.user.email);
+    }else{
+      FirebaseService.postAuth(result.user.uid,"visitor",this.$store.state.user.displayName);
+    }
       this.$router.push("/");
     },
     async createAccount() {
@@ -99,6 +103,9 @@ export default {
       const result = FirebaseService.loginWithEmail(this.email, this.password);
       this.$store.state.user = result;
       this.$router.push("/");
+      result.then(r => {
+        FirebaseService.postAuth(r.user.uid,"visitor",r.user.email)
+      })
     },
     async logout() {
       firebase
