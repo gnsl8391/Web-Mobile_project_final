@@ -21,25 +21,38 @@ firebase.initializeApp(config);
 const firestore = firebase.firestore();
 
 export default {
-  getAuth() {
-    const authsCollection = firestore.collection(AUTHS);
-    return authsCollection
-      .orderBy("created_at", "desc")
-      .get()
-      .then(docSnapshots => {
-        return docSnapshots.docs.map(doc => {
-          let data = doc.data();
-          return data;
-        });
+  getOneMebers(uid) {
+    const usersCollection = firestore.collection(AUTHS / +uid);
+    return usersCollection.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        return data;
       });
-  },
-  postAuth(uid, myauth, providerId) {
-    return firestore.collection(AUTHS).add({
-      uid,
-      myauth,
-      providerId,
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
+  },
+  getAllMembers() {
+    const usersCollection = firestore.collection(AUTHS);
+    return usersCollection.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        return data;
+      });
+    });
+  },
+  postAuth(uid, myauth, email) {
+    const docRef = firestore.doc("auths/" + uid);
+    docRef
+      .set({
+        uid: uid,
+        myauth: myauth,
+        email: email
+      })
+      .then(function() {
+       console.log("Statues saved!");
+      })
+      .catch(function(errer) {
+        alert(error);
+      });
   },
   getPosts() {
     const postsCollection = firestore.collection(POSTS);
@@ -82,25 +95,7 @@ export default {
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
-  findAuth(uid, pId) {
-    let flag = false;
-    let authInfo = this.getAuth();
-    authInfo.then(r => {
-      for (let i = 0; i < r.length; i++) {
-        if (r[i].providerId == pId) {
-          if (r[i].uid == uid) {
-            flag = true;
-            break;
-          }
-        }
-      }
-      if (!flag) {
-        this.postAuth(uid, "visitor", pId);
-      }
-    });
-    // console.log(authInfo);
-    // console.log(authInfo.PromiseValue);
-  },
+
   loginWithGoogle() {
     let provider = new firebase.auth.GoogleAuthProvider();
     return firebase
