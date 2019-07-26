@@ -79,6 +79,9 @@
         <v-btn v-else flat class="hidden-xs-only linkText" to="git">
           Git Project
         </v-btn>
+        <v-btn flat class="hidden-xs-only linkText" href="admin">
+          Management
+        </v-btn>
         <!-- 로그인 Modal Popup -->
         <v-dialog
           v-model="dialog"
