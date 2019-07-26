@@ -82,30 +82,78 @@ export default {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
-      FirebaseService.postAuth(result.user.uid,"visitor",this.$store.state.user.email)
+      const chk = FirebaseService.getOneMembers(result.user.uid);
+      chk.then(r => {
+        if (r) {
+          FirebaseService.postAuth(
+            result.user.uid,
+            r.myauth,
+            this.$store.state.user.email,
+            "google"
+          );
+        } else {
+          FirebaseService.postAuth(
+            result.user.uid,
+            "visitor",
+            this.$store.state.user.email,
+            "google"
+          );
+        }
+      });
+
       this.$router.push("/");
     },
     async loginWithFacebook() {
       const result = await FirebaseService.loginWithFacebook();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
-      if(this.$store.state.user.email){
-      FirebaseService.postAuth(result.user.uid,"visitor",this.$store.state.user.email);
-    }else{
-      FirebaseService.postAuth(result.user.uid,"visitor",this.$store.state.user.displayName);
-    }
+      const chk = FirebaseService.getOneMembers(result.user.uid);
+      chk.then(r => {
+        if (r) {
+          if (this.$store.state.user.email) {
+            FirebaseService.postAuth(
+              result.user.uid,
+              r.myauth,
+              this.$store.state.user.email,
+              "facebook"
+            );
+          } else {
+            FirebaseService.postAuth(
+              result.user.uid,
+              r.myauth,
+              this.$store.state.user.displayName,
+              "facebook"
+            );
+          }
+        } else {
+          if (this.$store.state.user.email) {
+            FirebaseService.postAuth(
+              result.user.uid,
+              "visitor",
+              this.$store.state.user.email,
+              "facebook"
+            );
+          } else {
+            FirebaseService.postAuth(
+              result.user.uid,
+              "visitor",
+              this.$store.state.user.displayName,
+              "facebook"
+            );
+          }
+        }
+      });
+
       this.$router.push("/");
     },
     async createAccount() {
-      await FirebaseService.createAccount(this.email, this.password);
+      const result = await FirebaseService.createAccount( this.email, this.password);
+      FirebaseService.postAuth(result.user.uid, "visitor", result.user.email, "email");
     },
     async loginWithEmail() {
       const result = FirebaseService.loginWithEmail(this.email, this.password);
       this.$store.state.user = result;
       this.$router.push("/");
-      result.then(r => {
-        FirebaseService.postAuth(r.user.uid,"visitor",r.user.email)
-      })
     },
     async logout() {
       firebase

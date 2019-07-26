@@ -20,9 +20,10 @@
       :search="search"
     >
       <template v-slot:items="props">
-        <td>{{ props.item.email }}</td>
-        <td class="text-xs-right">{{ props.item.uid }}</td>
-        <td class="text-xs-right">{{ props.item.myauth }}</td>
+        <td>{{ props.item.id }}</td>
+        <td>{{ props.item.root }}</td>
+        <td>{{ props.item.uid }}</td>
+        <td>{{ props.item.myauth }}</td>
       </template>
       <template v-slot:no-results>
         <v-alert :value="true" color="error" icon="warning">
@@ -43,7 +44,8 @@ import FirebaseService from "@/services/FirebaseService";
       return {
         search: '',
         headers: [
-          { text: 'Email', value: 'email' },
+          { text: 'ID', value: 'id' },
+          { text: 'Root', value: 'root'},
           { text: 'UID', value: 'uid' },
           { text: 'Auth', value: 'myauth' },
         ],

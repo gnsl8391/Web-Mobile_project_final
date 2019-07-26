@@ -21,13 +21,16 @@ firebase.initializeApp(config);
 const firestore = firebase.firestore();
 
 export default {
-  getOneMebers(uid) {
-    const usersCollection = firestore.collection(AUTHS / +uid);
-    return usersCollection.get().then(docSnapshots => {
-      return docSnapshots.docs.map(doc => {
-        let data = doc.data();
-        return data;
-      });
+  getOneMembers(uid) {
+    var cityRef = firestore.collection(AUTHS).doc(uid);
+    var getDoc = "";
+    return cityRef.get().then(doc => {
+      if (!doc.exists) {
+        return null;
+      } else {
+        getDoc = doc.data();
+        return getDoc;
+      }
     });
   },
   getAllMembers() {
@@ -39,20 +42,14 @@ export default {
       });
     });
   },
-  postAuth(uid, myauth, email) {
+  postAuth(uid, myauth, id, root) {
     const docRef = firestore.doc("auths/" + uid);
-    docRef
-      .set({
-        uid: uid,
-        myauth: myauth,
-        email: email
-      })
-      .then(function() {
-       console.log("Statues saved!");
-      })
-      .catch(function(errer) {
-        alert(error);
-      });
+    docRef.set({
+      uid: uid,
+      myauth: myauth,
+      id: id,
+      root: root
+    });
   },
   getPosts() {
     const postsCollection = firestore.collection(POSTS);
@@ -95,7 +92,6 @@ export default {
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
-
   loginWithGoogle() {
     let provider = new firebase.auth.GoogleAuthProvider();
     return firebase
@@ -123,7 +119,7 @@ export default {
       alert("Please enter a password.");
       return;
     }
-    firebase
+    return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(function(user) {
@@ -187,6 +183,7 @@ export default {
       if (user) {
         store.state.user = user;
         store.state.accessToken = user.email;
+        store.state.uid = user.uid;
       } else {
         // User is signed out.
         // ...
