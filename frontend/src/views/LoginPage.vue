@@ -21,7 +21,7 @@
           </v-card-text>
           <v-card-actions class="justify-center">
             <span>
-              <v-btn href="/signup" class="mx-2">
+              <v-btn href="signup" class="mx-2">
                 Register
               </v-btn>
             </span>
@@ -64,7 +64,7 @@ import FirebaseService from "@/services/FirebaseService";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import SignUp from "./SignUp";
+import signup from "./SignUp";
 
 export default {
   name: "LoginPage",
@@ -75,23 +75,57 @@ export default {
     };
   },
   component: {
-    SignUp
+    signup
   },
   methods: {
     async loginWithGoogle() {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
+      const chk = FirebaseService.getOneMembers(result.user.uid);
+      chk.then(r => {
+        if (!r) {
+          FirebaseService.postAuth(
+            result.user.uid,
+            "visitor",
+            this.$store.state.user.email,
+            "google"
+          );
+        }
+      });
+
       this.$router.push("/");
     },
     async loginWithFacebook() {
       const result = await FirebaseService.loginWithFacebook();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
+      const chk = FirebaseService.getOneMembers(result.user.uid);
+      chk.then(r => {
+        if (!r) {
+          if (this.$store.state.user.email) {
+            FirebaseService.postAuth(
+              result.user.uid,
+              "visitor",
+              this.$store.state.user.email,
+              "facebook"
+            );
+          } else {
+            FirebaseService.postAuth(
+              result.user.uid,
+              "visitor",
+              this.$store.state.user.displayName,
+              "facebook"
+            );
+          }
+        }
+      });
+
       this.$router.push("/");
     },
     async createAccount() {
-      await FirebaseService.createAccount(this.email, this.password);
+      const result = await FirebaseService.createAccount(this.email, this.password);
+      FirebaseService.postAuth(result.user.uid, "visitor", result.user.email, "email");
     },
     async loginWithEmail() {
       const result = FirebaseService.loginWithEmail(this.email, this.password);
