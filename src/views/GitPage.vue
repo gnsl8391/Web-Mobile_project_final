@@ -39,7 +39,6 @@ export default {
       this.commits.push(event_1);
       const response2 = GitlabService.getMerges(projectID);
       this.merges = response2;
-      // console.log(this.commits);
     },
     async init() {
       let branches = [];
@@ -68,20 +67,16 @@ export default {
       for (let k = 0; k < commits.length; k++) {
         await commits[k].then(async function(response) {
           for (let i = response.data.length - 1; i > -1; i--) {
-            // console.log(response.data[i]);
             if (
               response.data[i].action_name == "pushed new" &&
               response.data[i].push_data.ref != "master" &&
               response.data[i].push_data.ref != "developers" &&
               response.data[i].push_data.ref != "develop"
             ) {
-              // console.log(response.data[i]);
               var exbranch = gitgraph.branch(response.data[i].push_data.ref);
               exbranch.checkout();
               branches.push(exbranch);
-              // console.log(branches);
             } else if (response.data[i].action_name == "pushed to") {
-              // console.log(response.data[i]);
               branches.forEach(function(e_branch) {
                 if (e_branch.name == response.data[i].push_data.ref) {
                   e_branch.commit({
@@ -109,34 +104,33 @@ export default {
                 }
               });
             } else if (response.data[i].action_name == "accepted") {
-              // console.log(response.data[i]);
               await branches.forEach(async function(e_branch, i_branch) {
-                await merges.then(function(e_merge) {
-                  for (let j = 0; j < e_merge.data.length; j++) {
-                    if (
-                      response.data[i].target_title == e_merge.data[j].title
-                    ) {
-                      if (e_branch.name == e_merge.data[j].source_branch) {
-                        // console.log(branches);
-                        // console.log(e_branch.name);
-                        // console.log(e_merge.data[j].source_branch);
-                        develop.merge({
-                          branch: e_branch.name,
-                          commitOptions: {
-                            subject: `MergeRequest / ${
-                              response.data[i].target_title
-                            }`,
-                            author: `${response.data[i].author.username} <${
-                              response.data[i].author.name
-                            }>`
-                          }
-                        });
-                        branches.splice(branches.indexOf(i_branch), 1);
-                        // console.log(branches);
+                await merges
+                  .then(function(e_merge) {
+                    for (let j = 0; j < e_merge.data.length; j++) {
+                      if (
+                        response.data[i].target_title == e_merge.data[j].title
+                      ) {
+                        if (e_branch.name == e_merge.data[j].source_branch) {
+                          develop.merge({
+                            branch: e_branch.name,
+                            commitOptions: {
+                              subject: `MergeRequest / ${
+                                response.data[i].target_title
+                              }`,
+                              author: `${response.data[i].author.username} <${
+                                response.data[i].author.name
+                              }>`
+                            }
+                          });
+                          branches.splice(branches.indexOf(i_branch), 1);
+                        }
                       }
                     }
-                  }
-                });
+                  })
+                  .catch(function(err) {
+                    // console.log(err);
+                  });
               });
             }
           }
