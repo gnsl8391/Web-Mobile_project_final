@@ -82,6 +82,7 @@ export default {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
+      this.$store.state.uid = result.user.uid;
       const chk = FirebaseService.getOneMembers(result.user.uid);
       chk.then(r => {
         if (!r) {
@@ -91,15 +92,18 @@ export default {
             this.$store.state.user.email,
             "google"
           );
+          this.$store.state.auth = "visitor";
+        } else {
+          this.$store.state.auth = r.myauth;
         }
       });
-
       this.$router.push("/");
     },
     async loginWithFacebook() {
       const result = await FirebaseService.loginWithFacebook();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
+      this.$store.state.uid = result.user.uid;
       const chk = FirebaseService.getOneMembers(result.user.uid);
       chk.then(r => {
         if (!r) {
@@ -118,6 +122,9 @@ export default {
               "facebook"
             );
           }
+          this.$store.state.auth = "visitor";
+        } else {
+          this.$store.state.auth = r.myauth;
         }
       });
 
@@ -130,6 +137,9 @@ export default {
     async loginWithEmail() {
       const result = FirebaseService.loginWithEmail(this.email, this.password);
       this.$store.state.user = result;
+      result.then(r => {
+        this.$store.state.uid = r.user.uid;
+      });
       this.$router.push("/");
     },
     async logout() {
