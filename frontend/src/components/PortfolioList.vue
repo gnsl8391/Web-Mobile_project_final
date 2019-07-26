@@ -9,10 +9,11 @@
     >
       <Portfolio
         class="ma-3 animated bounceIn"
-        :date="portfolios[i - 1].created_at.toString()"
-        :title="portfolios[i - 1].title"
-        :body="portfolios[i - 1].body"
-        :imgSrc="portfolios[i - 1].img"
+        :pfid="portfolios[i - 1].id"
+        :date="portfolios[i - 1].dataMap.created_at.toString()"
+        :title="portfolios[i - 1].dataMap.title"
+        :body="portfolios[i - 1].dataMap.body"
+        :imgSrc="portfolios[i - 1].dataMap.img"
       />
     </v-flex>
     <v-flex xs12 text-xs-center round my-5 v-if="loadMore">
@@ -138,7 +139,7 @@ export default {
       this.portfolios = await FirebaseService.getPortfolios();
     },
     loadMorePortfolios() {
-      this.limits += 3;
+      this.limits += 6;
     },
 
     onCreatePortfolio() {

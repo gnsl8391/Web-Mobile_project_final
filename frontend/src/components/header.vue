@@ -1,11 +1,6 @@
 <template>
   <div id="header">
-    <v-toolbar
-      fixed
-      class="elevation-0"
-      style="background-color:#ffffff00;"
-      id="headerBar"
-    >
+    <v-toolbar fixed id="headerBar">
       <v-spacer>
         <a href="/" v-on:click.native="chkUrl" style="text-decoration:none;">
           <img src="../assets/mainlogo.png" id="logoImg" />
@@ -241,13 +236,21 @@ export default {
     FirebaseService.authChk();
   },
   mounted() {
+    var header = document.getElementById("headerBar");
+    if (this.last_known_scroll_position == 0 && window.location.pathname == "/") {
+      console.log("here");
+      header.classList.add("elevation-0");
+      header.style.backgroundColor = "#ffffff00";
+    } else {
+      header.style.backgroundColor = "#F7D358";
+    }
     window.addEventListener("scroll", function() {
       this.last_known_scroll_position = window.scrollY;
       var header = document.getElementById("headerBar");
       if (this.last_known_scroll_position > 0) {
         header.classList.remove("elevation-0");
         header.style.backgroundColor = "#F7D358";
-      } else {
+      } else if (this.last_known_scroll_position == 0 && window.location.pathname == "/") {
         header.classList.add("elevation-0");
         header.style.backgroundColor = "#ffffff00";
       }
