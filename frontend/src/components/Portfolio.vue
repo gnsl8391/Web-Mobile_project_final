@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card @click="getDetail(pfid)">
     <v-img :src="imgSrc" height="200px" />
     <v-card-title primary-title>
       <div style="margin:5px;">
@@ -14,6 +14,7 @@
 export default {
   name: "Portfolio",
   props: {
+    pfid: { type: String },
     date: { type: String },
     title: { type: String },
     body: { type: String },
@@ -51,6 +52,18 @@ export default {
         document.getElementsByClassName(tagId)[tagIdIdx].innerHTML =
           response.data.data.translations[0].translatedText;
       });
+    },
+    async getDetail(uid) {
+      const axios = require("axios");
+      let formData = new FormData();
+      formData.append("portfolioUrl", uid);
+      axios.post("/PortfolioDetail"
+        , formData)
+        .then((Resopnse) => {
+          console.log(Response);
+        }).catch((ex) => {
+          console.log(ex);
+        });
     }
   }
 };
