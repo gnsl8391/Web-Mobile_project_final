@@ -335,7 +335,7 @@ export default {
 
   .slideCard {
     padding: 20px;
-    padding-top: 50px;
+    padding-top: 30px;
   }
   .carousel-3d-slider {
     margin: 0 auto !important;
@@ -362,7 +362,7 @@ export default {
     font-size: 22px;
   }
   .slideCard {
-    padding: 40px;
+    padding: 25px;
   }
   .carousel-3d-slider {
     margin: 0 auto !important;
