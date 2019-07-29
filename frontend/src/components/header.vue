@@ -79,7 +79,7 @@
         <v-btn v-else flat class="hidden-xs-only linkText" to="git">
           Git Project
         </v-btn>
-        <v-btn flat class="hidden-xs-only linkText" href="admin">
+        <v-btn flat class="hidden-xs-only linkText" href="admin" v-if="callAuth">
           Management
         </v-btn>
         <!-- 로그인 Modal Popup -->
@@ -191,6 +191,7 @@ import "firebase/auth";
 export default {
   data() {
     return {
+      chkAuth: "",
       isFixed: false,
       drawer: null,
       dialog: false,
@@ -233,15 +234,18 @@ export default {
     chkUrlRes: function() {
       if (window.location.pathname == "/") return true;
       else return false;
+    },
+    callAuth: function() {
+      return this.getAuth();
     }
   },
   created() {
     FirebaseService.authChk();
+    console.log(this.$store.state.user);
   },
   mounted() {
     var header = document.getElementById("headerBar");
     if (this.last_known_scroll_position == 0 && window.location.pathname == "/") {
-      console.log("here");
       header.classList.add("elevation-0");
       header.style.backgroundColor = "#ffffff00";
     } else {
@@ -260,6 +264,20 @@ export default {
     });
   },
   methods: {
+    getAuth: function() {
+      const uid = this.$store.state.uid;
+      if (uid != "") {
+        const member = FirebaseService.getOneMembers(uid);
+        member.then(r => {
+          this.chkAuth = r.myauth;
+        });
+      }
+      if (this.chkAuth == "admin") {
+        return true;
+      } else {
+        return false;
+      }
+    },
     Trans: function() {
       if (this.lang == "ko") {
         this.lang = "en";
@@ -308,9 +326,8 @@ export default {
       }
     },
     logout: async function() {
-      this.$store.state.user = "";
-      this.$store.state.accessToken = "";
       FirebaseService.logout();
+      window.location.replace("/");
     }
   }
 };

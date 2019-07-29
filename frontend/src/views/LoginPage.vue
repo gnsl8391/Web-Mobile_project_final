@@ -80,9 +80,11 @@ export default {
   methods: {
     async loginWithGoogle() {
       const result = await FirebaseService.loginWithGoogle();
-      this.$store.state.accessToken = result.credential.accessToken;
-      this.$store.state.user = result.user;
-      this.$store.state.uid = result.user.uid;
+      this.$store.dispatch("login", {
+        accessToken: result.credential.accessToken,
+        user: result.user,
+        uid: result.user.uid
+      });
       const chk = FirebaseService.getOneMembers(result.user.uid);
       chk.then(r => {
         if (!r) {
@@ -92,18 +94,17 @@ export default {
             this.$store.state.user.email,
             "google"
           );
-          this.$store.state.auth = "visitor";
-        } else {
-          this.$store.state.auth = r.myauth;
-        }
+        };
       });
       this.$router.push("/");
     },
     async loginWithFacebook() {
       const result = await FirebaseService.loginWithFacebook();
-      this.$store.state.accessToken = result.credential.accessToken;
-      this.$store.state.user = result.user;
-      this.$store.state.uid = result.user.uid;
+      this.$store.dispatch("login", {
+        accessToken: result.credential.accessToken,
+        user: result.user,
+        uid: result.user.uid
+      });
       const chk = FirebaseService.getOneMembers(result.user.uid);
       chk.then(r => {
         if (!r) {
@@ -127,7 +128,6 @@ export default {
           this.$store.state.auth = r.myauth;
         }
       });
-
       this.$router.push("/");
     },
     async createAccount() {
@@ -136,9 +136,12 @@ export default {
     },
     async loginWithEmail() {
       const result = FirebaseService.loginWithEmail(this.email, this.password);
-      this.$store.state.user = result;
       result.then(r => {
-        this.$store.state.uid = r.user.uid;
+        this.$store.dispatch("login", {
+          accessToken: this.email,
+          user: result,
+          uid: r.user.uid
+        });
       });
       this.$router.push("/");
     },
