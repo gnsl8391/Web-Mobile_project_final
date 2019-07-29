@@ -5,10 +5,7 @@
     </v-flex>
     <v-flex sm12 hidden-xs-only>
       <h1 style="color:#6666ff; margin-left : 10%">Git Graph</h1>
-      <div
-        id="gitGraph"
-        style="overflow:scroll; width:90%; height:1000px; margin:0 auto;"
-      ></div>
+      <div id="gitGraph"></div>
     </v-flex>
   </v-layout>
 </template>
@@ -22,8 +19,6 @@ export default {
   name: "GitPage",
   data: () => ({
     commits: [],
-    events: "",
-    me: "",
     merges: ""
   }),
   components: {
@@ -45,7 +40,7 @@ export default {
       const response2 = GitlabService.getMerges(projectID);
       this.merges = response2;
     },
-    init() {
+    async init() {
       let branches = [];
       const graphContainer = document.getElementById("gitGraph");
       const gitgraph = createGitgraph(graphContainer, {
@@ -53,95 +48,102 @@ export default {
       });
       const master = gitgraph.branch({
         name: "master",
-        author: "tastera"
+        author: "tastera <SONG KUNHEE>"
       });
       master.commit({
         subject: "Start project",
-        author: "tastera"
+        author: "tastera <SONG KUNHEE>"
+      });
+      const develop = gitgraph.branch({
+        name: "develop",
+        author: "tastera <SONG KUNHEE>"
+      });
+      develop.commit({
+        subject: "Develop branch generate",
+        author: "tastera <SONG KUNHEE>"
       });
       const commits = this.commits;
-      branches.push(master);
+      const merges = this.merges;
       for (let k = 0; k < commits.length; k++) {
-        commits[k].then(r => {
-          for (let i = r.data.length - 1; i >= 0; i--) {
-            if (r.data[i].action_name == "pushed new") {
-              var b = gitgraph.branch(r.data[i].push_data.ref);
-              b.commit({
-                subject: r.data[i].push_data.commit_title,
-                author: r.data[i].author.username,
-                onClick() {
-                  window.open(
-                    `https://lab.ssafy.com/tastera/webmobile-sub2/commit/${
-                      r.data[i].push_data.commit_to
-                    }`
-                  );
-                },
-                onMessageClick() {
-                  window.open(
-                    `https://lab.ssafy.com/tastera/webmobile-sub2/commit/${
-                      r.data[i].push_data.commit_to
-                    }`
-                  );
-                }
-              });
-              b.checkout();
-              branches.push(b);
-            } else if (r.data[i].action_name == "accepted") {
-              branches.forEach(e => {
-                const merges = this.merges;
-                merges.then(m => {
-                  for (let j = 0; j < m.data.length; j++) {
-                    if (r.data[i].target_title == m.data[j].title) {
-                      if (e.name == m.data[j].source_branch) {
-                        master.merge({
-                          branch: e,
-                          commitOptions: {
-                            subject: r.data[i].target_title,
-                            author: r.data[i].author.username
-                          },
-                          onClick() {
-                            window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
-                                  ${r.data[i].push_data.commit_to}`);
-                          },
-                          onMessageClick() {
-                            window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
-                                  ${r.data[i].push_data.commit_to}`);
-                          }
-                        });
-                        return false;
-                      }
-                      return false;
+        await commits[k].then(async function(response) {
+          for (let i = response.data.length - 1; i > -1; i--) {
+            if (
+              response.data[i].action_name == "pushed new" &&
+              response.data[i].push_data.ref != "master" &&
+              response.data[i].push_data.ref != "developers" &&
+              response.data[i].push_data.ref != "develop"
+            ) {
+              var exbranch = gitgraph.branch(response.data[i].push_data.ref);
+              exbranch.checkout();
+              branches.push(exbranch);
+            } else if (response.data[i].action_name == "pushed to") {
+              branches.forEach(function(e_branch) {
+                if (e_branch.name == response.data[i].push_data.ref) {
+                  e_branch.commit({
+                    subject: response.data[i].push_data.commit_title,
+                    author: `${response.data[i].author.username} <${
+                      response.data[i].author.name
+                    }>`,
+                    onClick() {
+                      window.open(
+                        `https://lab.ssafy.com/tastera/webmobile-sub2/commit/${
+                          response.data[i].push_data.commit_to
+                        }`
+                      );
+                    },
+                    onMessageClick() {
+                      window.open(
+                        `https://lab.ssafy.com/tastera/webmobile-sub2/commit/${
+                          response.data[i].push_data.commit_to
+                        }`
+                      );
                     }
-                  }
-                });
-              });
-            } else if (r.data[i].action_name == "pushed to") {
-              branches.forEach(e => {
-                if (e.name == r.data[i].push_data.ref) {
-                  var title = r.data[i].push_data.commit_title;
-                  if (title.substr(0, 5) != "Merge") {
-                    e.commit({
-                      subject: r.data[i].push_data.commit_title,
-                      author: r.data[i].author.username,
-                      onClick() {
-                        window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
-                            ${r.data[i].push_data.commit_to}`);
-                      },
-                      onMessageClick() {
-                        window.open(`https://lab.ssafy.com/tastera/webmobile-sub2/commit/
-                            ${r.data[i].push_data.commit_to}`);
-                      }
-                    });
-                    e.checkout();
-                    return false;
-                  }
+                  });
+                  e_branch.checkout();
                   return false;
                 }
+              });
+            } else if (response.data[i].action_name == "accepted") {
+              await branches.forEach(async function(e_branch, i_branch) {
+                await merges
+                  .then(function(e_merge) {
+                    for (let j = 0; j < e_merge.data.length; j++) {
+                      if (
+                        response.data[i].target_title == e_merge.data[j].title
+                      ) {
+                        if (e_branch.name == e_merge.data[j].source_branch) {
+                          develop.merge({
+                            branch: e_branch.name,
+                            commitOptions: {
+                              subject: `MergeRequest / ${
+                                response.data[i].target_title
+                              }`,
+                              author: `${response.data[i].author.username} <${
+                                response.data[i].author.name
+                              }>`
+                            }
+                          });
+                          branches.splice(branches.indexOf(i_branch), 1);
+                        }
+                      }
+                    }
+                  })
+                  .catch(function(err) {
+                    // console.log(err);
+                  });
               });
             }
           }
         });
       }
+      // console.log(branches);
+      master.merge({
+        branch: develop,
+        commitOptions: {
+          subject: "final develop => master merge",
+          author: "gnsl8391 <KimHoon>"
+        }
+      });
     }
   }
 };
@@ -164,7 +166,7 @@ path {
 }
 svg {
   transform: scale(0.5);
-  margin-left: -600px;
-  margin-top: -2700px;
+  margin-left: -380px;
+  margin-top: -1050px;
 }
 </style>
