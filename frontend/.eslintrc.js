@@ -32,7 +32,8 @@ module.exports = {
     "space-before-function-paren": "off",
     "brace-style": "off",
     "camelcase": "off",
-    "no-multi-str": "off"
+    "no-multi-str": "off",
+    "handle-callback-err": "off"
   },
   parserOptions: {
     parser: "babel-eslint"
