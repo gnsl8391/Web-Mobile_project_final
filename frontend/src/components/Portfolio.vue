@@ -18,7 +18,9 @@ export default {
     date: { type: String },
     title: { type: String },
     body: { type: String },
-    imgSrc: { type: String }
+    imgSrc: { type: String },
+    uid: { type: String },
+    writer: { type: String }
   },
   data() {
     return {
@@ -60,7 +62,10 @@ export default {
           date: this.date,
           title: this.title,
           body: this.body,
-          imgSrc: this.imgSrc}});
+          imgSrc: this.imgSrc,
+          uid: this.uid,
+          writer: this.writer
+        }});
     }
   }
 };

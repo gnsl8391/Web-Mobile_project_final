@@ -12,12 +12,12 @@
             <v-flex xs12 sm8 class="headline mb-0" id="pftitle">{{ pfdetail.title }}</v-flex>
             <v-flex xs12 sm4 style="font-size:17px;text-align:right;">{{ getpfdate }}</v-flex>
             <v-flex xs12 sm8  />
-            <v-flex xs12 sm4 style="font-size:14px; text-align:right;">Posted By yex38144@naver.com</v-flex>
+            <v-flex xs12 sm4 style="font-size:14px; text-align:right;">Posted By {{ pfdetail.writer  }}</v-flex>
             <div id="pfbody" style="margin: 4% 0; font-size:17px;" v-html="pfdetail.body"> </div> <br />
           </v-layout>
         </v-card-title>
 
-        <v-card-actions style="float:right;">
+        <v-card-actions style="float:right;"  v-if="pfdetail.uid == this.$store.state.user.uid ">
           <v-btn flat color="orange">수정</v-btn>
           <v-btn flat color="orange">삭제</v-btn>
         </v-card-actions>
