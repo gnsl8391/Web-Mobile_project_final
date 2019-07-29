@@ -1,5 +1,5 @@
 <template>
-  <v-layout mt-5 wrap>
+  <v-layout mt-5 wrap >
     <v-flex
       v-for="i in portfolios.length > limits ? limits : portfolios.length"
       v-bind:key="i"
@@ -28,6 +28,7 @@
             dark
             v-on="on"
             v-on:click="$EventBus.$emit('radio')"
+            v-if="$store.state.user!=''"
           >
             <v-icon size="20px" class="mr-2">
               fas fa-pen
@@ -41,7 +42,7 @@
           </v-card-title>
           <v-card-text>
             <v-layout row wrap>
-              <v-flex xs12 md8>
+              <v-flex xs12 md7>
                 <form>
                   <span style="margin-left:3%">TITLE : </span>
                   <input v-model="title" type="text" id="title" />
@@ -57,8 +58,8 @@
                   </div>
                 </form>
               </v-flex>
-              <v-flex xs12 md4 style="text-align:center;" id="preImg">
-                <img :src="imageUrl" height="140" />
+              <v-flex xs12 md5 style="text-align:center;" id="preImg">
+                <img :src="imageUrl" style="max-height:170px; max-width: 270px;" />
               </v-flex>
             </v-layout>
             <yimo-vue-editor v-model="body"></yimo-vue-editor>
@@ -109,7 +110,8 @@ export default {
       },
       image: null,
       switchDiv: true,
-      imgurImg: []
+      imgurImg: [],
+      url: ""
     };
   },
   components: {
@@ -196,7 +198,8 @@ export default {
           FirebaseService.postPortfolio(
             this.title,
             this.body,
-            res.data.data.link
+            res.data.data.link,
+            this.$store.state.uid
           );
         })
         .catch(() => {
