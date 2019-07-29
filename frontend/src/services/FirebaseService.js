@@ -88,11 +88,13 @@ export default {
         });
       });
   },
-  postPortfolio(title, body, img) {
+  postPortfolio(title, body, img, uid, writer) {
     return firestore.collection(PORTFOLIOS).add({
       title,
       body,
       img,
+      uid,
+      writer,
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
@@ -181,6 +183,7 @@ export default {
         // An error happened.
         alert("로그아웃 실패");
       });
+    store.dispatch("logout");
   },
   authChk() {
     firebase.auth().onAuthStateChanged(function(user) {

@@ -1,5 +1,5 @@
 <template>
-  <v-layout mt-5 wrap>
+  <v-layout mt-5 wrap >
     <v-flex
       v-for="i in portfolios.length > limits ? limits : portfolios.length"
       v-bind:key="i"
@@ -14,6 +14,8 @@
         :title="portfolios[i - 1].dataMap.title"
         :body="portfolios[i - 1].dataMap.body"
         :imgSrc="portfolios[i - 1].dataMap.img"
+        :uid="portfolios[i -1 ].dataMap.uid"
+        :writer="portfolios[i - 1].dataMap.writer"
       />
     </v-flex>
     <v-flex xs12 text-xs-center round my-5 v-if="loadMore">
@@ -28,6 +30,7 @@
             dark
             v-on="on"
             v-on:click="$EventBus.$emit('radio')"
+            v-if="myauth"
           >
             <v-icon size="20px" class="mr-2">
               fas fa-pen
@@ -41,7 +44,7 @@
           </v-card-title>
           <v-card-text>
             <v-layout row wrap>
-              <v-flex xs12 md8>
+              <v-flex xs12 md7>
                 <form>
                   <span style="margin-left:3%">TITLE : </span>
                   <input v-model="title" type="text" id="title" />
@@ -57,8 +60,8 @@
                   </div>
                 </form>
               </v-flex>
-              <v-flex xs12 md4 style="text-align:center;" id="preImg">
-                <img :src="imageUrl" height="140" />
+              <v-flex xs12 md5 style="text-align:center;" id="preImg">
+                <img :src="imageUrl" style="max-height:170px; max-width: 270px;" />
               </v-flex>
             </v-layout>
             <yimo-vue-editor v-model="body"></yimo-vue-editor>
@@ -109,7 +112,9 @@ export default {
       },
       image: null,
       switchDiv: true,
-      imgurImg: []
+      imgurImg: [],
+      url: "",
+      myauth: false
     };
   },
   components: {
@@ -125,6 +130,7 @@ export default {
     this.$EventBus.$on("desktopImg", () => {
       this.onPickFile();
     });
+    this.curAuthChk();
   },
   mounted() {
     this.getPortfolios();
@@ -135,6 +141,28 @@ export default {
     }
   },
   methods: {
+    curAuthChk() {
+      console.log("??");
+      console.log(this.$store.state.user);
+      if (this.$store.state.user == "") this.myauth = false;
+      else {
+        const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
+        auths.then(auth => {
+          if (auth == null || auth.myauth == "visitor") this.myauth = false;
+          else this.myauth = true;
+          console.log(auth.myauth);
+        });
+        console.log(this.myauth);
+      }
+    },
+    curAuthChk2() {
+      if (this.$store.state.user == "") return false;
+      const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
+      auths.then(auth => {
+        if (auth == null || auth.myauth == "visitor") return false;
+        else return true;
+      });
+    },
     async getPortfolios() {
       this.portfolios = await FirebaseService.getPortfolios();
     },
@@ -193,10 +221,19 @@ export default {
         mimeType: "multipart/form-data"
       })
         .then(res => {
+          var userName = "";
+          if (this.$store.state.user.displayName == "") {
+            userName = this.$store.state.user.email;
+          }
+          else {
+            userName = this.$store.state.user.displayName;
+          }
           FirebaseService.postPortfolio(
             this.title,
             this.body,
-            res.data.data.link
+            res.data.data.link,
+            this.$store.state.uid,
+            userName
           );
         })
         .catch(() => {

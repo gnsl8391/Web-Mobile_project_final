@@ -1,5 +1,5 @@
 <template>
-  <v-card @click="getDetail(pfid)">
+  <v-card @click="getDetail()" >
     <v-img :src="imgSrc" height="200px" />
     <v-card-title primary-title>
       <div style="margin:5px;">
@@ -18,7 +18,9 @@ export default {
     date: { type: String },
     title: { type: String },
     body: { type: String },
-    imgSrc: { type: String }
+    imgSrc: { type: String },
+    uid: { type: String },
+    writer: { type: String }
   },
   data() {
     return {
@@ -53,17 +55,17 @@ export default {
           response.data.data.translations[0].translatedText;
       });
     },
-    async getDetail(uid) {
-      const axios = require("axios");
-      let formData = new FormData();
-      formData.append("portfolioUrl", uid);
-      axios.post("/PortfolioDetail"
-        , formData)
-        .then((Resopnse) => {
-          console.log(Response);
-        }).catch((ex) => {
-          console.log(ex);
-        });
+    async getDetail() {
+      this.$router.push({name: "portfolioDetail",
+        params: {
+          pfid: this.pfid,
+          date: this.date,
+          title: this.title,
+          body: this.body,
+          imgSrc: this.imgSrc,
+          uid: this.uid,
+          writer: this.writer
+        }});
     }
   }
 };

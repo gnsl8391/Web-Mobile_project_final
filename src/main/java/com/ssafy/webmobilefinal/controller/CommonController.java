@@ -25,14 +25,25 @@ public class CommonController {
 		return m.size();
 	}
 
-	@RequestMapping(value="/PortfolioDetail", method=RequestMethod.POST)
-	public ModelAndView getpf(String portfolioUrl){
-		System.out.println("!!!************************************************!!!!!!!!!!");
-		System.out.println(portfolioUrl);
-		ModelAndView mav= new ModelAndView();
-		mav.setViewName("PortfolioDetail"); // 이거 안됨
-		return mav;
-	}
+	// @RequestMapping(value="/PortfolioDetail", method=RequestMethod.POST)
+	// public ModelAndView getpf(String portfolioUrl){
+	// 	System.out.println("!!!************************************************!!!!!!!!!!");
+	// 	System.out.println(portfolioUrl);
+	// 	ModelAndView mav= new ModelAndView();
+	// 	mav.setViewName("PortfolioDetail"); // 이거 안됨
+	// 	return mav;
+	// }
+
+	// const axios = require("axios");
+	// let formData = new FormData();
+	// formData.append("portfolioUrl", uid);
+	// axios.post("/PortfolioDetail"
+	// 	, formData)
+	// 	.then((Resopnse) => {
+	// 		console.log(Response);
+	// 	}).catch((ex) => {
+	// 		console.log(ex);
+	// 	});
 
 	@GetMapping("/portfolio")
 	public String goPortfolio(){

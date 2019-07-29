@@ -49,6 +49,12 @@ export default new Router({
       path: "/admin",
       name: "admin",
       component: AdminPage
+    },
+    {
+      path: "/portfolioDetail",
+      name: "portfolioDetail",
+      component: PortfolioDetail,
+      props: true
     }
   ]
 });
