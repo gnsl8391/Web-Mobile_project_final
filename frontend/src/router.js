@@ -46,8 +46,8 @@ export default new Router({
       component: GitPage
     },
     {
-      path: "/admin",
-      name: "admin",
+      path: "/Management",
+      name: "Management",
       component: AdminPage
     },
     {

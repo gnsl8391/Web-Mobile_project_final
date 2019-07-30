@@ -21,7 +21,6 @@ export default new Vuex.Store({
       this.state.uid = "";
     },
     authChk(user) {
-      console.log(user);
       this.state.accessToken = user.accessToken;
       this.state.user = user.user;
       this.state.uid = user.uid;

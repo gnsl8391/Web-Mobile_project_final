@@ -1,5 +1,5 @@
 <template>
-  <div style="background: #5e717d;">
+  <div style="background: #5e717d;" xs12 sm8>
     <ImgBanner>
       <div id="bannerTxt" slot="text">Members</div>
     </ImgBanner>
