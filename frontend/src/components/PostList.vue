@@ -40,7 +40,7 @@
               <input v-model="title" type="text" id="title" />
             </form>
             <div>
-              <markdown-editor v-model="body" :options="options" />
+              <yimo-vue-editor v-model="body"></yimo-vue-editor>
             </div>
           </v-card-text>
           <v-card-actions>
@@ -61,6 +61,7 @@
 <script>
 import Post from "@/components/Post";
 import FirebaseService from "@/services/FirebaseService";
+import YimoVueEditor from "yimo-vue-editor";
 
 export default {
   name: "PostList",
@@ -87,7 +88,8 @@ export default {
     };
   },
   components: {
-    Post
+    Post,
+    YimoVueEditor
   },
   mounted() {
     this.getPosts();

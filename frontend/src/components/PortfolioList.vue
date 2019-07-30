@@ -138,7 +138,6 @@ export default {
       return this.imageUrl !== "";
     },
     chkMyauth() {
-      console.log(this.myauth + "!!!!!!!!!!!!!!!!!!!");
       return this.myauth;
     }
   },
@@ -229,7 +228,7 @@ export default {
           else {
             userName = this.$store.state.user.displayName;
           }
-          FirebaseService.postPortfolio(
+          var dd = FirebaseService.postPortfolio(
             this.title,
             this.body,
             res.data.data.link,

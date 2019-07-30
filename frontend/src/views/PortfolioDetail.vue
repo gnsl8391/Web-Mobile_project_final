@@ -15,32 +15,62 @@
             <div id="pfbody" style="margin: 4% 0; font-size:17px;" v-html="pfdetail.body"> </div> <br />
           </v-layout>
         </v-card-title>
-        <v-card-actions style="float:right;"  v-if="pfdetail.uid == this.$store.state.user.uid ">
+        <v-card-actions style="float:right;"  v-if="this.$store.state.user != '' && (pfdetail.uid == this.$store.state.user.uid) ">
           <v-btn flat color="orange">수정</v-btn>
-          <v-btn flat color="orange" @click="ClickDel">삭제</v-btn>
+          <template>
+            <div class="text-xs-center">
+              <v-btn flat
+              :disabled="loading"
+              :loading="loading"
+              color="orange"
+              @click="ClickDel"
+              >
+              삭제
+            </v-btn>
+            <v-dialog
+            v-model="loading"
+            hide-overlay
+            persistent
+            width="300"
+            >
+            <v-card
+            color="#FACC2E"
+            dark
+            >
+            <v-card-text>
+              처리 중...
+              <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </div>
+</template>
         </v-card-actions>
         <div style="display:hidden; clear:both;"></div>
       </v-card>
       <br />
       <br />
     </v-flex>
-    <Loading/>
+    <!-- <Loading/> -->
   </v-layout>
 </template>
 
 <script>
-import Loading from "../components/Loading";
 export default {
   name: "PortfolioDetail",
   data () {
     return {
       pfdetail: this.$route.params,
       pfdate: this.$route.params.date,
-      lang: "ko"
+      lang: "ko",
+      loading: false
     };
   },
   components: {
-    Loading
   },
   created() {
     if (typeof this.$route.params.pfid == "undefined") { // 새로고침시 파라미터 분실, 이전페이지 이동으로 예외처리
@@ -87,7 +117,9 @@ export default {
     ClickDel() {
       var res = confirm("삭제하시겠습니까?");
       if (res) {
-        this.$EventBus.$emit("runLoading");
+        this.loading = true;
+        setTimeout(() => (this.loading = false), 2000);
+        this.$router.go(-1);
       }
     }
   }

@@ -112,14 +112,18 @@ export default {
       });
   },
   postPortfolio(title, body, img, uid, writer) {
+    console.log(title + " / " + body + " / " + img + " / " + uid + " / " + writer);
     return firestore.collection(PORTFOLIOS).add({
-      title,
-      body,
-      img,
-      uid,
-      writer,
+      title: title,
+      body: body,
+      img: img,
+      uid: uid,
+      writer: writer,
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
+  },
+  deletePortfolio(uid) {
+    firebase.ref(PORTFOLIOS + "/" + uid).remove();
   },
   loginWithGoogle() {
     let provider = new firebase.auth.GoogleAuthProvider();
