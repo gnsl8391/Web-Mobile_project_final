@@ -228,13 +228,18 @@ export default {
           else {
             userName = this.$store.state.user.displayName;
           }
-          var dd = FirebaseService.postPortfolio(
+          FirebaseService.postPortfolio(
             this.title,
             this.body,
             res.data.data.link,
             this.$store.state.uid,
             userName
-          );
+          )
+            .then(function() {
+              alert("저장되었습니다!");
+              location.reload();
+              this.dialog = false;
+            });
         })
         .catch(() => {
           FirebaseService.postPortfolio(
@@ -242,9 +247,6 @@ export default {
             "https://source.unsplash.com/random/1600x900"
           );
         });
-      alert("저장되었습니다!");
-      location.reload();
-      this.dialog = false;
     }
   }
 };

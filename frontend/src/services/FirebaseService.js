@@ -120,10 +120,20 @@ export default {
       uid: uid,
       writer: writer,
       created_at: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(function(err) {
+      console.log(err);
     });
   },
-  deletePortfolio(uid) {
-    var res = firestore.collection(PORTFOLIOS).doc(uid).delete();
+  deletePortfolio(pfid) {
+    var res = firestore.collection(PORTFOLIOS).doc(pfid).delete();
+  },
+  updatePortfoilio(pfid, title, body, imgSrc) {
+    var setDoc = firestore.collection(PORTFOLIOS).doc(pfid);
+    setDoc.set({
+      title: title,
+      body: body,
+      img: imgSrc
+    }, {merge: true});
   },
   loginWithGoogle() {
     let provider = new firebase.auth.GoogleAuthProvider();
