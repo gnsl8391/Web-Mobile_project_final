@@ -79,7 +79,7 @@
         <v-btn v-else flat class="hidden-xs-only linkText" to="git">
           Git Project
         </v-btn>
-        <v-btn flat class="hidden-xs-only linkText" href="admin" v-if="callAuth">
+        <v-btn flat class="hidden-xs-only linkText" href="Management" v-if="callAuth">
           Management
         </v-btn>
         <!-- 로그인 Modal Popup -->
@@ -114,7 +114,7 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <!-- login navigation -->
+    <!-- login in sidebar-->
     <v-navigation-drawer v-model="drawer" fixed temporary>
       <v-list class="pa-1">
         <v-list-tile avatar>
@@ -151,8 +151,26 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile>
+
+        <!-- Management condition in sidebar -->
+        <v-list-tile v-if="callAuth">
+        <v-list-tile-action>
+          <v-icon>fas fa-users-cog</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>
+            <router-link
+              :to="{ path: '/Management' }"
+              class="linkText"
+            >
+              Management
+            </router-link>
+          </v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+
           <!-- login condition in sidebar -->
+          <v-list-tile>
           <v-list-tile-action>
             <v-icon>fas fa-user</v-icon>
           </v-list-tile-action>
