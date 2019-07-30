@@ -9,32 +9,33 @@ export default new Vuex.Store({
     user: "",
     uid: ""
   },
+  getters: {
+    isLogin: (state) => {
+      return state.user == "";
+    }
+  },
   mutations: {
-    login(list) {
-      this.state.accessToken = list.accessToken;
-      this.state.user = list.user;
-      this.state.uid = list.uid;
-    },
     logout() {
       this.state.accessToken = "";
       this.state.user = "";
       this.state.uid = "";
     },
-    authChk(list) {
-      this.state.accessToken = list.accessToken;
-      this.state.user = list.user;
-      this.state.uid = list.uid;
+    authChk(user) {
+      console.log(user);
+      this.state.accessToken = user.accessToken;
+      this.state.user = user.user;
+      this.state.uid = user.uid;
     }
   },
   actions: {
     login({commit}, list) {
-      commit("login", list);
+      commit("authChk", list);
     },
     logout({commit}) {
       commit("logout");
     },
-    authChk({commit}, list) {
-      commit("authChk", list);
+    authChk({commit}, user) {
+      commit("authChk", user);
     }
   }
 });

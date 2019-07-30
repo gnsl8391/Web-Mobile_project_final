@@ -14,6 +14,7 @@ import store from "./store";
 import mainHeader from "./components/header";
 import mainFooter from "./components/footer";
 import topBut from "./components/BackToTop";
+import FirebaseService from "@/services/FirebaseService";
 import Vue from "vue";
 Vue.prototype.$EventBus = new Vue();
 
@@ -23,6 +24,9 @@ export default {
     "app-header": mainHeader,
     "app-footer": mainFooter,
     "app-topBut": topBut
+  },
+  created() {
+    FirebaseService.authChk();
   },
   store,
   data () {

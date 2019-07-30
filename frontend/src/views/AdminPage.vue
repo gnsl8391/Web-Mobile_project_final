@@ -94,8 +94,20 @@ export default {
     },
     async setAuth(title, uid) {
       const user = await FirebaseService.getOneMembers(uid);
-      await FirebaseService.postAuth(uid, title, user.id, user.root);
-      this.getdata();
+      const admin = await FirebaseService.getAdminCnt();
+
+      if (admin[0].adminCnt == 1 && user.myauth == "admin" && title != "admin") {
+        alert("관리자는 한명 이상이어야 합니다.");
+      }
+      else {
+        await FirebaseService.postAuth(uid, title, user.id, user.root);
+        this.getdata();
+        if (user.myauth != "admin" && title == "admin") {
+          await FirebaseService.cngAdminCnt(admin[0].adminCnt, "+");
+        } else if (user.myauth == "admin" && title != "admin") {
+          await FirebaseService.cngAdminCnt(admin[0].adminCnt, "-");
+        }
+      }
     }
   },
   components: {
