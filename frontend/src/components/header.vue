@@ -7,7 +7,7 @@
         </a>
       </v-spacer>
       <span class="hidden-md-and-down">
-        <span v-if="this.$store.state.user == ''">
+        <span v-if="isLogin">
           로그인을 해주세요
         </span>
         <span v-else-if="this.$store.state.user.displayName != undefined">
@@ -122,7 +122,7 @@
             <v-icon size="30px">far fa-laugh-wink</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title v-if="this.$store.state.user == ''">
+            <v-list-tile-title v-if="this.$store.getters.isLogin">
               <span>로그인을 해주세요</span>
             </v-list-tile-title>
             <v-list-tile-title
@@ -237,11 +237,10 @@ export default {
     },
     callAuth: function() {
       return this.getAuth();
+    },
+    isLogin: function() {
+      return this.$store.getters.isLogin;
     }
-  },
-  created() {
-    FirebaseService.authChk();
-    console.log(this.$store.state.user);
   },
   mounted() {
     var header = document.getElementById("headerBar");

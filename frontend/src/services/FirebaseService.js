@@ -5,6 +5,8 @@ import store from "../store.js";
 const POSTS = "posts";
 const PORTFOLIOS = "portfolios";
 const AUTHS = "auths";
+const CHKADMIN = "chkAdmin";
+const adminDoc = "Msyvl7pA8HhIYNvhTfWH";
 
 // Setup Firebase
 const config = {
@@ -21,6 +23,27 @@ firebase.initializeApp(config);
 const firestore = firebase.firestore();
 
 export default {
+  cngAdminCnt(cnt, pm) {
+    const docRef = firestore.doc(CHKADMIN + "/" + adminDoc);
+    const cal = "";
+    if (pm == "+") {
+      this.cal = cnt + 1;
+    } else {
+      this.cal = cnt - 1;
+    }
+    docRef.set({
+      adminCnt: this.cal
+    });
+  },
+  getAdminCnt() {
+    const admin = firestore.collection(CHKADMIN);
+    return admin.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        return data;
+      });
+    });
+  },
   getOneMembers(uid) {
     var cityRef = firestore.collection(AUTHS).doc(uid);
     var getDoc = "";
@@ -197,4 +220,5 @@ export default {
       }
     });
   }
+
 };

@@ -123,9 +123,7 @@ export default {
               "facebook"
             );
           }
-          this.$store.state.auth = "visitor";
         } else {
-          this.$store.state.auth = r.myauth;
         }
       });
       this.$router.push("/");
@@ -136,8 +134,8 @@ export default {
     },
     async loginWithEmail() {
       const result = FirebaseService.loginWithEmail(this.email, this.password);
-      result.then(r => {
-        this.$store.dispatch("login", {
+      await result.then(r => {
+        this.$store.dispatch("authChk", {
           accessToken: this.email,
           user: result,
           uid: r.user.uid
