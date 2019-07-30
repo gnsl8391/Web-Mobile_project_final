@@ -23,14 +23,13 @@
         <v-icon size="25" class="mr-2">fa-plus</v-icon>
         더 보기
       </v-btn>
-      <v-dialog v-model="dialog" persistent max-width="800px">
+      <v-dialog v-model="dialog" persistent max-width="800px" v-if="chkMyauth">
         <template v-slot:activator="{ on }">
           <v-btn
             color="warning"
             dark
             v-on="on"
             v-on:click="$EventBus.$emit('radio')"
-            v-if="myauth"
           >
             <v-icon size="20px" class="mr-2">
               fas fa-pen
@@ -130,7 +129,6 @@ export default {
     this.$EventBus.$on("desktopImg", () => {
       this.onPickFile();
     });
-    this.curAuthChk();
   },
   mounted() {
     this.getPortfolios();
@@ -138,21 +136,24 @@ export default {
   computed: {
     formIsValid() {
       return this.imageUrl !== "";
+    },
+    chkMyauth() {
+      console.log(this.myauth + "!!!!!!!!!!!!!!!!!!!");
+      return this.myauth;
     }
+  },
+  beforeUpdate() {
+    this.curAuthChk();
   },
   methods: {
     curAuthChk() {
-      console.log("??");
-      console.log(this.$store.state.user);
       if (this.$store.state.user == "") this.myauth = false;
       else {
         const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
         auths.then(auth => {
           if (auth == null || auth.myauth == "visitor") this.myauth = false;
           else this.myauth = true;
-          console.log(auth.myauth);
         });
-        console.log(this.myauth);
       }
     },
     curAuthChk2() {
