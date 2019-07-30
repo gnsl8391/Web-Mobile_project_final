@@ -1,46 +1,39 @@
 <template>
-  <v-layout id="portfolioCard">
+  <v-layout id="postCard">
     <v-flex xs12 sm8 style="margin: 0 auto;">
-      <v-card  style="margin: 0 auto; position:relative !important;">
-        <v-img
-          :src="pfdetail.imgSrc"
-          aspect-ratio="2.75"
-        ></v-img>
+      <v-card>
         <v-card-title primary-title>
           <v-layout row wrap>
-            <v-flex xs12 sm8 class="headline mb-0" id="pftitle">{{ pfdetail.title }}</v-flex>
+            <v-flex xs12 sm8 class="headline mb-0" id="ptitle">{{ pfdetail.title }}</v-flex>
             <v-flex xs12 sm4 style="font-size:17px;text-align:right;">{{ getpfdate }}</v-flex>
             <v-flex xs12 sm8  />
             <v-flex xs12 sm4 style="font-size:14px; text-align:right;">Posted By {{ pfdetail.writer  }}</v-flex>
-            <div id="pfbody" style="margin: 4% 0; font-size:17px;" v-html="pfdetail.body"> </div> <br />
+            <div id="pbody" style="margin: 4% 0; font-size:17px;" v-html="pfdetail.body"> </div> <br />
           </v-layout>
         </v-card-title>
+
         <v-card-actions style="float:right;"  v-if="pfdetail.uid == this.$store.state.user.uid ">
           <v-btn flat color="orange">수정</v-btn>
-          <v-btn flat color="orange" @click="ClickDel">삭제</v-btn>
+          <v-btn flat color="orange">삭제</v-btn>
         </v-card-actions>
+
         <div style="display:hidden; clear:both;"></div>
       </v-card>
       <br />
       <br />
     </v-flex>
-    <Loading/>
   </v-layout>
 </template>
 
 <script>
-import Loading from "../components/Loading";
 export default {
-  name: "PortfolioDetail",
+  name: "PostDetail",
   data () {
     return {
-      pfdetail: this.$route.params,
-      pfdate: this.$route.params.date,
+      pdetail: this.$route.params,
+      pdate: this.$route.params.date,
       lang: "ko"
     };
-  },
-  components: {
-    Loading
   },
   created() {
     if (typeof this.$route.params.pfid == "undefined") { // 새로고침시 파라미터 분실, 이전페이지 이동으로 예외처리
@@ -68,9 +61,9 @@ export default {
         "https://www.googleapis.com/language/translate/v2?key=AIzaSyA0_KdshFIp0aoX7fbaKVTZmuvk3GBrlls&target=" +
         target +
         "&format=html&q=" +
-        this.pfdetail.title;
+        this.pdetail.title;
       this.$http.post(url).then(response => {
-        this.pfdetail.title =
+        this.pdetail.title =
           response.data.data.translations[0].translatedText;
       });
 
@@ -83,12 +76,6 @@ export default {
         this.pfdetail.body =
           response.data.data.translations[0].translatedText;
       });
-    },
-    ClickDel() {
-      var res = confirm("삭제하시겠습니까?");
-      if (res) {
-        this.$EventBus.$emit("runLoading");
-      }
     }
   }
 };
@@ -96,14 +83,13 @@ export default {
 
 <style>
 @media screen and (max-width: 598px){
-  #portfolioCard{
+  #postCard{
     margin-top: 100px;
   }
 }
 @media screen and (min-width: 599px){
-  #portfolioCard{
+  #postCard{
     margin-top: 110px;
   }
 }
-
 </style>
