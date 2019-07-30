@@ -9,10 +9,13 @@
         <v-card-title primary-title>
           <v-layout row wrap>
             <v-flex xs12 sm8 class="headline mb-0" id="pftitle">{{ pfdetail.title }}</v-flex>
+            <input xs12 sm8 class="headline mb-0" v-bind:value="pfdetail.title" style="border: 1px solid gray;" />
             <v-flex xs12 sm4 style="font-size:17px;text-align:right;">{{ getpfdate }}</v-flex>
             <v-flex xs12 sm8  />
             <v-flex xs12 sm4 style="font-size:14px; text-align:right;">Posted By {{ pfdetail.writer  }}</v-flex>
-            <div id="pfbody" style="margin: 4% 0; font-size:17px;" v-html="pfdetail.body"> </div> <br />
+            <div id="pfbody" style="margin: 4% 0; font-size:17px;" v-html="pfdetail.body"> </div>
+            <yimo-vue-editor v-model="pfdetail.body"></yimo-vue-editor>
+             <br />
           </v-layout>
         </v-card-title>
         <v-card-actions style="float:right;"  v-if="this.$store.state.user != '' && (pfdetail.uid == this.$store.state.user.uid) ">
@@ -60,6 +63,8 @@
 </template>
 
 <script>
+import FirebaseService from "@/services/FirebaseService";
+import YimoVueEditor from "yimo-vue-editor";
 export default {
   name: "PortfolioDetail",
   data () {
@@ -71,6 +76,7 @@ export default {
     };
   },
   components: {
+    YimoVueEditor
   },
   created() {
     if (typeof this.$route.params.pfid == "undefined") { // 새로고침시 파라미터 분실, 이전페이지 이동으로 예외처리
@@ -118,8 +124,12 @@ export default {
       var res = confirm("삭제하시겠습니까?");
       if (res) {
         this.loading = true;
-        setTimeout(() => (this.loading = false), 2000);
-        this.$router.go(-1);
+        setTimeout(() => (this.loading = false
+        ), 2000);
+        FirebaseService.deletePortfolio(this.pfdetail.pfid);
+        setTimeout(() => (
+          this.$router.go(-1)
+        ), 2000);
       }
     }
   }

@@ -123,7 +123,7 @@ export default {
     });
   },
   deletePortfolio(uid) {
-    firebase.ref(PORTFOLIOS + "/" + uid).remove();
+    var res = firestore.collection(PORTFOLIOS).doc(uid).delete();
   },
   loginWithGoogle() {
     let provider = new firebase.auth.GoogleAuthProvider();
