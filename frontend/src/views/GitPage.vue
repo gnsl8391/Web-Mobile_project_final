@@ -129,14 +129,13 @@ export default {
                     }
                   })
                   .catch(function(err) {
-                    // console.log(err);
+                    console.log("불러오지 못한 MergeRequest가 있습니다.");
                   });
               });
             }
           }
         });
       }
-      // console.log(branches);
       master.merge({
         branch: develop,
         commitOptions: {

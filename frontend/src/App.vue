@@ -15,6 +15,8 @@ import mainHeader from "./components/header";
 import mainFooter from "./components/footer";
 import topBut from "./components/BackToTop";
 import Vue from "vue";
+import firebase from "firebase/app";
+// import provise from "@/services/provise";
 Vue.prototype.$EventBus = new Vue();
 
 export default {
@@ -30,6 +32,32 @@ export default {
       //
     };
   }
+  // created() {
+  //   var config = {
+  //     apiKey: "AIzaSyC38Q6st2D5nlzoosGxMuZMm_-dz9wDDBU",
+  //     authDomain: "ssafy-2team-dc2b4.firebaseapp.com",
+  //     databaseURL: "https://ssafy-2team-dc2b4.firebaseio.com",
+  //     projectId: "ssafy-2team-dc2b4",
+  //     storageBucket: "gs://ssafy-2team-dc2b4.appspot.com",
+  //     messagingSenderId: "72397315856"
+  //   };
+  //   firebase.initializeApp(config);
+  //   const messaging = firebase.messaging();
+  //
+  //   messaging
+  //     .requestPermission()
+  //     .then(() => firebase.messaging().getToken())
+  //     .then((token) => {
+  //       console.log(token); // Receiver Token to use in the notification
+  //     })
+  //     .catch(function(err) {
+  //       console.log("Unable to get permission to notify.", err);
+  //     });
+  //
+  //   messaging.onMessage(function(payload) {
+  //     console.log("Message received. ", payload);
+  //   });
+  // }
 };
 
 var BrowserChk = "";

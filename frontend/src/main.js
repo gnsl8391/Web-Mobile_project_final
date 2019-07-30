@@ -7,6 +7,8 @@ import VueSimplemde from "vue-simplemde";
 import "simplemde/dist/simplemde.min.css";
 import "font-awesome/css/font-awesome.min.css";
 
+// import firebase from "firebase/app";
+
 import App from "./App.vue";
 import router from "./router";
 
@@ -56,3 +58,22 @@ new Vue({
   components: { App },
   template: "<App/>"
 });
+
+// var config = {
+//   apiKey: "AIzaSyC38Q6st2D5nlzoosGxMuZMm_-dz9wDDBU",
+//   authDomain: "ssafy-2team-dc2b4.firebaseapp.com",
+//   databaseURL: "https://ssafy-2team-dc2b4.firebaseio.com",
+//   projectId: "ssafy-2team-dc2b4",
+//   storageBucket: "gs://ssafy-2team-dc2b4.appspot.com",
+//   messagingSenderId: "72397315856"
+// };
+// firebase.initializeApp(config);
+//
+// Vue.prototype.$messaging = firebase.messaging();
+//
+// navigator.serviceWorker.register("/firebase-messaging-sw.js")
+//   .then((registration) => {
+//     Vue.prototype.$messaging.useServiceWorker(registration);
+//   }).catch(err => {
+//     console.log(err);
+//   });
