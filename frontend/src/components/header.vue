@@ -286,7 +286,9 @@ export default {
       if (uid != "") {
         const member = FirebaseService.getOneMembers(uid);
         member.then(r => {
-          this.chkAuth = r.myauth;
+          if (r) {
+            this.chkAuth = r.myauth;
+          }
         });
       }
       if (this.chkAuth == "admin") {
