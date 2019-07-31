@@ -3,6 +3,7 @@
     <v-content>
       <app-header />
       <app-topBut />
+      <app-chatbot />
       <router-view />
       <app-footer />
     </v-content>
@@ -10,6 +11,7 @@
 </template>
 
 <script>
+import chatbot from "./components/Chatbot";
 import store from "./store";
 import mainHeader from "./components/header";
 import mainFooter from "./components/footer";
@@ -23,7 +25,8 @@ export default {
   components: {
     "app-header": mainHeader,
     "app-footer": mainFooter,
-    "app-topBut": topBut
+    "app-topBut": topBut,
+    "app-chatbot": chatbot
   },
   created() {
     FirebaseService.authChk();
@@ -61,7 +64,3 @@ if (BrowserChk != "Chrome") {
   });
 }
 </script>
-
-<style>
-
-</style>
