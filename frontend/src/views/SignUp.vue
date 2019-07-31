@@ -9,6 +9,13 @@
     <v-container>
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-text-field
+          v-model="name"
+          :counter="10"
+          :rules="nameRules"
+          label="이름"
+          required
+        ></v-text-field>
+        <v-text-field
           v-model="email"
           :rules="emailRules"
           label="E-mail"
@@ -24,37 +31,27 @@
               hint="At least 8 characters"
               class="input-group--focused"
               @click:append="show3 = !show3"
+              v-model="password"
             ></v-text-field>
           </v-flex>
           <v-flex hidden-xs-only sm2 />
           <v-flex xs12 sm5>
             <v-text-field
               :append-icon="show4 ? 'fas fa-eye' : 'fas fa-eye-slash'"
-              :rules="[rules.required]"
+              :rules="[rules.required, passChk]"
               :type="show4 ? 'text' : 'password'"
               label="비밀번호 확인"
-              hint="일치하는 비밀번호를 입력하세요."
               @click:append="show4 = !show4"
+              v-model="passwordChk"
             ></v-text-field>
           </v-flex>
         </v-layout>
-        <v-text-field
-          v-model="name"
-          :counter="10"
-          :rules="nameRules"
-          label="이름"
-          required
-        ></v-text-field>
-        <v-text-field
-          v-model="phone"
-          :counter="10"
-          label="전화번호"
-          required
-        ></v-text-field>
         <v-layout style="float:right; margin : 10px 0px;">
-          <v-btn :disabled="!valid" outline color="indigo" @click="validate">
-            회원가입
-          </v-btn>
+          <v-btn
+          :disabled="!valid"
+          outline color="indigo"
+          @click="validate"
+          >회원가입</v-btn>
           <v-btn outline color="warning" @click="reset">
             초기화
           </v-btn>
@@ -66,6 +63,7 @@
 </template>
 
 <script>
+import FirebaseService from "@/services/FirebaseService";
 import ImgBanner from "../components/ImgBanner";
 import ImgUpload from "../components/ImgUpload";
 export default {
@@ -85,7 +83,8 @@ export default {
     ],
     checkbox: false,
     imgBannerUrl: "https://source.unsplash.com/user/erondu/1600x900",
-    password: "Password",
+    password: "",
+    passwordChk: "",
     show3: false,
     show4: false,
     rules: {
@@ -104,6 +103,13 @@ export default {
     });
   },
   methods: {
+    passChk(value) {
+      if (this.password == value) {
+        return true;
+      } else {
+        return "password don't match!";
+      }
+    },
     getImgUrl(img) {
       return require("../assets/" + img);
     },
@@ -111,6 +117,11 @@ export default {
       if (this.$refs.form.validate()) {
         this.snackbar = true;
       }
+      const result = FirebaseService.createAccount(this.email, this.passwordChk);
+      result.then(r => {
+        FirebaseService.postAuth(r.user.uid, "visitor", r.user.email, "email");
+        FirebaseService.updateProfile(r.user, this.name);
+      });
     },
     reset() {
       this.$refs.form.reset();

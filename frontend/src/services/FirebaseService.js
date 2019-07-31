@@ -127,6 +127,7 @@ export default {
       .auth()
       .signInWithPopup(provider)
       .then(function(result) {
+        console.log(result);
         return result;
       });
   },
@@ -140,14 +141,6 @@ export default {
       });
   },
   createAccount(email, password) {
-    if (email.length < 4) {
-      alert("Please enter an email address.");
-      return;
-    }
-    if (password.length < 4) {
-      alert("Please enter a password.");
-      return;
-    }
     return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -161,11 +154,16 @@ export default {
         var errorMessage = error.message;
         // [START_EXCLUDE]
         if (errorCode == "auth/weak-password") {
-          alert("The password is too weak.");
+          alert("Enter the password again");
         } else {
           alert(errorMessage);
         }
       });
+  },
+  updateProfile(user, name) {
+    user.updateProfile({
+      displayName: name
+    });
   },
   loginWithEmail(email, password) {
     if (email.length < 4) {
@@ -182,6 +180,7 @@ export default {
       .then(function(user) {
         store.state.accessToken = email;
         alert("반갑습니다 ^~^");
+        console.log(user);
         return user;
       })
       .catch(function(error) {

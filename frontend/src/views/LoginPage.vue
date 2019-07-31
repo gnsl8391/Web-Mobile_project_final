@@ -128,10 +128,6 @@ export default {
       });
       this.$router.push("/");
     },
-    async createAccount() {
-      const result = await FirebaseService.createAccount(this.email, this.password);
-      FirebaseService.postAuth(result.user.uid, "visitor", result.user.email, "email");
-    },
     async loginWithEmail() {
       const result = FirebaseService.loginWithEmail(this.email, this.password);
       await result.then(r => {
