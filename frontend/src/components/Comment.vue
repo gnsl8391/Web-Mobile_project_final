@@ -62,7 +62,7 @@
             </v-btn>
             </v-flex>
             <v-flex xs2 hidden-xs-only>
-              <v-btn  color="error" @click="regSubComm" style="min-width:10px !important;">등록</v-btn>
+              <v-btn  color="error" @click="regSubComm(item.pfc_id)" style="min-width:10px !important;">등록</v-btn>
             </v-flex>
           </v-layout>
           <br />
@@ -78,7 +78,7 @@
                   <b> {{ idx.spfc_writer }} </b>
                   &nbsp;&nbsp;&nbsp;&nbsp;
                   {{ idx.spfc_date }} |
-                  <i class="fas fa-times" style="color: red;" @click="delSubComm(i)"/>
+                  <i class="fas fa-times" style="color: red;" @click="delSubComm(item.pfc_id, idx.spfc_ids)"/>
                 </p>
                 <p>{{ idx.spfc_content }}</p>
               </v-flex>
@@ -190,13 +190,46 @@ export default{
           });
       }
     },
-    regSubComm() {
+    regSubComm(pfc_id) {
       console.log(this.subcomment);
-
+      const axios = require("axios");
+      let formData = new FormData();
+      formData.append("pfid", this.pfid);
+      if (this.$store.state.user.displayName != undefined) {
+        formData.append("spfc_writer", this.$store.state.user.displayName);
+      }
+      else {
+        formData.append("spfc_writer", this.$store.state.user.email.split("@")[0]);
+      }
+      formData.append("spfc_writerUid", this.$store.state.user.uid);
+      formData.append("spfc_content", this.subcomment);
+      formData.append("pfc_id", pfc_id);
+      var category = window.location.pathname.split("/")[1];
+      if (category == "portfolioDetail") {
+        axios.post("/regPfSubComment", formData).then(res => {
+          this.getSubComm(pfc_id);
+        })
+          .catch((ex) => {
+            console.log(ex);
+          });
+      }
       this.subcomment = "";
     },
-    delSubComm(val) {
-      console.log(val);
+    delSubComm(pfc_id, val) {
+      console.log(pfc_id, val);
+      var del = confirm("삭제하시겠습니까?");
+      const axios = require("axios");
+      let formData = new FormData();
+      formData.append("spfc_id", val);
+      var category = window.location.pathname.split("/")[1];
+      if (category == "portfolioDetail") {
+        axios.post("/delPfSubComment", formData).then(res => {
+          this.getSubComm(pfc_id);
+        })
+          .catch((ex) => {
+            console.log(ex);
+          });
+      }
     }
   }
 };
