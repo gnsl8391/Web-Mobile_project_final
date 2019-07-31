@@ -76,14 +76,18 @@ public class CommonController {
 	
 	@RequestMapping(value="/getPfSubComment", method=RequestMethod.POST)
 	public List<PfSubComment> getPfSubComm(String pfc_id){
-		// 포트폴리오 댓글 가져오기
+		// 포트폴리오 대댓글 가져오기
 		System.out.println(pfc_id);
+		List<PfSubComment> list = pfRepo.getAllPfSubComment(pfc_id);
+		for(int i=0; i<list.size(); i++) {
+			System.out.println(list.get(i));
+		}
 		return pfRepo.getAllPfSubComment(pfc_id);
 	}
 	
 	@RequestMapping(value="/regPfSubComment", method=RequestMethod.POST)
 	public int regPfSubComm(String pfid, String spfc_writer, String spfc_writerUid, String spfc_content, int pfc_id){
-		// 포트폴리오 댓글 등록하기
+		// 포트폴리오 대댓글 등록하기
 		System.out.println(pfid+"/"+spfc_writer+"/"+spfc_writerUid+"/"+spfc_content+"/"+pfc_id);
 		HashMap<String, String> hm = new HashMap<>();
 		hm.put("pfid", pfid);

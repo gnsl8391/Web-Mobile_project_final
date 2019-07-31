@@ -13,7 +13,7 @@
 	</delete>
 	
 	<!-- 포트폴리오 대댓글 관리 -->
-	<select id="getAllPfSubComment" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.PfComment">
+	<select id="getAllPfSubComment" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.PfSubComment">
 		select * from pfSubComment where pfc_id = #{pfc_id}
 	</select>
 	<insert id="addPfSubComment" parameterType="hashmap">

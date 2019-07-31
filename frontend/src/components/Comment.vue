@@ -3,11 +3,11 @@
       <v-layout row wrap style="width:100%; height: 48px;">
         <v-flex xs2 style="text-align: center; line-height: 48px;">
           <b>
-            <span v-if="this.$store.state.user.displayName != undefined">
-              {{ this.$store.state.user.displayName }}
+            <span v-if="displayName != undefined">
+              {{ displayName }}
             </span>
             <span v-else>
-              {{ this.$store.state.user.email.split('@')[0] }}
+              {{ email }}
             </span>
           </b>
         </v-flex>
@@ -29,7 +29,7 @@
       expand-icon="fas fa-angle-down"
     >
       <template v-slot:header>
-        <div>
+        <div @click="getSubComm(item.pfc_id)">
           <p><i class="fas fa-user-edit"></i>
             <b> {{ item.pfc_writer }}</b>
             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -41,6 +41,50 @@
       </template>
       <v-card>
         <v-card-text class="lighten-3" style="background-color: #F2F2F2;">
+          <!-- 대댓글 입력 -->
+          <v-layout row wrap style="width:100%; height: 48px;">
+            <v-flex xs2 style="text-align: center; line-height: 48px;">
+              <b>
+                <span v-if="displayName != undefined">
+                  {{ displayName }}
+                </span>
+                <span v-else>
+                  {{ email }}
+                </span>
+              </b>
+            </v-flex>
+            <v-flex xs8>
+             <input type="text" id="ComSubtitle" v-model="subcomment" />
+            </v-flex>
+            <v-flex xs2 hidden-sm-and-up>
+            <v-btn hidden-xs-and-up color="error" @click="regSubComm" style="min-width:10px !important; padding: 0 11px;">
+              <i class="fas fa-pen"></i>
+            </v-btn>
+            </v-flex>
+            <v-flex xs2 hidden-xs-only>
+              <v-btn  color="error" @click="regSubComm" style="min-width:10px !important;">등록</v-btn>
+            </v-flex>
+          </v-layout>
+          <br />
+          <!-- 대댓글 -->
+          <div v-for="(idx, i) in subcomm" :key="i">
+            <v-layout>
+              <v-flex xs2>
+                <div style="width:80%;font-size: 18px; text-align:right;">┗
+                </div>
+              </v-flex>
+              <v-flex xs10>
+                <p><i class="fas fa-user-edit"></i>
+                  <b> {{ idx.spfc_writer }} </b>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  {{ idx.spfc_date }} |
+                  <i class="fas fa-times" style="color: red;" @click="delSubComm(i)"/>
+                </p>
+                <p>{{ idx.spfc_content }}</p>
+              </v-flex>
+            </v-layout>
+          </div>
+          <!-- 대댓글 -->
         </v-card-text>
       </v-card>
     </v-expansion-panel-content>
@@ -57,8 +101,11 @@ export default{
     return {
       lang: "ko",
       comm: [],
+      subcomm: [],
       comment: "",
-      subcomment: ""
+      subcomment: "",
+      email: this.$store.state.user.email.split("@")[0],
+      displayName: this.$store.state.user.displayName
     };
   },
   created() {
@@ -125,6 +172,24 @@ export default{
           });
       }
     },
+    getSubComm(pfc_id) {
+      // portfolio인지 post인지
+      // 댓글 id
+      console.log(pfc_id);
+      const axios = require("axios");
+      let formData = new FormData();
+      formData.append("pfc_id", pfc_id);
+      var category = window.location.pathname.split("/")[1];
+      if (category == "portfolioDetail") {
+        axios.post("/getPfSubComment", formData).then(res => {
+          this.subcomm = res.data;
+          this.subcomment = "";
+        })
+          .catch((ex) => {
+            console.log(ex);
+          });
+      }
+    },
     regSubComm() {
       console.log(this.subcomment);
 
@@ -142,6 +207,13 @@ export default{
   height: 40px;
   margin-top: 5px;
   border: 1px solid #bdbdbd;
+  border-radius: 5px;
+}
+#ComSubtitle {
+  width: 100% !important;
+  height: 40px;
+  margin-top: 5px;
+  border: 1px solid #A4A4A4;
   border-radius: 5px;
 }
 </style>
