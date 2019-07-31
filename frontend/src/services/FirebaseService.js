@@ -19,26 +19,8 @@ const config = {
 
 firebase.initializeApp(config);
 const firestore = firebase.firestore();
-// const messaging = firebase.messaging();
 
 export default {
-  // getToken_I() {
-  //   messaging.requestPermission()
-  //   .then(function() {
-  //     console.log("Have permission");
-  //     return messaging.getToken();
-  //   })
-  //   .then(function(token) {
-  //     console.log(token);
-  //   })
-  //   .catch(function(err) {
-  //     console.log("Error Occured.");
-  //   })
-  //
-  //   messaging.onMessage(function(payload) {
-  //     console.log("onMessage: ", payload)
-  //   });
-  // },
   getOneMembers(uid) {
     var cityRef = firestore.collection(AUTHS).doc(uid);
     var getDoc = "";

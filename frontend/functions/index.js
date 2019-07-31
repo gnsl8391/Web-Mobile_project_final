@@ -6,12 +6,3 @@ const functions = require('firebase-functions');
 exports.helloWorld = functions.https.onRequest((request, response) => {
  response.send("Hello from Firebase!");
 });
-
-// const admin = require('firebase-admin');
-// admin.initializeApp();
-//
-// exports.addMessage = functions.https.onRequest(async (req, res) => {
-//   const original = req.query.text;
-//   const snapshot = await admin.database().ref('/messages').push({original: original});
-//   res.redirect(303, snapshot.ref.toString());
-// });
