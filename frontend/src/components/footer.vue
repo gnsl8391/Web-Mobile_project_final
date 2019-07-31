@@ -31,11 +31,11 @@
           </weather>
         </div>
         <div id="info" style="float:left; width: 50%;font-size:1.5vw; ">
-          <h3 class="forTrans">Project Info.</h3>
-          <span class="forTrans">Team Leader : Gayeong Jeong</span><br />
-          <span class="forTrans">Team Member : Eunju Kang, Hoon Kim</span><br />
-          <span class="forTrans">Duration : 2019.07.01 ~ 2019.07.19</span><br />
-          <span>Git : https://lab.ssafy.com/tastera/webmobile-sub2.git</span>
+          <h3 class="forTrans">Team Info.</h3>
+          <span class="forTrans">* Leader : Gayeong Jeong</span><br />
+          <span class="forTrans">* Member : Eunju Kang, Hoon Kim</span><br />
+          <span class="forTrans">* Duration : 2019.07.01 ~ 2019.08.13</span><br />
+          <span>* Git : github 바로가기 <a href="https://lab.ssafy.com/tastera/webmobile-sub2.git"> <i class="fab fa-github"></i></a></span>
         </div>
       </v-card-actions>
     </v-card>
