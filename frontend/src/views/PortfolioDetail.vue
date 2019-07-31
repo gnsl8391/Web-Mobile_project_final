@@ -9,7 +9,7 @@
         <v-card-title primary-title>
           <v-layout row wrap>
             <v-flex v-if="!isUpdate" xs12 sm8 class="headline mb-0" id="pftitle">{{ pftitle }}</v-flex>
-            <input v-else xs12 sm8 class="headline mb-0" v-model="pftitle" style="border: 1px solid gray;" />
+            <input v-else xs12 sm8 class="headline mb-0" v-model="pftitle" style="border: 1px solid #ccc;" />
             <v-flex xs12 sm4 style="font-size:17px;text-align:right;">{{ getpfdate }}</v-flex>
             <v-flex xs12 sm8  />
             <v-flex xs12 sm4 style="font-size:14px; text-align:right;">Posted By {{ pfdetail.writer  }}</v-flex>
@@ -61,8 +61,11 @@
         </v-card-actions>
         <div style="display:hidden; clear:both;"></div>
       </v-card>
-      <br />
-      <br />
+      <br /><br />
+      <div v-if="this.$store.state.user != ''">
+        <Comment :pfid="this.$route.params.pfid"/>
+      </div>
+      <br /><br />
     </v-flex>
     <!-- <Loading/> -->
   </v-layout>
@@ -72,7 +75,7 @@
 import FirebaseService from "@/services/FirebaseService";
 import YimoVueEditor from "yimo-vue-editor";
 import ImgUpload from "../components/ImgUpload";
-
+import Comment from "../components/Comment";
 export default {
   name: "PortfolioDetail",
   data () {
@@ -89,7 +92,8 @@ export default {
   },
   components: {
     YimoVueEditor,
-    ImgUpload
+    ImgUpload,
+    Comment
   },
   created() {
     if (typeof this.$route.params.pfid == "undefined") { // 새로고침시 파라미터 분실, 이전페이지 이동으로 예외처리

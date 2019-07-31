@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.webmobilefinal.dao.PortfolioRepository">
+	<!-- 포트폴리오 댓글 관리 -->
+	<select id="getAllPfComment" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.PfComment">
+		select * from pfComment where pfid = #{pfid}
+	</select>
+	<insert id="addPfComment" parameterType="hashmap">
+		insert into pfComment values(0,#{pfid},#{pfc_writer},#{pfc_writerUid},#{pfc_content},default)
+	</insert>
+	<delete id="delPfComment" parameterType="Integer">
+		delete from pfComment where pfc_id = #{pfc_id};
+	</delete>
+	
+	<!-- 포트폴리오 대댓글 관리 -->
+	<select id="getAllPfSubComment" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.PfComment">
+		select * from pfSubComment where pfc_id = #{pfc_id}
+	</select>
+	<insert id="addPfSubComment" parameterType="hashmap">
+		insert into pfSubComment values(0,#{pfid},#{spfc_writer},#{spfc_writerUid},#{spfc_content},default,#{pfc_id})
+	</insert>
+	<delete id="delPfSubComment" parameterType="Integer">
+		delete from pfSubComment where spfc_id = #{spfc_id};
+	</delete>
+</mapper>
