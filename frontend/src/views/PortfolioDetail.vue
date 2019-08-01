@@ -2,9 +2,19 @@
   <v-layout id="portfolioCard">
     <v-flex xs12 sm8 style="margin: 0 auto;">
       <v-card  style="margin: 0 auto; position:relative !important;">
+        <v-toolbar
+      card
+      color="white"
+      dark
+    >
+      <v-toolbar-title style="color:#FFBF00" @click="goBack()">
+         <i class="fas fa-chevron-left"></i> BACK
+       </v-toolbar-title>
+    </v-toolbar>
         <v-img
           :src="pfImgSrc"
           aspect-ratio="2.75"
+          height="400"
         ></v-img>
         <v-card-title primary-title>
           <v-layout row wrap>
@@ -122,6 +132,9 @@ export default {
     }
   },
   methods: {
+    goBack() {
+      this.$router.push("/portfolio");
+    },
     translateText(target) {
       var url =
         "https://www.googleapis.com/language/translate/v2?key=AIzaSyA0_KdshFIp0aoX7fbaKVTZmuvk3GBrlls&target=" +
@@ -129,7 +142,7 @@ export default {
         "&format=html&q=" +
         this.pfdetail.title;
       this.$http.post(url).then(response => {
-        this.pfdetail.title =
+        this.pftitle =
           response.data.data.translations[0].translatedText;
       });
 
@@ -139,7 +152,7 @@ export default {
         "&format=html&q=" +
         this.pfdetail.body;
       this.$http.post(url).then(response => {
-        this.pfdetail.body =
+        this.pfbody =
           response.data.data.translations[0].translatedText;
       });
     },

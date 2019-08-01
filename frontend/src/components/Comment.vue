@@ -125,7 +125,7 @@ export default{
       else {
         const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
         auths.then(auth => {
-          if (auth == null || auth.myauth == "visitor") this.myauth = false;
+          if (auth == null) this.myauth = false;
           else this.myauth = true;
         });
       }
@@ -137,7 +137,8 @@ export default{
       else return false;
     },
     chkAuth() {
-      return this.myauth; // 권한이 null이거나 visitor인 경우 false, 멤버 또는 관리자일 경우 true(from portfolioList)
+      if (this.myauth) return true;
+      else return false;
     },
     getComm() {
       // portfolio인지 post인지

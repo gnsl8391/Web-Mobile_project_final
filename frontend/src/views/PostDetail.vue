@@ -2,6 +2,15 @@
   <v-layout id="postCard">
     <v-flex xs12 sm8 style="margin: 0 auto;">
       <v-card  style="margin: 0 auto; position:relative !important;">
+        <v-toolbar
+      card
+      color="white"
+      dark
+    >
+      <v-toolbar-title style="color:#FFBF00" @click="goBack()">
+         <i class="fas fa-chevron-left"></i> BACK
+       </v-toolbar-title>
+    </v-toolbar>
         <v-card-title primary-title>
           <v-layout row wrap>
             <v-flex v-if="!isUpdate" xs12 sm8 class="headline mb-0" id="pftitle">{{ pftitle }}</v-flex>
@@ -114,14 +123,17 @@ export default {
     }
   },
   methods: {
+    goBack() {
+      this.$router.push("/post");
+    },
     translateText(target) {
       var url =
         "https://www.googleapis.com/language/translate/v2?key=AIzaSyA0_KdshFIp0aoX7fbaKVTZmuvk3GBrlls&target=" +
         target +
         "&format=html&q=" +
-        this.pfdetail.title;
+        this.pftitle;
       this.$http.post(url).then(response => {
-        this.pfdetail.title =
+        this.pftitle =
           response.data.data.translations[0].translatedText;
       });
 
@@ -129,9 +141,9 @@ export default {
         "https://www.googleapis.com/language/translate/v2?key=AIzaSyA0_KdshFIp0aoX7fbaKVTZmuvk3GBrlls&target=" +
         target +
         "&format=html&q=" +
-        this.pfdetail.body;
+        this.pfbody;
       this.$http.post(url).then(response => {
-        this.pfdetail.body =
+        this.pfbody =
           response.data.data.translations[0].translatedText;
       });
     },
