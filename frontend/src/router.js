@@ -8,7 +8,7 @@ import GitPage from "./views/GitPage.vue";
 import SignUp from "./views/SignUp.vue";
 import AdminPage from "./views/AdminPage.vue";
 import PortfolioDetail from "./views/PortfolioDetail.vue";
-
+import PostDetail from "./views/PostDetail.vue";
 Vue.use(Router);
 
 export default new Router({
@@ -54,6 +54,12 @@ export default new Router({
       path: "/portfolioDetail",
       name: "portfolioDetail",
       component: PortfolioDetail,
+      props: true
+    },
+    {
+      path: "/postDetail",
+      name: "postDetail",
+      component: PostDetail,
       props: true
     }
   ]

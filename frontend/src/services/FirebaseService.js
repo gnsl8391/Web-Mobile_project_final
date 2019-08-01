@@ -83,16 +83,32 @@ export default {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
-          return data;
+          var tmp = {
+            id: doc.id,
+            dataMap: data
+          };
+          return tmp;
         });
       });
   },
-  postPost(title, body) {
+  postPost(title, body, uid, writer) {
     return firestore.collection(POSTS).add({
       title,
       body,
+      uid: uid,
+      writer: writer,
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
+  },
+  deletePost(pid) {
+    var res = firestore.collection(POSTS).doc(pid).delete();
+  },
+  updatePost(pid, title, body) {
+    var setDoc = firestore.collection(POSTS).doc(pid);
+    setDoc.set({
+      title: title,
+      body: body
+    }, {merge: true});
   },
   getPortfolios() {
     const postsCollection = firestore.collection(PORTFOLIOS);
@@ -112,7 +128,6 @@ export default {
       });
   },
   postPortfolio(title, body, img, uid, writer) {
-    console.log(title + " / " + body + " / " + img + " / " + uid + " / " + writer);
     return firestore.collection(PORTFOLIOS).add({
       title: title,
       body: body,

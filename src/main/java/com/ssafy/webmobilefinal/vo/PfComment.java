@@ -1,6 +1,6 @@
 package com.ssafy.webmobilefinal.vo;
 
-public class PfComment {
+public class pfComment {
 	int pfc_id;
 	String pfid;
 	String pfc_writer;
@@ -8,6 +8,16 @@ public class PfComment {
 	String pfc_content;
 	String pfc_date;
 	
+	public pfComment(int pfc_id, String pfid, String pfc_writer, String pfc_writerUid, String pfc_content,
+			String pfc_date) {
+		super();
+		this.pfc_id = pfc_id;
+		this.pfid = pfid;
+		this.pfc_writer = pfc_writer;
+		this.pfc_writerUid = pfc_writerUid;
+		this.pfc_content = pfc_content;
+		this.pfc_date = pfc_date;
+	}
 	public int getPfc_id() {
 		return pfc_id;
 	}

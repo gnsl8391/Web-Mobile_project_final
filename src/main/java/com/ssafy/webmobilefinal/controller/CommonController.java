@@ -1,13 +1,15 @@
 package com.ssafy.webmobilefinal.controller;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
-import com.ssafy.webmobilefinal.dao.MemberRepository;
 import com.ssafy.webmobilefinal.dao.PortfolioRepository;
-import com.ssafy.webmobilefinal.vo.Member;
-import com.ssafy.webmobilefinal.vo.PfComment;
-import com.ssafy.webmobilefinal.vo.PfSubComment;
+import com.ssafy.webmobilefinal.dao.PostRepository;
+import com.ssafy.webmobilefinal.vo.pfComment;
+import com.ssafy.webmobilefinal.vo.pfSubComment;
+import com.ssafy.webmobilefinal.vo.postComment;
+import com.ssafy.webmobilefinal.vo.postSubComment;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,17 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class CommonController {
 	@Autowired
-    private MemberRepository repo;
-
-	@Autowired
     private PortfolioRepository pfRepo;
-
-	@GetMapping("/go")
-	public @ResponseBody int getPort() {
-		List<Member> m = repo.getAllMember();
-
-		return m.size();
-	}
+	
+	@Autowired
+    private PostRepository postRepo;
 
 	// @RequestMapping(value="/PortfolioDetail", method=RequestMethod.POST)
 	// public ModelAndView getpf(String portfolioUrl){
@@ -51,60 +46,62 @@ public class CommonController {
 	// 		console.log(ex);
 	// 	});
 
+	/***********포트폴리오 댓글***********/
+	/*
+	 * 댓글, 대댓글 조회 : getPfComment, getPfSubComment
+	 * 댓글, 대댓글 등록 : regPfComment, regPfSubComment
+	 * 댓글, 대댓글 삭제 : delPfComment, delPfSubComment
+	 */
+	
 	@RequestMapping(value="/getPfComment", method=RequestMethod.POST)
-	public @ResponseBody List<PfComment> getPfComm(String pfid){
+	public @ResponseBody List<pfComment> getPfComm(String id){
 		// 포트폴리오 댓글 가져오기
-		return pfRepo.getAllPfComment(pfid);
+		return pfRepo.getAllPfComment(id);
 	}
 	
 	@RequestMapping(value="/regPfComment", method=RequestMethod.POST)
-	public @ResponseBody int regPfComm(String pfid, String pfc_writer, String pfc_writerUid, String pfc_content){
+	public @ResponseBody int regPfComm(String id, String writer, String writerUid, String content){
 		// 포트폴리오 댓글 등록하기
-		System.out.println(pfid+"/"+pfc_writer+"/"+pfc_writerUid+"/"+pfc_content);
 		HashMap<String, String> hm = new HashMap<>();
-		hm.put("pfid", pfid);
-		hm.put("pfc_writer", pfc_writer);
-		hm.put("pfc_writerUid", pfc_writerUid);
-		hm.put("pfc_content", pfc_content);
+		hm.put("pfid", id);
+		hm.put("pfc_writer", writer);
+		hm.put("pfc_writerUid", writerUid);
+		hm.put("pfc_content", content);
 		return pfRepo.addPfComment(hm);
 	}
 	
 	@RequestMapping(value="/delPfComment", method=RequestMethod.POST)
-	public @ResponseBody int delPfComm(int pfc_id){
-		System.out.println(pfc_id);
-		return pfRepo.delPfComment(pfc_id);
+	public @ResponseBody int delPfComm(int id){
+		return pfRepo.delPfComment(id);
 	}
 	
 	@RequestMapping(value="/getPfSubComment", method=RequestMethod.POST)
-	public @ResponseBody List<PfSubComment> getPfSubComm(String pfc_id){
+	public @ResponseBody List<pfSubComment> getPfSubComm(String id){
 		// 포트폴리오 대댓글 가져오기
-		System.out.println(pfc_id);
-		List<PfSubComment> list = pfRepo.getAllPfSubComment(pfc_id);
-		for(int i=0; i<list.size(); i++) {
-			System.out.println(list.get(i));
-		}
-		return pfRepo.getAllPfSubComment(pfc_id);
+		return pfRepo.getAllPfSubComment(id);
 	}
 	
 	@RequestMapping(value="/regPfSubComment", method=RequestMethod.POST)
-	public @ResponseBody int regPfSubComm(String pfid, String spfc_writer, String spfc_writerUid, String spfc_content, int pfc_id){
+	public @ResponseBody int regPfSubComm(String wid, String writer, String writerUid, String content, int id){
 		// 포트폴리오 대댓글 등록하기
-		System.out.println(pfid+"/"+spfc_writer+"/"+spfc_writerUid+"/"+spfc_content+"/"+pfc_id);
 		HashMap<String, String> hm = new HashMap<>();
-		hm.put("pfid", pfid);
-		hm.put("spfc_writer", spfc_writer);
-		hm.put("spfc_writerUid", spfc_writerUid);
-		hm.put("spfc_content", spfc_content);
-		hm.put("pfc_id", pfc_id+"");
+		hm.put("pfid", wid);
+		hm.put("spfc_writer", writer);
+		hm.put("spfc_writerUid", writerUid);
+		hm.put("spfc_content", content);
+		hm.put("pfc_id", id+"");
 		return pfRepo.addPfSubComment(hm);
 	}
 	
 	@RequestMapping(value="/delPfSubComment", method=RequestMethod.POST)
-	public @ResponseBody int delPfSubComm(int spfc_id){
-		System.out.println(spfc_id);
-		return pfRepo.delPfSubComment(spfc_id);
+	public @ResponseBody int delPfSubComm(int id){
+		System.out.println(id);
+		return pfRepo.delPfSubComment(id);
 	}
-
+	
+	
+	/***********페이지 이동***********/
+	
 	@GetMapping("/portfolio")
 	public String goPortfolio(){
 		return "forward:/";
@@ -124,4 +121,75 @@ public class CommonController {
 	public String goSignUp(){
 		return "forward:/";
 	}
+
+	@GetMapping("/Management")
+	public String goManagement(){
+		return "forward:/";
+	}
+	
+	/***********포스트 댓글***********/
+	/*
+	 * 댓글, 대댓글 조회 : getPostComment, getPostSubComment
+	 * 댓글, 대댓글 등록 : regPostComment, regPostSubComment
+	 * 댓글, 대댓글 삭제 : delPostComment, delPostSubComment
+	 */
+	
+	@RequestMapping(value="/getPostComment", method=RequestMethod.POST)
+	public @ResponseBody List<pfComment> getPostComm(String id){
+		// 포스트 댓글 가져오기
+		List<pfComment> list = new LinkedList<>();
+		List<postComment> q = postRepo.getAllPostComment(id);
+		for(int i=0; i<q.size(); i++) {
+			postComment n = q.get(i);
+			list.add(new pfComment(n.getPc_id(), n.getPid(), n.getPc_writer(), n.getPc_writerUid(), n.getPc_content(), n.getPc_date()));
+		}
+		return list;
+	}
+	
+	@RequestMapping(value="/regPostComment", method=RequestMethod.POST)
+	public @ResponseBody int regPostComm(String id, String writer, String writerUid, String content){
+		// 포스트 댓글 등록하기
+		HashMap<String, String> hm = new HashMap<>();
+		hm.put("pid", id);
+		hm.put("pc_writer", writer);
+		hm.put("pc_writerUid", writerUid);
+		hm.put("pc_content", content);
+		return postRepo.addPostComment(hm);
+	}
+	
+	@RequestMapping(value="/delPostComment", method=RequestMethod.POST)
+	public @ResponseBody int delPostComm(int id){
+		System.out.println(id);
+		return postRepo.delPostComment(id);
+	}
+	
+	@RequestMapping(value="/getPostSubComment", method=RequestMethod.POST)
+	public @ResponseBody List<pfSubComment> getPostSubComm(String id){
+		// 포트폴리오 대댓글 가져오기
+		List<pfSubComment> list = new LinkedList<>();
+		List<postSubComment> q = postRepo.getAllPostSubComment(id);
+		for(int i=0; i<q.size(); i++) {
+			postSubComment n = q.get(i);
+			list.add(new pfSubComment(n.getSpc_id(), n.getPid(), n.getSpc_writer(), n.getSpc_writerUid(), n.getSpc_content(), n.getSpc_date(), n.getPc_id()));
+		}
+		return list;
+	}
+	
+	@RequestMapping(value="/regPostSubComment", method=RequestMethod.POST)
+	public @ResponseBody int regPostSubComm(String wid, String writer, String writerUid, String content, int id){
+		// 포트폴리오 대댓글 등록하기
+		HashMap<String, String> hm = new HashMap<>();
+		hm.put("pid", wid);
+		hm.put("spc_writer", writer);
+		hm.put("spc_writerUid", writerUid);
+		hm.put("spc_content", content);
+		hm.put("pc_id", id+"");
+		return postRepo.addPostSubComment(hm);
+	}
+	
+	@RequestMapping(value="/delPostSubComment", method=RequestMethod.POST)
+	public @ResponseBody int delPostSubComm(int id){
+		return postRepo.delPostSubComment(id);
+	}
+	
 }

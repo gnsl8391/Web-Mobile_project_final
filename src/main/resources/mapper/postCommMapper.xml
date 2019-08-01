@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.webmobilefinal.dao.PostRepository">
+	<!-- 포트폴리오 댓글 관리 -->
+	<select id="getAllPostComment" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.postComment">
+		select * from postComment where pid = #{pid}
+	</select>
+	<insert id="addPostComment" parameterType="hashmap">
+		insert into postComment values(0,#{pid},#{pc_writer},#{pc_writerUid},#{pc_content},default)
+	</insert>
+	<delete id="delPostComment" parameterType="Integer">
+		delete from postComment where pc_id = #{pc_id};
+	</delete>
+	
+	<!-- 포트폴리오 대댓글 관리 -->
+	<select id="getAllPostSubComment" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.postSubComment">
+		select * from postSubComment where pc_id = #{pc_id}
+	</select>
+	<insert id="addPostSubComment" parameterType="hashmap">
+		insert into postSubComment values(0,#{pid},#{spc_writer},#{spc_writerUid},#{spc_content},default,#{pc_id})
+	</insert>
+	<delete id="delPostSubComment" parameterType="Integer">
+		delete from postSubComment where spc_id = #{spc_id};
+	</delete>
+</mapper>
