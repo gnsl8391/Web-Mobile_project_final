@@ -3,44 +3,98 @@
     <v-flex xs12 sm8 style="margin: 0 auto;">
       <v-card  style="margin: 0 auto; position:relative !important;">
         <v-img
-          :src="pfdetail.imgSrc"
+          :src="pfImgSrc"
           aspect-ratio="2.75"
         ></v-img>
         <v-card-title primary-title>
           <v-layout row wrap>
-            <v-flex xs12 sm8 class="headline mb-0" id="pftitle">{{ pfdetail.title }}</v-flex>
+            <v-flex v-if="!isUpdate" xs12 sm8 class="headline mb-0" id="pftitle">{{ pftitle }}</v-flex>
+            <input v-else xs12 sm8 class="headline mb-0" v-model="pftitle" style="border: 1px solid #ccc;" />
             <v-flex xs12 sm4 style="font-size:17px;text-align:right;">{{ getpfdate }}</v-flex>
             <v-flex xs12 sm8  />
             <v-flex xs12 sm4 style="font-size:14px; text-align:right;">Posted By {{ pfdetail.writer  }}</v-flex>
-            <div id="pfbody" style="margin: 4% 0; font-size:17px;" v-html="pfdetail.body"> </div> <br />
+            <ImgUpload v-if="isUpdate" />
+            <div v-if="!isUpdate" id="pfbody" style="margin: 4% 0; font-size:17px;" v-html="pfbody"> </div>
+            <yimo-vue-editor v-else v-model="pfbody"></yimo-vue-editor>
+             <br />
           </v-layout>
         </v-card-title>
-        <v-card-actions style="float:right;"  v-if="pfdetail.uid == this.$store.state.user.uid ">
-          <v-btn flat color="orange">수정</v-btn>
-          <v-btn flat color="orange" @click="ClickDel">삭제</v-btn>
+        <v-card-actions style="float:right;"  v-if="this.$store.state.user != '' && (pfdetail.uid == this.$store.state.user.uid) ">
+          <v-btn v-if="!isUpdate" flat color="orange" @click="update=true">
+            수정
+          </v-btn>
+          <v-btn v-else flat color="orange" @click="ClickUp">
+            저장
+          </v-btn>
+          <template>
+            <div class="text-xs-center">
+              <v-btn flat
+              :disabled="loading"
+              :loading="loading"
+              color="orange"
+              @click="ClickDel"
+              >
+              삭제
+            </v-btn>
+            <v-dialog
+            v-model="loading"
+            hide-overlay
+            persistent
+            width="300"
+            >
+            <v-card
+            color="#FACC2E"
+            dark
+            >
+            <v-card-text>
+              처리 중...
+              <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </div>
+</template>
         </v-card-actions>
         <div style="display:hidden; clear:both;"></div>
       </v-card>
-      <br />
-      <br />
+      <br /><br />
+      <div v-if="this.$store.state.user != ''">
+        <Comment :pfid="this.$route.params.pfid" :pfauth="pfauth"/>
+      </div>
+      <br /><br />
     </v-flex>
-    <Loading/>
+    <!-- <Loading/> -->
   </v-layout>
 </template>
 
 <script>
-import Loading from "../components/Loading";
+import FirebaseService from "@/services/FirebaseService";
+import YimoVueEditor from "yimo-vue-editor";
+import ImgUpload from "../components/ImgUpload";
+import Comment from "../components/Comment";
 export default {
   name: "PortfolioDetail",
   data () {
     return {
+      pfauth: this.$route.params.auth,
       pfdetail: this.$route.params,
       pfdate: this.$route.params.date,
-      lang: "ko"
+      pftitle: this.$route.params.title,
+      pfbody: this.$route.params.body,
+      pfImgSrc: this.$route.params.imgSrc,
+      lang: "ko",
+      loading: false,
+      update: false
     };
   },
   components: {
-    Loading
+    YimoVueEditor,
+    ImgUpload,
+    Comment
   },
   created() {
     if (typeof this.$route.params.pfid == "undefined") { // 새로고침시 파라미터 분실, 이전페이지 이동으로 예외처리
@@ -52,14 +106,19 @@ export default {
       } else {
         this.lang = "ko";
       }
-
       this.translateText(this.lang);
+    });
+    this.$EventBus.$on("ImgSign", link => {
+      this.pfImgSrc = link;
     });
   },
   computed: {
     getpfdate() {
       if (typeof this.$route.params.pfid == "undefined") return false; // 예외처리
       return this.pfdate.substring(0, 25);
+    },
+    isUpdate() {
+      return this.update;
     }
   },
   methods: {
@@ -87,8 +146,28 @@ export default {
     ClickDel() {
       var res = confirm("삭제하시겠습니까?");
       if (res) {
-        this.$EventBus.$emit("runLoading");
+        this.loading = true;
+        setTimeout(() => (this.loading = false
+        ), 2000);
+        FirebaseService.deletePortfolio(this.pfdetail.pfid);
+        setTimeout(() => (
+          this.$router.go(-1)
+        ), 2000);
       }
+    },
+    ClickUp() {
+      this.loading = true;
+      setTimeout(() => (this.loading = false
+      ), 2000);
+      FirebaseService.updatePortfoilio(
+        this.pfdetail.pfid,
+        this.pftitle,
+        this.pfbody,
+        this.pfImgSrc
+      );
+      setTimeout(() => (
+        this.$router.go(-1)
+      ), 2000);
     }
   }
 };

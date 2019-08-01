@@ -113,7 +113,8 @@ export default {
       switchDiv: true,
       imgurImg: [],
       url: "",
-      myauth: false
+      myauth: false,
+      sendMyAuth: ""
     };
   },
   components: {
@@ -138,7 +139,6 @@ export default {
       return this.imageUrl !== "";
     },
     chkMyauth() {
-      console.log(this.myauth + "!!!!!!!!!!!!!!!!!!!");
       return this.myauth;
     }
   },
@@ -155,14 +155,6 @@ export default {
           else this.myauth = true;
         });
       }
-    },
-    curAuthChk2() {
-      if (this.$store.state.user == "") return false;
-      const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
-      auths.then(auth => {
-        if (auth == null || auth.myauth == "visitor") return false;
-        else return true;
-      });
     },
     async getPortfolios() {
       this.portfolios = await FirebaseService.getPortfolios();
@@ -235,7 +227,12 @@ export default {
             res.data.data.link,
             this.$store.state.uid,
             userName
-          );
+          )
+            .then(function() {
+              alert("저장되었습니다!");
+              location.reload();
+              this.dialog = false;
+            });
         })
         .catch(() => {
           FirebaseService.postPortfolio(
@@ -243,9 +240,6 @@ export default {
             "https://source.unsplash.com/random/1600x900"
           );
         });
-      alert("저장되었습니다!");
-      location.reload();
-      this.dialog = false;
     }
   }
 };
