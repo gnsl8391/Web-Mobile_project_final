@@ -5,6 +5,10 @@
     </ImgBanner>
   <v-card>
     <v-card-title>
+      <i class="fas fa-file-invoice" style="margin-right: 10px; margin-left: 10px;"></i>
+      portfolio : {{ portfolio }}
+      <i class="fas fa-file-signature" style="margin-right: 10px; margin-left: 20px;"></i>
+      post : {{ post }}
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -71,6 +75,8 @@ import FirebaseService from "@/services/FirebaseService";
 
 export default {
   data: () => ({
+    portfolio: "",
+    post: "",
     search: "",
     headers: [
       { text: "ID", value: "id" },
@@ -87,8 +93,19 @@ export default {
   }),
   mounted() {
     this.getdata();
+    this.getNum();
   },
   methods: {
+    getNum() {
+      var pf = FirebaseService.getPortfolios();
+      pf.then(r => {
+        this.portfolio = r.length;
+      });
+      var p = FirebaseService.getPosts();
+      p.then(r => {
+        this.post = r.length;
+      });
+    },
     async getdata() {
       this.members = await FirebaseService.getAllMembers();
     },

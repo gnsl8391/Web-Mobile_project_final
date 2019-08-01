@@ -74,10 +74,10 @@
           class="hidden-xs-only linkText"
           @click="$vuetify.goTo('#github', options)"
         >
-          Git Project
+          Git
         </v-btn>
         <v-btn v-else flat class="hidden-xs-only linkText" to="git">
-          Git Project
+          Git
         </v-btn>
         <v-btn flat class="hidden-xs-only linkText" href="Management" v-if="callAuth">
           Management
@@ -91,7 +91,7 @@
         >
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" flat class="hidden-xs-only linkText">
-              Login
+              LOGIN
             </v-btn>
           </template>
           <v-card style="height:60%">
@@ -107,7 +107,7 @@
           </v-card>
         </v-dialog>
         <v-btn flat class="hidden-xs-only linkText" v-else @click="logout">
-          Logout
+          LOGOUT
         </v-btn>
         <v-btn flat class="hidden-sm-and-up" @click.stop="drawer = !drawer">
           <v-icon size="18px">fas fa-bars</v-icon>
@@ -163,7 +163,7 @@
               :to="{ path: '/Management' }"
               class="linkText"
             >
-              Management
+              MANAGEMENT
             </router-link>
           </v-list-tile-title>
         </v-list-tile-content>
@@ -181,14 +181,14 @@
                 class="linkText"
                 v-if="this.$store.state.user == ''"
               >
-                login
+                LOGIN
               </router-link>
               <router-link
                 :to="{ path: '/' }"
                 class="linkText"
                 v-else-if="this.$store.state.user != undefined"
               >
-                <span @click="logout">logout</span>
+                <span @click="logout">LOGOUT</span>
               </router-link>
             </v-list-tile-title>
           </v-list-tile-content>
@@ -217,15 +217,15 @@ export default {
       ticking: false,
       items: [
         {
-          title: "portfolio",
+          title: "PORTFOLIO",
           icon: "fas fa-edit"
         },
         {
-          title: "post",
+          title: "POST",
           icon: "far fa-sticky-note"
         },
         {
-          title: "git",
+          title: "GIT",
           icon: "fab fa-github"
         }
       ],
@@ -345,8 +345,9 @@ export default {
       }
     },
     logout: async function() {
-      FirebaseService.logout();
-      window.location.replace("/");
+      FirebaseService.logout().then(function() {
+        window.location.replace("/");
+      });
     }
   }
 };
