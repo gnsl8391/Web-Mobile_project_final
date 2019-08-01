@@ -1,24 +1,23 @@
 <template>
-  <v-layout py-4 h-100>
-    <v-flex row>
-      <div class="caption">{{ formatedDate }}</div>
-      <h2 class="color-333 headline font-weight-light postTitle">
-        {{ title }}
-      </h2>
-      <p class="mb-1 color-666 font-weight-light subheading postContent">
+  <div class="py-3" @click="getDetail">
+    <h2 :class="`headline font-weight-light mb-3 ${color}--text`" id="postTitle">{{ title }}</h2>
+    <div class="postContent">
         {{ body }}
-      </p>
-    </v-flex>
-  </v-layout>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
   name: "Post",
   props: {
-    date: { type: Date },
+    color: { type: String },
+    pid: { type: String },
+    date: { type: String },
     title: { type: String },
-    body: { type: String }
+    body: { type: String },
+    uid: { type: String },
+    writer: { type: String }
   },
   data() {
     return {
@@ -41,11 +40,6 @@ export default {
       }
     });
   },
-  computed: {
-    formatedDate() {
-      return `${this.date.getFullYear()}년 ${this.date.getMonth()}월 ${this.date.getDate()}일`;
-    }
-  },
   methods: {
     translateText(sourceText, tagId, tagIdIdx, target) {
       var url =
@@ -57,6 +51,17 @@ export default {
         document.getElementsByClassName(tagId)[tagIdIdx].innerHTML =
           response.data.data.translations[0].translatedText;
       });
+    },
+    async getDetail() {
+      this.$router.push({name: "postDetail",
+        params: {
+          pid: this.pid,
+          date: this.date,
+          title: this.title,
+          body: this.body,
+          uid: this.uid,
+          writer: this.writer
+        }});
     }
   }
 };
@@ -72,7 +77,7 @@ export default {
   height: 100%;
 }
 
-.postTitle {
+#postTitle {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
