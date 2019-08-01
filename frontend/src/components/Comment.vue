@@ -12,7 +12,8 @@
           </b>
         </v-flex>
         <v-flex xs8>
-         <input type="text" id="Comtitle" v-model="comment" />
+         <input v-if="chkAuth()" type="text" id="Comtitle" v-model="comment" />
+         <input v-else type="text" id="Comtitle" v-model="comment" readOnly placeholder="관리자와 팀원만 이용가능합니다."/>
         </v-flex>
         <v-flex xs2 hidden-sm-and-up>
         <v-btn hidden-xs-and-up color="error" @click="regComm" style="min-width:10px !important; padding: 0 11px;">
@@ -34,7 +35,7 @@
             <b> {{ item.pfc_writer }}</b>
             &nbsp;&nbsp;&nbsp;&nbsp;
             {{ item.pfc_date }} |
-               <i class="fas fa-times" style="color: red;" @click="delComm(item.pfc_id)"/>
+               <i v-if="chkMe(item.pfc_writerUid)" class="fas fa-times" style="color: red;" @click="delComm(item.pfc_id)"/>
           </p>
           <p>{{ item.pfc_content }}</p>
         </div>
@@ -54,7 +55,8 @@
               </b>
             </v-flex>
             <v-flex xs8>
-             <input type="text" id="ComSubtitle" v-model="subcomment" />
+             <input v-if="chkAuth()" type="text" id="ComSubtitle" v-model="subcomment"/>
+             <input v-else type="text" id="ComSubtitle" v-model="subcomment" readOnly placeholder="관리자와 팀원만 이용가능합니다."/>
             </v-flex>
             <v-flex xs2 hidden-sm-and-up>
             <v-btn hidden-xs-and-up color="error" @click="regSubComm" style="min-width:10px !important; padding: 0 11px;">
@@ -78,7 +80,7 @@
                   <b> {{ idx.spfc_writer }} </b>
                   &nbsp;&nbsp;&nbsp;&nbsp;
                   {{ idx.spfc_date }} |
-                  <i class="fas fa-times" style="color: red;" @click="delSubComm(item.pfc_id, idx.spfc_ids)"/>
+                  <i v-if="chkMe(idx.spfc_writerUid)" class="fas fa-times" style="color: red;" @click="delSubComm(item.pfc_id, idx.spfc_id)"/>
                 </p>
                 <p>{{ idx.spfc_content }}</p>
               </v-flex>
@@ -92,6 +94,7 @@
 </template>
 
 <script>
+import FirebaseService from "@/services/FirebaseService";
 export default{
   name: "Comment",
   props: {
@@ -105,14 +108,37 @@ export default{
       comment: "",
       subcomment: "",
       email: this.$store.state.user.email.split("@")[0],
-      displayName: this.$store.state.user.displayName
+      displayName: this.$store.state.user.displayName,
+      myauth: false
     };
   },
   created() {
     // axios로 댓글 내용 가져오기
     this.getComm();
   },
+  beforeUpdate() {
+    this.curAuthChk();
+  },
   methods: {
+    curAuthChk() {
+      if (this.$store.state.user == "") this.myauth = false;
+      else {
+        const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
+        auths.then(auth => {
+          if (auth == null || auth.myauth == "visitor") this.myauth = false;
+          else this.myauth = true;
+        });
+      }
+    },
+    chkMe(uid) {
+      if (uid == this.$store.state.user.uid) {
+        return true;
+      }
+      else return false;
+    },
+    chkAuth() {
+      return this.myauth; // 권한이 null이거나 visitor인 경우 false, 멤버 또는 관리자일 경우 true(from portfolioList)
+    },
     getComm() {
       // portfolio인지 post인지
       // 글 id
@@ -175,7 +201,6 @@ export default{
     getSubComm(pfc_id) {
       // portfolio인지 post인지
       // 댓글 id
-      console.log(pfc_id);
       const axios = require("axios");
       let formData = new FormData();
       formData.append("pfc_id", pfc_id);
@@ -191,7 +216,6 @@ export default{
       }
     },
     regSubComm(pfc_id) {
-      console.log(this.subcomment);
       const axios = require("axios");
       let formData = new FormData();
       formData.append("pfid", this.pfid);
@@ -216,8 +240,8 @@ export default{
       this.subcomment = "";
     },
     delSubComm(pfc_id, val) {
-      console.log(pfc_id, val);
       var del = confirm("삭제하시겠습니까?");
+      if (!del) return;
       const axios = require("axios");
       let formData = new FormData();
       formData.append("spfc_id", val);

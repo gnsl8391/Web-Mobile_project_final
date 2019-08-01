@@ -63,7 +63,7 @@
       </v-card>
       <br /><br />
       <div v-if="this.$store.state.user != ''">
-        <Comment :pfid="this.$route.params.pfid"/>
+        <Comment :pfid="this.$route.params.pfid" :pfauth="pfauth"/>
       </div>
       <br /><br />
     </v-flex>
@@ -80,6 +80,7 @@ export default {
   name: "PortfolioDetail",
   data () {
     return {
+      pfauth: this.$route.params.auth,
       pfdetail: this.$route.params,
       pfdate: this.$route.params.date,
       pftitle: this.$route.params.title,

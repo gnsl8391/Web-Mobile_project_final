@@ -113,7 +113,8 @@ export default {
       switchDiv: true,
       imgurImg: [],
       url: "",
-      myauth: false
+      myauth: false,
+      sendMyAuth: ""
     };
   },
   components: {
@@ -154,14 +155,6 @@ export default {
           else this.myauth = true;
         });
       }
-    },
-    curAuthChk2() {
-      if (this.$store.state.user == "") return false;
-      const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
-      auths.then(auth => {
-        if (auth == null || auth.myauth == "visitor") return false;
-        else return true;
-      });
     },
     async getPortfolios() {
       this.portfolios = await FirebaseService.getPortfolios();
