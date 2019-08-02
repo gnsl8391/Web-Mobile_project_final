@@ -102,15 +102,6 @@ export default {
     title: "",
     body: "",
     dialog: false,
-    options: {
-      // lineNumbers: true,
-      // styleActiveLine: true,
-      // styleSelectedText: true,
-      // lineWrapping: true,
-      // indentWithTabs: true,
-      // tabSize: 2,
-      // indentUnit: 2
-    },
     posts: [],
     myauth: false
   }),
