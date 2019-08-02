@@ -48,10 +48,31 @@
         </v-layout>
         <v-layout style="float:right; margin : 10px 0px;">
           <v-btn
-          :disabled="!valid"
+          :disabled="!valid || loading"
+          :loading="loading"
           outline color="indigo"
           @click="validate"
           >회원가입</v-btn>
+            <v-dialog
+            v-model="loading"
+            hide-overlay
+            persistent
+            width="300"
+            >
+            <v-card
+            color="#FACC2E"
+            dark
+            >
+            <v-card-text>
+              처리 중...
+              <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
           <v-btn outline color="warning" @click="reset">
             초기화
           </v-btn>
@@ -59,6 +80,21 @@
         <div style="clear:both;" />
       </v-form>
     </v-container>
+    <v-snackbar
+      v-model="snackbar"
+      :multi-line="mode === 'multi-line'"
+      :timeout="timeout"
+      :top="true"
+    >
+      {{ text }}
+      <v-btn
+        color="pink"
+        flat
+        @click="moveHome()"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -91,7 +127,15 @@ export default {
       required: value => !!value || "Required.",
       min: v => (v && v.length >= 8) || "Min 8 characters",
       emailMatch: () => "The email and password you entered don't match"
-    }
+    },
+    snackbar: false,
+    y: "top",
+    x: null,
+    mode: "",
+    timeout: 6000,
+    text: "",
+    goHome: false,
+    loading: false
   }),
   components: {
     ImgBanner,
@@ -103,6 +147,15 @@ export default {
     });
   },
   methods: {
+    moveHome() {
+      this.snackbar = false;
+      if (this.goHome) {
+        this.$router.push("/");
+      }
+      else {
+        this.reset();
+      }
+    },
     passChk(value) {
       if (this.password == value) {
         return true;
@@ -114,14 +167,27 @@ export default {
       return require("../assets/" + img);
     },
     validate() {
+      // 로딩
+      this.loading = true;
       if (this.$refs.form.validate()) {
-        this.snackbar = true;
+        // 회원가입
+        const result = FirebaseService.createAccount(this.email, this.passwordChk);
+        console.log(result);
+        result.then(r => {
+          if (r.user == null) {
+            this.text = r;
+            this.snackbar = true;
+          }
+          else {
+            this.text = "가입되었습니다.";
+            this.snackbar = true;
+            this.goHome = true;
+            FirebaseService.postAuth(r.user.uid, "visitor", r.user.email, "email");
+            FirebaseService.updateProfile(r.user, this.name);
+          }
+          this.loading = false;
+        });
       }
-      const result = FirebaseService.createAccount(this.email, this.passwordChk);
-      result.then(r => {
-        FirebaseService.postAuth(r.user.uid, "visitor", r.user.email, "email");
-        FirebaseService.updateProfile(r.user, this.name);
-      });
     },
     reset() {
       this.$refs.form.reset();

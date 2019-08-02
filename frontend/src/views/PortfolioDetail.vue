@@ -67,14 +67,12 @@
           </v-card>
         </v-dialog>
       </div>
-</template>
+    </template>
         </v-card-actions>
         <div style="display:hidden; clear:both;"></div>
       </v-card>
       <br /><br />
-      <div v-if="this.$store.state.user != ''">
         <Comment :pfid="this.$route.params.pfid" :pfauth="pfauth"/>
-      </div>
       <br /><br />
     </v-flex>
     <!-- <Loading/> -->

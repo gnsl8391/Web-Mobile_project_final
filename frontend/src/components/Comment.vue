@@ -13,7 +13,7 @@
         </v-flex>
         <v-flex xs8>
          <input v-if="chkAuth()" type="text" id="Comtitle" v-model="comment" />
-         <input v-else type="text" id="Comtitle" v-model="comment" readOnly placeholder="관리자 및 팀원만 이용가능합니다."/>
+         <input v-else type="text" id="Comtitle" v-model="comment" readOnly placeholder=" 로그인 후 이용가능합니다."/>
         </v-flex>
         <v-flex xs2 hidden-sm-and-up>
         <v-btn hidden-xs-and-up color="error" @click="regComm" style="min-width:10px !important; padding: 0 11px;">
@@ -56,7 +56,7 @@
             </v-flex>
             <v-flex xs8>
              <input v-if="chkAuth()" type="text" id="ComSubtitle" v-model="subcomment"/>
-             <input v-else type="text" id="ComSubtitle" v-model="subcomment" readOnly placeholder="관리자 및 팀원만 이용가능합니다."/>
+             <input v-else type="text" id="ComSubtitle" v-model="subcomment" readOnly placeholder=" 로그인 후 이용가능합니다."/>
             </v-flex>
             <v-flex xs2 hidden-sm-and-up>
             <v-btn hidden-xs-and-up color="error" @click="regSubComm" style="min-width:10px !important; padding: 0 11px;">
@@ -112,6 +112,17 @@ export default{
       myauth: false
     };
   },
+  // computed: {
+  //   email: {
+  //     get() {
+  //       return this.switchD;
+  //     },
+  //     set(newValue) {
+  //       this.switchD = newValue;
+  //       this.setUrl(this.switchD);
+  //     }
+  //   }
+  // },
   created() {
     // axios로 댓글 내용 가져오기
     this.getComm();
