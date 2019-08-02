@@ -59,7 +59,7 @@ if (BrowserChk != "Chrome") {
   }
 
   var notification = new Notification("최적화 경고", {
-    icon: "fruit.png",
+    icon: "https://cdn1.iconfinder.com/data/icons/fruit-39/128/FRUIT_2-14-256.png",
     body: "해당 사이트는 크롬에서 최적화 되어있습니다."
   });
 }

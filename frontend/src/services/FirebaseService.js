@@ -174,7 +174,6 @@ export default {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(function(user) {
-        alert("회원가입을 축하드립니다");
         return user;
       })
       .catch(function(error) {
@@ -183,9 +182,11 @@ export default {
         var errorMessage = error.message;
         // [START_EXCLUDE]
         if (errorCode == "auth/weak-password") {
-          alert("Enter the password again");
+          var alertMsg = "비밀번호를 다시 입력하세요.";
+          return alertMsg;
         } else {
-          alert(errorMessage);
+          alertMsg = "이미 가입한 회원입니다.";
+          return alertMsg;
         }
       });
   },
@@ -208,8 +209,6 @@ export default {
       .signInWithEmailAndPassword(email, password)
       .then(function(user) {
         store.state.accessToken = email;
-        alert("반갑습니다 ^~^");
-        console.log(user);
         return user;
       })
       .catch(function(error) {
@@ -228,11 +227,9 @@ export default {
       .signOut()
       .then(function() {
         // Sign-out successful.
-        alert("안녕히가세요 ^~^");
       })
       .catch(function() {
         // An error happened.
-        alert("로그아웃 실패");
       });
     store.dispatch("logout");
   },

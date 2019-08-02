@@ -56,6 +56,21 @@
         </v-flex>
       </v-layout>
     </v-flex>
+    <v-snackbar
+      v-model="snackbar"
+      :multi-line="mode === 'multi-line'"
+      :timeout="timeout"
+      :top="true"
+    >
+      {{ text }}
+      <v-btn
+        color="pink"
+        flat
+        @click="moveHome()"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-layout>
 </template>
 
@@ -71,13 +86,23 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      snackbar: false,
+      y: "top",
+      x: null,
+      mode: "",
+      timeout: 6000,
+      text: "처리되었습니다."
     };
   },
   component: {
     signup
   },
   methods: {
+    moveHome() {
+      this.snackbar = false;
+      this.$router.push("/");
+    },
     async loginWithGoogle() {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.dispatch("login", {
@@ -95,8 +120,9 @@ export default {
             "google"
           );
         };
+        this.text = "로그인되었습니다.";
+        this.snackbar = true;
       });
-      this.$router.push("/");
     },
     async loginWithFacebook() {
       const result = await FirebaseService.loginWithFacebook();
@@ -125,8 +151,9 @@ export default {
           }
         } else {
         }
+        this.text = "로그인되었습니다.";
+        this.snackbar = true;
       });
-      this.$router.push("/");
     },
     async loginWithEmail() {
       const result = FirebaseService.loginWithEmail(this.email, this.password);
@@ -136,15 +163,17 @@ export default {
           user: result,
           uid: r.user.uid
         });
+        this.text = "로그인되었습니다.";
+        this.snackbar = true;
       });
-      this.$router.push("/");
     },
     async logout() {
       firebase
         .auth()
         .signOut()
         .then(function() {
-          alert("Logged out!");
+          this.text = "로그아웃되었습니다.";
+          this.snackbar = true;
         });
     }
   }

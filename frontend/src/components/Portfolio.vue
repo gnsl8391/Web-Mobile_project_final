@@ -1,5 +1,6 @@
 <template>
-  <v-card @click="getDetail()" >
+  <v-hover>
+  <v-card @click="getDetail()" slot-scope="{ hover }" :class="`elevation-${hover ? 20 : 2}`" >
     <v-img :src="imgSrc" height="200px" />
     <v-card-title primary-title>
       <div style="margin:5px;">
@@ -8,6 +9,7 @@
       </div>
     </v-card-title>
   </v-card>
+</v-hover>
 </template>
 
 <script>
