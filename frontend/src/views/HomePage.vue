@@ -32,11 +32,11 @@
         <div class="introDiv">
           <h2 id="introTitle">Team 2. 야망</h2>
           <p id="intro">
-            <span style="font-style: italic; font-size : 26px;">
-              야망을 가진 사람을 막을 수 있는 사람은<br />
-              그 자신 뿐이다.<br />
-              - Charles Ross -
-            </span>
+            <vue-typer
+            class="team_typer"
+            text="야망을 가진 사람을 막을 수 있는 사람은 그 자신 뿐이다
+- Charles Ross -">
+          </vue-typer><br/>
           </p>
         </div>
       </v-flex>
@@ -120,6 +120,7 @@ import PostList from "../components/PostList";
 import ImgUpload from "@/components/ImgUpload";
 import { Carousel3d, Slide } from "vue-carousel-3d";
 import GitlabService from "@/services/GitlabService";
+import { VueTyper } from "vue-typer";
 
 export default {
   name: "HomePage",
@@ -129,7 +130,8 @@ export default {
     PortfolioList,
     PostList,
     Carousel3d,
-    Slide
+    Slide,
+    VueTyper
   },
   data: () => ({
     drawer: true,
@@ -379,6 +381,10 @@ export default {
   .current {
     background: white !important;
     margin-top: 15px;
+  }
+  .team_typer {
+    font-style: italic;
+    font-size : 26px;
   }
 }
 </style>
