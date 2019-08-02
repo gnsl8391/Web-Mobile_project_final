@@ -167,12 +167,9 @@ export default {
       return require("../assets/" + img);
     },
     validate() {
-      // 로딩
       this.loading = true;
       if (this.$refs.form.validate()) {
-        // 회원가입
         const result = FirebaseService.createAccount(this.email, this.passwordChk);
-        console.log(result);
         result.then(r => {
           if (r.user == null) {
             this.text = r;

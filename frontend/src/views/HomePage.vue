@@ -31,7 +31,7 @@
         <!--소개끝-->
         <div class="introDiv">
           <h2 id="introTitle">Team 2. 야망</h2>
-          <p id="intro">
+          <p id="intro" style="font-size: 20px; height: 170px;">
             <vue-typer
             class="team_typer"
             text="야망을 가진 사람을 막을 수 있는 사람은 그 자신 뿐이다

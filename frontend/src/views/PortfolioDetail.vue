@@ -75,7 +75,6 @@
         <Comment :pfid="this.$route.params.pfid" :pfauth="pfauth"/>
       <br /><br />
     </v-flex>
-    <!-- <Loading/> -->
   </v-layout>
 </template>
 
@@ -105,7 +104,7 @@ export default {
     Comment
   },
   created() {
-    if (typeof this.$route.params.pfid == "undefined") { // 새로고침시 파라미터 분실, 이전페이지 이동으로 예외처리
+    if (typeof this.$route.params.pfid == "undefined") {
       this.$router.go(-1);
     }
     this.$EventBus.$on("click-icon", () => {
@@ -122,7 +121,7 @@ export default {
   },
   computed: {
     getpfdate() {
-      if (typeof this.$route.params.pfid == "undefined") return false; // 예외처리
+      if (typeof this.$route.params.pfid == "undefined") return false;
       return this.pfdate.substring(0, 25);
     },
     isUpdate() {
@@ -183,7 +182,6 @@ export default {
   }
 };
 </script>
-
 <style>
 @media screen and (max-width: 598px){
   #portfolioCard{
@@ -195,5 +193,4 @@ export default {
     margin-top: 110px;
   }
 }
-
 </style>
