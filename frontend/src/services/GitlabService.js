@@ -7,7 +7,7 @@ export default {
     return Api(BASE_URL).get(`/users/${userName}/projects`);
   },
   getMembers() {
-    return Api(BASE_URL).get("/projects/6081/members");
+    return Api(BASE_URL).get("/projects/7547/members");
   },
   getCommits(userName) {
     let d = new Date();
