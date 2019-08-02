@@ -1,14 +1,15 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import App from "./App.vue";
+import router from "./router";
+
 import Vue from "vue";
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
 import VueSimplemde from "vue-simplemde";
 import "simplemde/dist/simplemde.min.css";
 import "font-awesome/css/font-awesome.min.css";
-
-import App from "./App.vue";
-import router from "./router";
+import "animate.css";
+import "fullpage-vue/src/fullpage.css";
+import VueFullpage from "fullpage-vue";
 
 import VueResource from "vue-resource";
 import VueWeatherWidget from "vue-weather-widget";
@@ -16,8 +17,12 @@ import "vue-weather-widget/dist/css/vue-weather-widget.css";
 
 import "@fortawesome/fontawesome-free/css/all.css";
 import VEditor from "yimo-vue-editor";
+
+import VueCarousel from "@chenfengyuan/vue-carousel";
+Vue.component(VueCarousel.name, VueCarousel);
 Vue.config.productionTip = false;
 
+Vue.use(VueFullpage);
 Vue.use(VueSimplemde);
 Vue.use(VueResource);
 Vue.use(Vuetify, {
