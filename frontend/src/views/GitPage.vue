@@ -127,16 +127,12 @@ export default {
                         }
                       }
                     }
-                  })
-                  .catch(function(err) {
-                    // console.log(err);
                   });
               });
             }
           }
         });
       }
-      // console.log(branches);
       master.merge({
         branch: develop,
         commitOptions: {

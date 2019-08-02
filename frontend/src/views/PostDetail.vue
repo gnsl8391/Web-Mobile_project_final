@@ -72,7 +72,6 @@
       </div>
       <br /><br />
     </v-flex>
-    <!-- <Loading/> -->
   </v-layout>
 </template>
 
@@ -101,7 +100,7 @@ export default {
     Comment
   },
   created() {
-    if (typeof this.$route.params.pid == "undefined") { // 새로고침시 파라미터 분실, 이전페이지 이동으로 예외처리
+    if (typeof this.$route.params.pid == "undefined") {
       this.$router.go(-1);
     }
     this.$EventBus.$on("click-icon", () => {
@@ -115,7 +114,7 @@ export default {
   },
   computed: {
     getpfdate() {
-      if (typeof this.$route.params.pid == "undefined") return false; // 예외처리
+      if (typeof this.$route.params.pid == "undefined") return false;
       return this.pfdate.substring(0, 25);
     },
     isUpdate() {

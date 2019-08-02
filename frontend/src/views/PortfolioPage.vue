@@ -4,7 +4,6 @@
       <div id="bannerTxt" slot="text">Portfolio</div>
     </ImgBanner>
     <v-container>
-      <!-- Portfolio -->
       <v-layout>
         <v-flex xs12>
           <PortfolioList :limits="6" :load-more="true"></PortfolioList>
