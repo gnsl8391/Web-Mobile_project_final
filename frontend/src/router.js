@@ -4,8 +4,9 @@ import HomePage from "./views/HomePage.vue";
 import PostPage from "./views/PostPage.vue";
 import PortfolioPage from "./views/PortfolioPage.vue";
 import LoginPage from "./views/LoginPage.vue";
-import GitPage from "./views/GitPage.vue";
+import MyPage from "./views/MyPage.vue";
 import SignUp from "./views/SignUp.vue";
+import GitPage from "./views/GitPage.vue";
 import AdminPage from "./views/AdminPage.vue";
 import PortfolioDetail from "./views/PortfolioDetail.vue";
 import PostDetail from "./views/PostDetail.vue";
@@ -39,6 +40,11 @@ export default new Router({
       path: "/signup",
       name: "signup",
       component: SignUp
+    },
+    {
+      path: "/mypage",
+      name: "mypage",
+      component: MyPage
     },
     {
       path: "/git",

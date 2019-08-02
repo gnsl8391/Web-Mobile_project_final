@@ -168,7 +168,22 @@
           </v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-
+      <!-- Mypage -->
+      <v-list-tile v-if="this.$store.state.user != ''">
+      <v-list-tile-action>
+        <v-icon>fas fa-user</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>
+          <router-link
+            :to="{ path: '/mypage' }"
+            class="linkText"
+          >
+            MY PAGE
+          </router-link>
+        </v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
           <!-- login condition in sidebar -->
           <v-list-tile>
           <v-list-tile-action>
@@ -369,6 +384,7 @@ export default {
       FirebaseService.logout();
       this.text = "로그아웃되었습니다.";
       this.snackbar = true;
+      this.$router.push("/login");
     }
   }
 };
