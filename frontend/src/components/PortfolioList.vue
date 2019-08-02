@@ -100,15 +100,6 @@ export default {
       imageUrl: "",
       portfolios: [],
       dialog: false,
-      options: {
-        // lineNumbers: true,
-        // styleActiveLine: true,
-        // styleSelectedText: true,
-        // lineWrapping: true,
-        // indentWithTabs: true,
-        // tabSize: 2,
-        // indentUnit: 2
-      },
       image: null,
       switchDiv: true,
       imgurImg: [],
