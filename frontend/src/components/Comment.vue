@@ -59,12 +59,12 @@
              <input v-else type="text" id="ComSubtitle" v-model="subcomment" readOnly placeholder=" 로그인 후 이용가능합니다."/>
             </v-flex>
             <v-flex xs2 hidden-sm-and-up>
-            <v-btn hidden-xs-and-up color="error" @click="regSubComm" style="min-width:10px !important; padding: 0 11px;">
-              <i class="fas fa-pen"></i>
-            </v-btn>
+              <v-btn hidden-xs-and-up color="error" @click="regSubComm(item.pfc_id)" style="min-width:10px !important; padding: 0 11px;">
+                <i class="fas fa-pen"></i>
+              </v-btn>
             </v-flex>
             <v-flex xs2 hidden-xs-only>
-              <v-btn  color="error" @click="regSubComm(item.pfc_id)" style="min-width:10px !important;">등록</v-btn>
+              <v-btn color="error" @click="regSubComm(item.pfc_id)" style="min-width:10px !important;">등록</v-btn>
             </v-flex>
           </v-layout>
           <br />
@@ -112,17 +112,6 @@ export default{
       myauth: false
     };
   },
-  // computed: {
-  //   email: {
-  //     get() {
-  //       return this.switchD;
-  //     },
-  //     set(newValue) {
-  //       this.switchD = newValue;
-  //       this.setUrl(this.switchD);
-  //     }
-  //   }
-  // },
   created() {
     // axios로 댓글 내용 가져오기
     this.getComm();
@@ -244,6 +233,7 @@ export default{
         });
     },
     regSubComm(id) {
+      console.log(id);
       const axios = require("axios");
       let formData = new FormData();
       formData.append("wid", this.pfid);
@@ -256,6 +246,7 @@ export default{
       formData.append("writerUid", this.$store.state.user.uid);
       formData.append("content", this.subcomment);
       formData.append("id", id);
+      console.log(id);
       var category = window.location.pathname.split("/")[1];
       var url = "";
       if (category == "portfolioDetail") {

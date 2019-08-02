@@ -165,7 +165,7 @@ public class CommonController {
 	
 	@RequestMapping(value="/getPostSubComment", method=RequestMethod.POST)
 	public @ResponseBody List<pfSubComment> getPostSubComm(String id){
-		// 포트폴리오 대댓글 가져오기
+		// 포스트 대댓글 가져오기
 		List<pfSubComment> list = new LinkedList<>();
 		List<postSubComment> q = postRepo.getAllPostSubComment(id);
 		for(int i=0; i<q.size(); i++) {
@@ -177,7 +177,7 @@ public class CommonController {
 	
 	@RequestMapping(value="/regPostSubComment", method=RequestMethod.POST)
 	public @ResponseBody int regPostSubComm(String wid, String writer, String writerUid, String content, int id){
-		// 포트폴리오 대댓글 등록하기
+		// 포스트 대댓글 등록하기
 		HashMap<String, String> hm = new HashMap<>();
 		hm.put("pid", wid);
 		hm.put("spc_writer", writer);
