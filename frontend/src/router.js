@@ -8,7 +8,6 @@ import GitPage from "./views/GitPage.vue";
 import SignUp from "./views/SignUp.vue";
 import AdminPage from "./views/AdminPage.vue";
 import PortfolioDetail from "./views/PortfolioDetail.vue";
-import Test from "./views/test.vue";
 
 Vue.use(Router);
 
@@ -56,11 +55,6 @@ export default new Router({
       name: "portfolioDetail",
       component: PortfolioDetail,
       props: true
-    },
-    {
-      path: "/test",
-      name: "Test",
-      component: Test
     }
   ]
 });
