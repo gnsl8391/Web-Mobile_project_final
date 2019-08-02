@@ -113,8 +113,7 @@ export default {
       switchDiv: true,
       imgurImg: [],
       url: "",
-      myauth: false,
-      sendMyAuth: ""
+      myauth: false
     };
   },
   components: {

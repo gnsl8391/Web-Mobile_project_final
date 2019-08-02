@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.webmobilefinal.dao.PortfolioRepository">
 	<!-- 포트폴리오 댓글 관리 -->
-	<select id="getAllPfComment" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.PfComment">
+	<select id="getAllPfComment" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.pfComment">
 		select * from pfComment where pfid = #{pfid}
 	</select>
 	<insert id="addPfComment" parameterType="hashmap">
@@ -13,7 +13,7 @@
 	</delete>
 	
 	<!-- 포트폴리오 대댓글 관리 -->
-	<select id="getAllPfSubComment" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.PfSubComment">
+	<select id="getAllPfSubComment" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.pfSubComment">
 		select * from pfSubComment where pfc_id = #{pfc_id}
 	</select>
 	<insert id="addPfSubComment" parameterType="hashmap">

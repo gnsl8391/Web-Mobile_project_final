@@ -195,6 +195,21 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+    <v-snackbar
+      v-model="snackbar"
+      :multi-line="mode === 'multi-line'"
+      :timeout="timeout"
+      :top="true"
+    >
+      {{ text }}
+      <v-btn
+        color="pink"
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -235,7 +250,13 @@ export default {
       lang: "ko",
       duration: 750,
       offset: 55,
-      easing: "easeOutQuad"
+      easing: "easeOutQuad",
+      snackbar: false,
+      y: "top",
+      x: null,
+      mode: "",
+      timeout: 6000,
+      text: ""
     };
   },
   components: {
@@ -345,9 +366,9 @@ export default {
       }
     },
     logout: async function() {
-      FirebaseService.logout().then(function() {
-        window.location.replace("/");
-      });
+      FirebaseService.logout();
+      this.text = "로그아웃되었습니다.";
+      this.snackbar = true;
     }
   }
 };

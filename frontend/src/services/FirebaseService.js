@@ -97,16 +97,32 @@ export default {
         return docSnapshots.docs.map(doc => {
           let data = doc.data();
           data.created_at = new Date(data.created_at.toDate());
-          return data;
+          var tmp = {
+            id: doc.id,
+            dataMap: data
+          };
+          return tmp;
         });
       });
   },
-  postPost(title, body) {
+  postPost(title, body, uid, writer) {
     return firestore.collection(POSTS).add({
       title,
       body,
+      uid: uid,
+      writer: writer,
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     });
+  },
+  deletePost(pid) {
+    var res = firestore.collection(POSTS).doc(pid).delete();
+  },
+  updatePost(pid, title, body) {
+    var setDoc = firestore.collection(POSTS).doc(pid);
+    setDoc.set({
+      title: title,
+      body: body
+    }, {merge: true});
   },
   getPortfolios() {
     const postsCollection = firestore.collection(PORTFOLIOS);
@@ -126,7 +142,6 @@ export default {
       });
   },
   postPortfolio(title, body, img, uid, writer) {
-    console.log(title + " / " + body + " / " + img + " / " + uid + " / " + writer);
     return firestore.collection(PORTFOLIOS).add({
       title: title,
       body: body,
@@ -173,7 +188,6 @@ export default {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(function(user) {
-        alert("회원가입을 축하드립니다");
         return user;
       })
       .catch(function(error) {
@@ -182,9 +196,11 @@ export default {
         var errorMessage = error.message;
         // [START_EXCLUDE]
         if (errorCode == "auth/weak-password") {
-          alert("Enter the password again");
+          var alertMsg = "비밀번호를 다시 입력하세요.";
+          return alertMsg;
         } else {
-          alert(errorMessage);
+          alertMsg = "이미 가입한 회원입니다.";
+          return alertMsg;
         }
       });
   },
@@ -207,8 +223,6 @@ export default {
       .signInWithEmailAndPassword(email, password)
       .then(function(user) {
         store.state.accessToken = email;
-        alert("반갑습니다 ^~^");
-        console.log(user);
         return user;
       })
       .catch(function(error) {
@@ -227,11 +241,9 @@ export default {
       .signOut()
       .then(function() {
         // Sign-out successful.
-        alert("안녕히가세요 ^~^");
       })
       .catch(function() {
         // An error happened.
-        alert("로그아웃 실패");
       });
     store.dispatch("logout");
   },

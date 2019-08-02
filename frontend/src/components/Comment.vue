@@ -13,7 +13,7 @@
         </v-flex>
         <v-flex xs8>
          <input v-if="chkAuth()" type="text" id="Comtitle" v-model="comment" />
-         <input v-else type="text" id="Comtitle" v-model="comment" readOnly placeholder="관리자와 팀원만 이용가능합니다."/>
+         <input v-else type="text" id="Comtitle" v-model="comment" readOnly placeholder=" 로그인 후 이용가능합니다."/>
         </v-flex>
         <v-flex xs2 hidden-sm-and-up>
         <v-btn hidden-xs-and-up color="error" @click="regComm" style="min-width:10px !important; padding: 0 11px;">
@@ -56,7 +56,7 @@
             </v-flex>
             <v-flex xs8>
              <input v-if="chkAuth()" type="text" id="ComSubtitle" v-model="subcomment"/>
-             <input v-else type="text" id="ComSubtitle" v-model="subcomment" readOnly placeholder="관리자와 팀원만 이용가능합니다."/>
+             <input v-else type="text" id="ComSubtitle" v-model="subcomment" readOnly placeholder=" 로그인 후 이용가능합니다."/>
             </v-flex>
             <v-flex xs2 hidden-sm-and-up>
             <v-btn hidden-xs-and-up color="error" @click="regSubComm" style="min-width:10px !important; padding: 0 11px;">
@@ -112,6 +112,17 @@ export default{
       myauth: false
     };
   },
+  // computed: {
+  //   email: {
+  //     get() {
+  //       return this.switchD;
+  //     },
+  //     set(newValue) {
+  //       this.switchD = newValue;
+  //       this.setUrl(this.switchD);
+  //     }
+  //   }
+  // },
   created() {
     // axios로 댓글 내용 가져오기
     this.getComm();
@@ -125,7 +136,7 @@ export default{
       else {
         const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
         auths.then(auth => {
-          if (auth == null || auth.myauth == "visitor") this.myauth = false;
+          if (auth == null) this.myauth = false;
           else this.myauth = true;
         });
       }
@@ -137,123 +148,150 @@ export default{
       else return false;
     },
     chkAuth() {
-      return this.myauth; // 권한이 null이거나 visitor인 경우 false, 멤버 또는 관리자일 경우 true(from portfolioList)
+      if (this.myauth) return true;
+      else return false;
     },
     getComm() {
       // portfolio인지 post인지
       // 글 id
       const axios = require("axios");
       let formData = new FormData();
-      formData.append("pfid", this.pfid);
+      formData.append("id", this.pfid);
       var category = window.location.pathname.split("/")[1];
+      var url = "";
       if (category == "portfolioDetail") {
-        axios.post("/getPfComment", formData).then(res => {
-          this.comm = res.data;
-          this.comment = "";
-        })
-          .catch((ex) => {
-            console.log(ex);
-          });
+        url = "/getPfComment";
       }
+      else {
+        url = "/getPostComment";
+      }
+      axios.post(url, formData).then(res => {
+        this.comm = res.data;
+        this.comment = "";
+      })
+        .catch((ex) => {
+          console.log(ex);
+        });
     },
     regComm() {
-      if (window.location.pathname == "/portfolioDetail") {
-        const axios = require("axios");
-        let formData = new FormData();
-        formData.append("pfid", this.pfid);
-        if (this.$store.state.user.displayName != undefined) {
-          formData.append("pfc_writer", this.$store.state.user.displayName);
-        }
-        else {
-          formData.append("pfc_writer", this.$store.state.user.email.split("@")[0]);
-        }
-        formData.append("pfc_writerUid", this.$store.state.user.uid);
-        formData.append("pfc_content", this.comment);
-        var category = window.location.pathname.split("/")[1];
-        if (category == "portfolioDetail") {
-          axios.post("/regPfComment", formData).then(res => {
-            this.getComm();
-          })
-            .catch((ex) => {
-              console.log(ex);
-            });
-        }
+      const axios = require("axios");
+      let formData = new FormData();
+      formData.append("id", this.pfid);
+      if (this.$store.state.user.displayName != undefined) {
+        formData.append("writer", this.$store.state.user.displayName);
       }
-      else if (window.location.pathname == "/postDetail") {
-        console.log("good");
+      else {
+        formData.append("writer", this.$store.state.user.email.split("@")[0]);
       }
+      formData.append("writerUid", this.$store.state.user.uid);
+      formData.append("content", this.comment);
+
+      var category = window.location.pathname.split("/")[1];
+      var url = "";
+      if (category == "portfolioDetail") {
+        url = "/regPfComment";
+      }
+      else {
+        url = "/regPostComment";
+      }
+      axios.post(url, formData).then(res => {
+        this.getComm();
+      })
+        .catch((ex) => {
+          console.log(ex);
+        });
     },
     delComm(val) {
       var del = confirm("삭제하시겠습니까?");
       const axios = require("axios");
       let formData = new FormData();
-      formData.append("pfc_id", val);
+      formData.append("id", val);
       var category = window.location.pathname.split("/")[1];
+      var url = "";
       if (category == "portfolioDetail") {
-        axios.post("/delPfComment", formData).then(res => {
-          this.getComm();
-        })
-          .catch((ex) => {
-            console.log(ex);
-          });
+        url = "/delPfComment";
       }
+      else {
+        url = "/delPostComment";
+      }
+      axios.post(url, formData).then(res => {
+        this.getComm();
+      })
+        .catch((ex) => {
+          console.log(ex);
+        });
     },
-    getSubComm(pfc_id) {
+    getSubComm(id) {
       // portfolio인지 post인지
       // 댓글 id
       const axios = require("axios");
       let formData = new FormData();
-      formData.append("pfc_id", pfc_id);
+      formData.append("id", id);
       var category = window.location.pathname.split("/")[1];
+      var url = "";
       if (category == "portfolioDetail") {
-        axios.post("/getPfSubComment", formData).then(res => {
-          this.subcomm = res.data;
-          this.subcomment = "";
-        })
-          .catch((ex) => {
-            console.log(ex);
-          });
-      }
-    },
-    regSubComm(pfc_id) {
-      const axios = require("axios");
-      let formData = new FormData();
-      formData.append("pfid", this.pfid);
-      if (this.$store.state.user.displayName != undefined) {
-        formData.append("spfc_writer", this.$store.state.user.displayName);
+        url = "/getPfSubComment";
       }
       else {
-        formData.append("spfc_writer", this.$store.state.user.email.split("@")[0]);
+        url = "/getPostSubComment";
       }
-      formData.append("spfc_writerUid", this.$store.state.user.uid);
-      formData.append("spfc_content", this.subcomment);
-      formData.append("pfc_id", pfc_id);
+      axios.post(url, formData).then(res => {
+        this.subcomm = res.data;
+        this.subcomment = "";
+      })
+        .catch((ex) => {
+          console.log(ex);
+        });
+    },
+    regSubComm(id) {
+      const axios = require("axios");
+      let formData = new FormData();
+      formData.append("wid", this.pfid);
+      if (this.$store.state.user.displayName != undefined) {
+        formData.append("writer", this.$store.state.user.displayName);
+      }
+      else {
+        formData.append("writer", this.$store.state.user.email.split("@")[0]);
+      }
+      formData.append("writerUid", this.$store.state.user.uid);
+      formData.append("content", this.subcomment);
+      formData.append("id", id);
       var category = window.location.pathname.split("/")[1];
+      var url = "";
       if (category == "portfolioDetail") {
-        axios.post("/regPfSubComment", formData).then(res => {
-          this.getSubComm(pfc_id);
-        })
-          .catch((ex) => {
-            console.log(ex);
-          });
+        url = "/regPfSubComment";
       }
+      else {
+        url = "/regPostSubComment";
+      }
+      axios.post(url, formData).then(res => {
+        this.getSubComm(id);
+      })
+        .catch((ex) => {
+          console.log(ex);
+        });
       this.subcomment = "";
     },
-    delSubComm(pfc_id, val) {
+    delSubComm(id, val) {
       var del = confirm("삭제하시겠습니까?");
       if (!del) return;
       const axios = require("axios");
       let formData = new FormData();
-      formData.append("spfc_id", val);
+      formData.append("id", val);
       var category = window.location.pathname.split("/")[1];
+      var url = "";
       if (category == "portfolioDetail") {
-        axios.post("/delPfSubComment", formData).then(res => {
-          this.getSubComm(pfc_id);
-        })
-          .catch((ex) => {
-            console.log(ex);
-          });
+        url = "/delPfSubComment";
       }
+      else {
+        url = "/delPostSubComment";
+      }
+      axios.post(url, formData).then(res => {
+        this.getSubComm(id);
+      })
+        .catch((ex) => {
+          console.log(ex);
+        });
     }
   }
 };
