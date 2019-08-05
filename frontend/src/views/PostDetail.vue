@@ -91,7 +91,8 @@ export default {
       pfbody: this.$route.params.body,
       lang: "ko",
       loading: false,
-      update: false
+      update: false,
+      getpfdate: ""
     };
   },
   components: {
@@ -113,13 +114,13 @@ export default {
     });
   },
   computed: {
-    getpfdate() {
-      if (typeof this.$route.params.pid == "undefined") return false;
-      return this.pfdate.substring(0, 25);
-    },
     isUpdate() {
       return this.update;
     }
+  },
+  mounted() {
+    console.log(this.pfdate);
+    this.getpfdate = this.pfdate.toString().substring(0, 25);
   },
   methods: {
     goBack() {

@@ -95,7 +95,8 @@ export default {
       pfImgSrc: this.$route.params.imgSrc,
       lang: "ko",
       loading: false,
-      update: false
+      update: false,
+      getpfdate: ""
     };
   },
   components: {
@@ -104,6 +105,7 @@ export default {
     Comment
   },
   created() {
+    console.log(this.$route.params);
     if (typeof this.$route.params.pfid == "undefined") {
       this.$router.go(-1);
     }
@@ -120,13 +122,12 @@ export default {
     });
   },
   computed: {
-    getpfdate() {
-      if (typeof this.$route.params.pfid == "undefined") return false;
-      return this.pfdate.substring(0, 25);
-    },
     isUpdate() {
       return this.update;
     }
+  },
+  mounted() {
+    this.getpfdate = this.pfdate.toString().substring(0, 25);
   },
   methods: {
     goBack() {

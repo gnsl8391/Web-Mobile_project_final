@@ -105,6 +105,26 @@ export default {
         });
       });
   },
+  getOnePost(uid) {
+    const postsCollection = firestore.collection(POSTS);
+    return postsCollection
+      .orderBy("created_at", "desc")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          data.created_at = new Date(data.created_at.toDate());
+          if (data.uid == uid) {
+            var tmp = {
+              id: doc.id,
+              dataMap: data
+            };
+            return tmp;
+          }
+          else return null;
+        });
+      });
+  },
   postPost(title, body, uid, writer) {
     return firestore.collection(POSTS).add({
       title,
@@ -138,6 +158,28 @@ export default {
             dataMap: data
           };
           return tmp;
+        });
+      });
+  },
+  getOnePortfolio(uid) {
+    const postsCollection = firestore.collection(PORTFOLIOS);
+    return postsCollection
+      .orderBy("created_at", "desc")
+      .get()
+      .then(docSnapshots => {
+        return docSnapshots.docs.map(doc => {
+          let data = doc.data();
+          data.created_at = new Date(data.created_at.toDate());
+          if (data.uid === uid) {
+            var tmp = {
+              id: doc.id,
+              dataMap: data
+            };
+            return tmp;
+          }
+          else {
+            return null;
+          }
         });
       });
   },
@@ -204,6 +246,23 @@ export default {
         }
       });
   },
+  updatePassword(newPassword) {
+    var user = firebase.auth().currentUser;
+    user.updatePassword(newPassword).then(function() {
+      // Update successful.
+    }).catch(function(error) {
+      // An error happened.
+    });
+  },
+  deleteAccount() {
+    var user = firebase.auth().currentUser;
+    user.delete().then(function() {
+      // User deleted.
+      firestore.collection(AUTHS).doc(user.uid).delete();
+    }).catch(function(error) {
+      // An error happened.
+    });
+  },
   updateProfile(user, name) {
     user.updateProfile({
       displayName: name
@@ -211,12 +270,10 @@ export default {
   },
   loginWithEmail(email, password) {
     if (email.length < 4) {
-      alert("Please enter an email address.");
-      return;
+      return "이메일을 입력해주세요.";
     }
     if (password.length < 4) {
-      alert("Please enter a password.");
-      return;
+      return "비밀번호를 입력해주세요.";
     }
     return firebase
       .auth()
@@ -229,9 +286,9 @@ export default {
         var errorCode = error.code;
         var errorMessage = error.message;
         if (errorCode === "auth/wrong-password") {
-          alert("Wrong password.");
-        } else {
-          alert(errorMessage);
+          return "잘못된 비밀번호입니다.";
+        } else if (errorCode === "auth/email-already-in-use") {
+          return "이미 사용중인 이메일입니다.";
         }
       });
   },
