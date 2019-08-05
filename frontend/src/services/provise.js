@@ -9,6 +9,11 @@ var config = {
   messagingSenderId: "72397315856"
 };
 const messaging = firebase.messaging();
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("../../firebase-messaging-sw.js");
+  });
+}
 
 messaging
   .requestPermission()

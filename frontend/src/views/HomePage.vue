@@ -119,7 +119,6 @@ import PostList from "../components/PostList";
 import ImgUpload from "@/components/ImgUpload";
 import { Carousel3d, Slide } from "vue-carousel-3d";
 import GitlabService from "@/services/GitlabService";
-import provise from "@/services/provise";
 
 export default {
   name: "HomePage",
