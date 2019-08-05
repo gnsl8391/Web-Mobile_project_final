@@ -232,13 +232,11 @@ export default{
     getPost() {
       var myPt = FirebaseService.getOnePost(this.$store.state.user.uid);
       myPt.then(data => {
-        console.log(data);
         var count = 0;
         var res = true;
         for (var i = 0; i < data.length; i++) {
           if (data[i] != null) {
             if (res) {
-              console.log(data[i]);
               this.ptInfo = data[i];
               this.ptTitle = this.ptInfo.dataMap.title;
               res = false;

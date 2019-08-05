@@ -258,6 +258,7 @@ export default {
     var user = firebase.auth().currentUser;
     user.delete().then(function() {
       // User deleted.
+      firestore.collection(AUTHS).doc(user.uid).delete();
     }).catch(function(error) {
       // An error happened.
     });
