@@ -3,18 +3,18 @@
     <!-- 1 -->
     <div class="fullpage-wp" v-fullpage="opts" ref="example">
       <div class="page">
-        <p sytle="margin-top: 30px" style="background: gray">
-          <ImgBanner v-bind:imgSrc="imgBannerUrl" id="ImgBanner">
+        <p sytle="margin-top: 30px">
+          <ImgBanner id="ImgBanner">
             <div id="banner" slot="text" class="animated bounceInDown">
               Think more strategically.<br />
               We always have.
             </div>
+            <ImgUpload slot="image" style="margin-left:2%; width : 98%;" />
           </ImgBanner>
-          <ImgUpload style="margin-left:2%; width : 98%;" />
         </p>
       </div>
       <!-- 2 -->
-      <div class="page-1 page" style="background: pink">
+      <div class="page-1 page">
         <p sytle="margin-top: 30px" class="part-1" v-animate="{value: 'bounceInLeft'}">
           <!-- About Me -->
           <v-layout class="homePage">
@@ -23,7 +23,7 @@
               <v-menu offset-y>
                 <template v-slot:activator="{ on }">
                   <v-btn flat dark v-on="on" style="color:black; font-size:30px;">
-                    About me <v-icon>fas fa-chevron-down</v-icon>
+                    About me <v-icon style="margin-left: 10px;">fas fa-chevron-down</v-icon>
                   </v-btn>
                 </template>
                 <v-list>
@@ -40,7 +40,8 @@
             <div class="introDiv">
               <h2 id="introTitle">Team 2. 야망</h2>
               <p id="intro">
-                <vue-typer class="team_typer" text="야망을 가진 사람을 막을 수 있는 사람은"></vue-typer><br/>
+                <vue-typer class="team_typer" text="야망을 가진 사람을 막을 수 있는 사람은 그 자신 뿐이다
+                - Charles Ross -"></vue-typer><br/>
               </p>
             </div>
           </v-flex>
@@ -61,7 +62,7 @@
       </p>
     </div>
     <!-- 3 -->
-    <div class="page-2 page" style="background-color: red;">
+    <div class="page-2 page">
       <p class="part-2" v-animate="{value: 'bounceInRight'}">
         <!-- Portfolio -->
         <v-layout id="portfolio" class="pfPage">
@@ -72,7 +73,7 @@
                 <i class="fas fa-angle-right"></i>
               </a>
             </h2>
-            <PortfolioList></PortfolioList>
+            <carousel :data="data"></carousel>
           </v-flex>
         </v-layout>
       </p>
@@ -145,7 +146,6 @@ export default {
   components: {
     ImgBanner,
     ImgUpload,
-    PortfolioList,
     PostList,
     VueTyper
   },
@@ -155,6 +155,9 @@ export default {
       drawer: true,
       slides: 3,
       name: "Team",
+      data: [
+        PortfolioList
+      ],
       items: [
         {
           title: "Team",
@@ -299,14 +302,11 @@ body {
   margin: 0;
 }
 .fullpage-container {
-  position: relative;
+  position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-}
-.page {
-  display: block;
 }
 #banner {
   line-height: 1.2em;
@@ -315,9 +315,14 @@ body {
   font-weight: bold;
   color: #ffffff;
 }
+.page {
+  display: block;
+  background-image: url("https://source.unsplash.com/user/erondu/1600x900");
+  background: cover;
+}
 .page-1 {
   padding-top: 100px;
-  background: #1bbc9b;
+  background: #e4ffbf;
 }
 .page-2 {
   padding-top: 100px;
@@ -350,12 +355,6 @@ body {
   }
 }
 @media screen and (min-width: 599px) and (max-width: 958px) {
-  .homePage {
-    height: 600px;
-  }
-  .pfPage {
-    height: 880px;
-  }
   #post {
     height: 800px;
   }
@@ -374,12 +373,6 @@ body {
   }
 }
 @media screen and (min-width: 958px) {
-  .homePage {
-    height: 600px;
-  }
-  .pfPage {
-    height: 650px;
-  }
   #intro {
     font-size: 16px;
     margin-top: 10px;
@@ -445,8 +438,9 @@ body {
   display: none !important;
 }
 .team_typer {
-  font-style: italic;
+  delay: 6000;
   font-size : 26px;
+  font-family: 'Nanum Myeongjo', serif;
 }
 .slideCard {
   border-radius: 20px;
