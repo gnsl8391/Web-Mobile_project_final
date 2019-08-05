@@ -92,7 +92,8 @@ export default {
       x: null,
       mode: "",
       timeout: 6000,
-      text: "처리되었습니다."
+      text: "처리되었습니다.",
+      error: false
     };
   },
   component: {
@@ -101,7 +102,9 @@ export default {
   methods: {
     moveHome() {
       this.snackbar = false;
-      this.$router.push("/");
+      if (!this.error) {
+        this.$router.push("/");
+      }
     },
     async loginWithGoogle() {
       const result = await FirebaseService.loginWithGoogle();
@@ -158,13 +161,19 @@ export default {
     async loginWithEmail() {
       const result = FirebaseService.loginWithEmail(this.email, this.password);
       await result.then(r => {
-        this.$store.dispatch("authChk", {
-          accessToken: this.email,
-          user: result,
-          uid: r.user.uid
-        });
-        this.text = "로그인되었습니다.";
-        this.snackbar = true;
+        if (r.user == null) {
+          this.text = r;
+          this.snackbar = true;
+          this.error = true;
+        } else {
+          this.$store.dispatch("authChk", {
+            accessToken: this.email,
+            user: result,
+            uid: r.user.uid
+          });
+          this.text = "로그인되었습니다.";
+          this.snackbar = true;
+        }
       });
     },
     async logout() {
