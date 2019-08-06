@@ -10,6 +10,8 @@ import GitPage from "./views/GitPage.vue";
 import AdminPage from "./views/AdminPage.vue";
 import PortfolioDetail from "./views/PortfolioDetail.vue";
 import PostDetail from "./views/PostDetail.vue";
+import Test from "./views/test.vue";
+
 Vue.use(Router);
 
 export default new Router({
@@ -67,6 +69,11 @@ export default new Router({
       name: "postDetail",
       component: PostDetail,
       props: true
+    },
+    {
+      path: "/test",
+      name: "test",
+      component: Test
     }
   ]
 });

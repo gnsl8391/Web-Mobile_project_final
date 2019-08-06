@@ -5,6 +5,7 @@
         <v-flex text-xs-center>
           <span class="text-shadow display-2 font-weight-light">
             <slot name="text" />
+            <slot name="image" />
           </span>
         </v-flex>
       </v-layout>

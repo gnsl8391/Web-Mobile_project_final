@@ -78,7 +78,7 @@ export default {
   name: "PostList",
   props: {
     column: { type: Number, default: 1 },
-    limits: { type: Number, default: 2 },
+    limits: { type: Number, default: 3 },
     loadMore: { type: Boolean, default: false }
   },
   data: () => ({

@@ -19,6 +19,9 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import VEditor from "yimo-vue-editor";
 
 import VueCarousel from "@chenfengyuan/vue-carousel";
+import VueAgile from "vue-agile";
+Vue.use(VueAgile);
+
 Vue.component(VueCarousel.name, VueCarousel);
 Vue.config.productionTip = false;
 
