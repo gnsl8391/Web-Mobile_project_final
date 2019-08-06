@@ -85,6 +85,7 @@ export default {
         user: result.user,
         uid: result.user.uid
       });
+      await FirebaseService.updateUserDeviceToken(result.user.uid);
       const chk = FirebaseService.getOneMembers(result.user.uid);
       chk.then(r => {
         if (!r) {
@@ -105,6 +106,7 @@ export default {
         user: result.user,
         uid: result.user.uid
       });
+      await FirebaseService.updateUserDeviceToken(result.user.uid);
       const chk = FirebaseService.getOneMembers(result.user.uid);
       chk.then(r => {
         if (!r) {
@@ -137,6 +139,7 @@ export default {
           uid: r.user.uid
         });
       });
+      // await FirebaseService.updateUserDeviceToken(result.user.uid);
       this.$router.push("/");
     },
     async logout() {
