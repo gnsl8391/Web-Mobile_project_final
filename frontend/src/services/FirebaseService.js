@@ -124,6 +124,18 @@ export default {
       body: body
     }, {merge: true});
   },
+  getOnePf(uid) {
+    var pf = firestore.collection(PORTFOLIOS).doc(uid);
+    var getDoc = "";
+    return pf.get().then(doc => {
+      if (!doc.exists) {
+        return null;
+      } else {
+        getDoc = doc.data();
+        return getDoc;
+      }
+    });
+  },
   getPortfolios() {
     const postsCollection = firestore.collection(PORTFOLIOS);
     return postsCollection

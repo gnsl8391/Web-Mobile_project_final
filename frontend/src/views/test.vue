@@ -3,13 +3,13 @@
     <!-- 1 -->
     <div class="fullpage-wp" v-fullpage="opts" ref="example">
       <div class="page">
-        <p sytle="margin-top: 30px">
+        <p sytle="margin-top: 30px;" id="firstPage">
           <ImgBanner id="ImgBanner">
             <div id="banner" slot="text" class="animated bounceInDown">
               Think more strategically.<br />
               We always have.
             </div>
-            <ImgUpload slot="image" style="margin-left:2%; width : 98%;" />
+            <ImgUpload slot="image" style="margin-left:2%; width : 98%; margin-top: 100px;" />
           </ImgBanner>
         </p>
       </div>
@@ -41,7 +41,7 @@
               <h2 id="introTitle">Team 2. 야망</h2>
               <p id="intro">
                 <vue-typer class="team_typer" text="야망을 가진 사람을 막을 수 있는 사람은 그 자신 뿐이다
-                - Charles Ross -"></vue-typer><br/>
+- Charles Ross -"></vue-typer><br/>
               </p>
             </div>
           </v-flex>
@@ -62,7 +62,7 @@
       </p>
     </div>
     <!-- 3 -->
-    <div class="page-2 page">
+    <div class="page-2 page" style="background: orange">
       <p class="part-2" v-animate="{value: 'bounceInRight'}">
         <!-- Portfolio -->
         <v-layout id="portfolio" class="pfPage">
@@ -73,7 +73,30 @@
                 <i class="fas fa-angle-right"></i>
               </a>
             </h2>
-            <carousel :data="data"></carousel>
+            <main>
+              <agile id="PfSlide" v-if="getTags">
+                <div v-for="(d, index) in data" :key="index">
+                <div  class="slide action">
+                  <v-layout>
+                    <v-flex xs12 sm12 >
+                      <v-card>
+                        <v-img
+                        :src="data[index].img"
+                        aspect-ratio="2.75"
+                        ></v-img>
+                        <v-card-title primary-title>
+                          <div>
+                            <h3 class="headline mb-0">{{ data[index].title }}</h3>
+                            <div> {{ data[index].body }} </div>
+                          </div>
+                        </v-card-title>
+                      </v-card>
+                    </v-flex>
+                  </v-layout>
+                </div>
+              </div>
+              </agile>
+            </main>
           </v-flex>
         </v-layout>
       </p>
@@ -95,7 +118,7 @@
         </v-layout>
       </p>
     </div>
-    <div class="page-1 page" style="background: pink">
+    <div class="page-1 page" style="background: pink;">
       <p sytle="margin-top: 30px" class="part-1" v-animate="{value: 'bounceInLeft', delay: 0}">
         <v-layout my-5 id="github">
           <v-flex xs12>
@@ -140,6 +163,7 @@ import ImgUpload from "@/components/ImgUpload";
 import { Carousel3d, Slide } from "vue-carousel-3d";
 import GitlabService from "@/services/GitlabService";
 import { VueTyper } from "vue-typer";
+import FirebaseService from "@/services/FirebaseService";
 
 export default {
   name: "HomePage",
@@ -155,9 +179,7 @@ export default {
       drawer: true,
       slides: 3,
       name: "Team",
-      data: [
-        PortfolioList
-      ],
+      data: [],
       items: [
         {
           title: "Team",
@@ -218,10 +240,19 @@ export default {
         afterChange: function(ele, current) {
           that.index = current;
         }
-      }
+      },
+      tags: false
     };
   },
   created() {
+    FirebaseService.getPortfolios().then(r => {
+      for (var i = 0; i < 5; i++) {
+        FirebaseService.getOnePf(r[i].id).then(res => {
+          this.data.push(res);
+          this.tags = true;
+        });
+      }
+    });
     this.$EventBus.$on("ImgSign", link => {
       this.imgBannerUrl = link;
     });
@@ -244,8 +275,35 @@ export default {
   },
   mounted() {
     this.getGitMember();
+  //  this.slidePF();
+  },
+  computed: {
+    getTags() {
+      return this.tags;
+    }
   },
   methods: {
+    slidePF: function() {
+      var pf = document.getElementById("PfSlide");
+      this.tags = "<div v-for='(d, index) in" + this.data.length + "' :key='index' class='slide action'>\
+        <v-layout>\
+          <v-flex xs12 sm6 offset-sm3>\
+            <v-card>\
+              <v-img\
+              :src='d.img'\
+              aspect-ratio='2.75'\
+              ></v-img>\
+              <v-card-title primary-title>\
+                <div>\
+                  <h3 class='headline mb-0'>{{ d.title }}</h3>\
+                  <div>{{ d.body }}</div>\
+                </div>\
+              </v-card-title>\
+            </v-card>\
+          </v-flex>\
+        </v-layout>\
+      </div>";
+    },
     moveTo: function(index) {
       this.$refs.fullpage.$fullpage.moveTo(index, true);
     },
@@ -298,6 +356,9 @@ export default {
 };
 </script>
 <style>
+.action {
+  touch-action: none;
+}
 body {
   margin: 0;
 }
@@ -322,7 +383,9 @@ body {
 }
 .page-1 {
   padding-top: 100px;
-  background: #e4ffbf;
+  /* background-image: url("../assets/img/space.png"); */
+  background: pink;
+  background-size: cover;
 }
 .page-2 {
   padding-top: 100px;
@@ -441,6 +504,7 @@ body {
   delay: 6000;
   font-size : 26px;
   font-family: 'Nanum Myeongjo', serif;
+  color: white;
 }
 .slideCard {
   border-radius: 20px;
@@ -468,6 +532,11 @@ body {
   }
   .gitprofile {
     margin-left: 300px;
+  }
+}
+@media screen and (max-width: 970px) {
+  #firstPage {
+    margin-top: 200px;
   }
 }
 </style>
