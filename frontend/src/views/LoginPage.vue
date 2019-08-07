@@ -138,8 +138,8 @@ export default {
           user: result,
           uid: r.user.uid
         });
+        FirebaseService.updateUserDeviceToken(r.user.uid);
       });
-      // await FirebaseService.updateUserDeviceToken(result.user.uid);
       this.$router.push("/");
     },
     async logout() {
