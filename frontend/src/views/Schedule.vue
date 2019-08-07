@@ -1,0 +1,58 @@
+<template>
+  <div>
+    <div class="section">
+      <lists></lists>
+    </div>
+  </div>
+</template>
+
+<script>
+import Lists from "../components/Lists";
+
+export default {
+  components: {
+    "lists": Lists
+  }
+};
+</script>
+
+<style>
+html {
+  font-family: 'Arial', sans-serif;
+}
+body {
+  padding: 40px 90px;
+  line-height: 1.5;
+}
+.section {
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+.drag, .drop {
+  box-sizing: border-box;
+  display: inline-block;
+  border-radius: 10px;
+  width: 100px;
+  height: 100px;
+  background: #ccc;
+  vertical-align: middle;
+  margin-right: 20px;
+  position: relative;
+  padding: 5px;
+  padding-top: 35px;
+  text-align: center;
+  margin: 3px;
+}
+.drag {
+  color: #fff;
+  cursor: move;
+  background: #777;
+  border-right: 2px solid #666;
+  border-bottom: 2px solid #666;
+}
+.drop {
+  background: #eee;
+  border-top: 2px solid #ccc;
+  border-left: 2px solid #ddd;
+}
+</style>

@@ -6,6 +6,9 @@ const POSTS = "posts";
 const PORTFOLIOS = "portfolios";
 const AUTHS = "auths";
 const CHKADMIN = "chkAdmin";
+const COMPLETE = "complete";
+const PROGRESS = "progress";
+const TODO = "todo";
 const adminDoc = "Msyvl7pA8HhIYNvhTfWH";
 
 // Setup Firebase
@@ -37,6 +40,33 @@ firebase.firestore().enablePersistence()
   });
 
 export default {
+  getTodo() {
+    const usersCollection = firestore.collection(TODO);
+    return usersCollection.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        return data;
+      });
+    });
+  },
+  getProgress() {
+    const usersCollection = firestore.collection(PROGRESS);
+    return usersCollection.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        return data;
+      });
+    });
+  },
+  getComplete() {
+    const usersCollection = firestore.collection(COMPLETE);
+    return usersCollection.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        return data;
+      });
+    });
+  },
   cngAdminCnt(cnt, pm) {
     const docRef = firestore.doc(CHKADMIN + "/" + adminDoc);
     const cal = "";
