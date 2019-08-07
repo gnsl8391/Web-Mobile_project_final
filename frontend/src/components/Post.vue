@@ -2,7 +2,7 @@
   <div class="py-3" @click="getDetail">
     <h2 :class="`headline font-weight-light mb-3 ${color}--text`" id="postTitle">{{ title }}</h2>
     <div class="postContent">
-        {{ body }}
+        {{ getBody }}
     </div>
   </div>
 </template>
@@ -39,6 +39,11 @@ export default {
         }
       }
     });
+  },
+  computed: {
+    getBody() {
+      return this.body.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
+    }
   },
   methods: {
     translateText(sourceText, tagId, tagIdIdx, target) {

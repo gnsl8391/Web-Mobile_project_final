@@ -18,12 +18,14 @@
         <p sytle="margin-top: 30px" class="part-1" v-animate="{value: 'bounceInLeft'}">
           <!-- About Me -->
           <v-layout class="homePage">
-            <v-flex sm hidden-xs8-only>
+            <v-flex sm1 hidden-xs-only/>
+            <v-flex sm7 xs12>
               <!--소개 -->
               <v-menu offset-y>
                 <template v-slot:activator="{ on }">
-                  <v-btn flat dark v-on="on" style="color:black; font-size:30px;">
-                    About me <v-icon style="margin-left: 10px;">fas fa-chevron-down</v-icon>
+                  <v-btn flat dark v-on="on" >
+                    <span  class="eachPageFont">About me</span>
+                     <v-icon style="margin-left: 10px;" class="aNone">fas fa-chevron-down</v-icon>
                   </v-btn>
                 </template>
                 <v-list>
@@ -45,10 +47,7 @@
               </p>
             </div>
           </v-flex>
-          <v-flex xs4 hidden-xs-only>
-            <v-btn style="display:none;font-size:30px;" flat>
-              About me
-            </v-btn>
+          <v-flex sm4 hidden-xs-only>
             <div class="introDiv">
               <img
               src="../assets/team.jpg"
@@ -62,54 +61,46 @@
       </p>
     </div>
     <!-- 3 -->
-    <div class="page-2 page" style="background: orange">
+    <div class="page-2 page" style="background: #FAFAFA">
       <p class="part-2" v-animate="{value: 'bounceInRight'}">
         <!-- Portfolio -->
-        <v-layout id="portfolio" class="pfPage">
+        <v-layout id="portfolio">
           <v-flex xs12>
-            <h2 class="headline my-5 text-xs-center">
+            <h2 class=" text-xs-center eachPageFont" style="margin-bottom:80px;">
               Portfolio
-              <a href="/portfolio">
+              <a href="/portfolio" class="aNone">
                 <i class="fas fa-angle-right"></i>
               </a>
             </h2>
-            <main>
-              <agile id="PfSlide" v-if="getTags">
-                <div v-for="(d, index) in data" :key="index">
-                <div  class="slide action">
-                  <v-layout>
-                    <v-flex xs12 sm12 >
-                      <v-card>
-                        <v-img
-                        :src="data[index].img"
-                        aspect-ratio="2.75"
-                        ></v-img>
-                        <v-card-title primary-title>
-                          <div>
-                            <h3 class="headline mb-0">{{ data[index].title }}</h3>
-                            <div> {{ data[index].body }} </div>
-                          </div>
-                        </v-card-title>
-                      </v-card>
-                    </v-flex>
-                  </v-layout>
-                </div>
-              </div>
-              </agile>
-            </main>
+            <v-flex hidden-xs-only style="width:80%; margin: 0 auto;">
+              <vueper-slides class="no-shadow" :visible-slides="3" :slide-ratio="1/4" :dragging-distance="70">
+                <vueper-slide style="height:300px;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
+                  {{item.dataMap.title}}
+                </vueper-slide>
+              </vueper-slides>
+            </v-flex>
+            <v-flex hidden-sm-and-up>
+              <vueper-slides class="no-shadow" :visible-slides="1" :slide-ratio="1/4" :dragging-distance="70">
+                <vueper-slide style="height:300px;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
+                  <div>
+                    {{item.dataMap.title}}
+                  </div>
+                </vueper-slide>
+              </vueper-slides>
+            </v-flex>
           </v-flex>
         </v-layout>
       </p>
     </div>
     <!-- 4 -->
-    <div class="page-3 page" style="background-color: blue;">
+    <div class="page-3 page" style="background-color: #FAFAFA;">
       <p class="part-3" v-animate="{value: 'bounceInLeft', delay: 0}">
         <!-- Post -->
-        <v-layout id="post" class="homePage">
-          <v-flex xs12>
-            <h2 class="headline my-5 text-xs-center">
+        <v-layout id="post" class="homePage" >
+          <v-flex xs12 sm10 style="margin: 0 auto;">
+            <h2 class="text-xs-center eachPageFont">
               Post
-              <a href="/post">
+              <a href="/post" class="aNone">
                 <i class="fas fa-angle-right"></i>
               </a>
             </h2>
@@ -118,27 +109,29 @@
         </v-layout>
       </p>
     </div>
-    <div class="page-1 page" style="background: pink;">
-      <p sytle="margin-top: 30px" class="part-1" v-animate="{value: 'bounceInLeft', delay: 0}">
+    <div class="page-3 page" style="background: #FAFAFA;">
+      <p class="part-1" v-animate="{value: 'bounceInLeft', delay: 0}">
         <v-layout my-5 id="github">
           <v-flex xs12>
-            <h2 class="headline my-5 text-xs-center">
+            <h2 class=" text-xs-center my-5 eachPageFont">
               Project
-              <a href="/git">
+              <a href="/git" class="aNone">
                 <i class="fas fa-angle-right"></i>
               </a>
             </h2>
             <!-- git profile -->
-            <v-layout row wrap class="align-center gitprofile">
-              <v-flex v-for="(mem, i) in member" :index="i" v-bind:key="i" class="align-center" xs12 sm3>
-                <v-layout class="slideCard my-1 text-xs-center" v-animate="{value: 'zoomInDown', delay: i * 600}">
+            <v-layout row wrap class="align-center gitprofile" style="width:80%;">
+              <v-flex v-for="(mem, i) in member" :index="i" v-bind:key="i" class="align-center" >
+                <v-layout class="slideCard my-1 text-xs-center" v-animate="{value: 'zoomInDown', delay: i * 600}" style="margin:0 auto">
                   <v-flex sm4>
                     <img v-bind:src="mem.avatar_url" style="width : 50px" />
                   </v-flex>
                   <v-flex sm8>
-                    <a v-bind:href="mem.web_url">
+                    <a v-bind:href="mem.web_url" style="color: #FE2E64 !important; text-decoration:none;">
                       <span class="title">{{ mem.name }}</span>
                     </a>
+                    <br />
+                    <span style="font-size:10px; color:gray;">└ GitHub 바로 이동하기</span>
                     <br />
                     <span>@{{ mem.username }}</span>
                   </v-flex>
@@ -164,6 +157,8 @@ import { Carousel3d, Slide } from "vue-carousel-3d";
 import GitlabService from "@/services/GitlabService";
 import { VueTyper } from "vue-typer";
 import FirebaseService from "@/services/FirebaseService";
+import { VueperSlides, VueperSlide } from "vueperslides";
+import "vueperslides/dist/vueperslides.css";
 
 export default {
   name: "HomePage",
@@ -171,7 +166,9 @@ export default {
     ImgBanner,
     ImgUpload,
     PostList,
-    VueTyper
+    VueTyper,
+    VueperSlides,
+    VueperSlide
   },
   data: function() {
     var that = this;
@@ -240,18 +237,12 @@ export default {
         afterChange: function(ele, current) {
           that.index = current;
         }
-      },
-      tags: false
+      }
     };
   },
   created() {
     FirebaseService.getPortfolios().then(r => {
-      for (var i = 0; i < 5; i++) {
-        FirebaseService.getOnePf(r[i].id).then(res => {
-          this.data.push(res);
-          this.tags = true;
-        });
-      }
+      this.data = r.slice(0, 9);
     });
     this.$EventBus.$on("ImgSign", link => {
       this.imgBannerUrl = link;
@@ -283,27 +274,6 @@ export default {
     }
   },
   methods: {
-    slidePF: function() {
-      var pf = document.getElementById("PfSlide");
-      this.tags = "<div v-for='(d, index) in" + this.data.length + "' :key='index' class='slide action'>\
-        <v-layout>\
-          <v-flex xs12 sm6 offset-sm3>\
-            <v-card>\
-              <v-img\
-              :src='d.img'\
-              aspect-ratio='2.75'\
-              ></v-img>\
-              <v-card-title primary-title>\
-                <div>\
-                  <h3 class='headline mb-0'>{{ d.title }}</h3>\
-                  <div>{{ d.body }}</div>\
-                </div>\
-              </v-card-title>\
-            </v-card>\
-          </v-flex>\
-        </v-layout>\
-      </div>";
-    },
     moveTo: function(index) {
       this.$refs.fullpage.$fullpage.moveTo(index, true);
     },
@@ -376,6 +346,16 @@ body {
   font-weight: bold;
   color: #ffffff;
 }
+.eachPageFont {
+  line-height: 1.2em;
+  font-size: 5vw;
+  font-weight: bold;
+  color: #FA5882;
+  margin-bottom:20px;
+}
+.aNone {
+  color: pink !important;
+}
 .page {
   display: block;
   background-image: url("https://source.unsplash.com/user/erondu/1600x900");
@@ -384,16 +364,16 @@ body {
 .page-1 {
   padding-top: 100px;
   /* background-image: url("../assets/img/space.png"); */
-  background: pink;
+  background: #FAFAFA;
   background-size: cover;
 }
 .page-2 {
   padding-top: 100px;
-  background-color: rgb(75, 191, 195);
+  background-color: #FAFAFA;
 }
 .page-3 {
   padding-top: 50px;
-  background: #aabbcc;
+  background: #FAFAFA;
 }
 .vue-radial-menu-wrapper {
   margin: 100px auto !important;
@@ -406,6 +386,13 @@ body {
   .introDiv {
     padding: 10px;
     margin-top: 10px;
+  }
+  .eachPageFont {
+    line-height: 1.2em;
+    font-size: 35px !important;
+    font-weight: bold;
+    color: #FA5882;
+    margin-bottom:20px;
   }
 }
 @media screen and (min-width: 550px) and (max-width: 598px) {
@@ -447,9 +434,6 @@ body {
 }
 .homePage {
   padding: 30px;
-}
-.pfPage {
-  padding-top: 30px;
 }
 @media screen and (max-width: 598px) {
   .carousel-3d-container .carousel-3d-slide {
@@ -508,8 +492,7 @@ body {
 }
 .slideCard {
   border-radius: 20px;
-  background: #aacdd5;
-  border: 1px solid #4f8d9c;
+  border: 1px solid #FE2E64;
   position: relative;
 }
 @media screen and (max-width: 598px) {
@@ -520,7 +503,16 @@ body {
     padding-top: 24px;
   }
   .gitprofile {
-    margin-left: 65px;
+    margin: 0 auto;
+    margin-top: 60px;
+  }
+  .vueperslides__bullets {
+    position: relative;
+  }
+  .vueperslides__arrows {
+  }
+  .vueperslides__parallax-wrapper {
+        padding-bottom: 90% !important;
   }
 }
 @media screen and (min-width: 598px) {
@@ -531,12 +523,22 @@ body {
     padding-top: 35px;
   }
   .gitprofile {
-    margin-left: 300px;
+    margin: 0 auto;
+    margin-top: 100px;
   }
 }
 @media screen and (max-width: 970px) {
   #firstPage {
     margin-top: 200px;
   }
+}
+.vueperslide__content-wrapper {
+  width: 100% !important;
+  background-color: #ffffff!important;
+  opacity: 0.5!important;
+  font-size: 30px;
+}
+.vueperslides__bullet {
+  border-color: #FA5882 !important;
 }
 </style>

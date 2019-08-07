@@ -2,10 +2,10 @@
   <v-app>
     <v-content>
       <app-header />
-      <app-topBut v-if="this.$route.path !== '/test'"/>
+      <app-topBut v-if="this.$route.path !== '/'"/>
       <app-chatbot />
       <router-view />
-      <app-footer v-if="this.$route.path !== '/test'"/>
+      <app-footer v-if="this.$route.path !== '/'"/>
     </v-content>
   </v-app>
 </template>

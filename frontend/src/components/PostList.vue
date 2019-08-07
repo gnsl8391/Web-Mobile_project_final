@@ -1,6 +1,7 @@
 <template>
-  <div>
-  <v-timeline>
+  <v-layout>
+    <v-flex  hidden-xs-only>
+  <v-timeline id="timeLine">
     <v-timeline-item
       v-for="i in posts.length > limits ? limits : posts.length"
       v-bind:key="i"
@@ -8,7 +9,7 @@
       small
     >
     <template v-slot:opposite>
-        <p
+        <p style="font-size:18px;"
         :class="`font-weight-bold ${years[i%5].color}--text`"
         v-text="formatedDate(posts[i - 1].dataMap.created_at)"
         ></p>
@@ -24,6 +25,32 @@
     />
   </v-timeline-item>
  </v-timeline>
+</v-flex>
+<v-flex hidden-sm-and-up >
+ <v-timeline id="timeLine" dense >
+   <v-timeline-item
+     v-for="i in posts.length > limits ? limits : posts.length"
+     v-bind:key="i"
+     :color="years[i%5].color"
+     small
+   >
+   <span style="margin-bottom:-10px; position:absolute;"
+   :class="`font-weight-bold ${years[i%5].color}--text`"
+   v-text="formatedDate(posts[i - 1].dataMap.created_at)"
+   ></span>
+   <Post
+     :color="years[i%5].color"
+     :pid="posts[i - 1].id"
+     :date="posts[i - 1].dataMap.created_at.toString()"
+     :title="posts[i - 1].dataMap.title"
+     :body="posts[i - 1].dataMap.body"
+     :uid="posts[i -1 ].dataMap.uid"
+     :writer="posts[i - 1].dataMap.writer"
+   />
+ </v-timeline-item>
+</v-timeline>
+</v-flex>
+
  <v-layout row wrap mw-700>
    <v-flex xs12 text-xs-center round my-5 v-if="loadMore">
      <v-btn color="info" dark v-on:click="loadMorePosts">
@@ -66,7 +93,7 @@
      </v-dialog>
    </v-flex>
  </v-layout>
-</div>
+</v-layout>
 </template>
 
 <script>
@@ -103,11 +130,14 @@ export default {
     body: "",
     dialog: false,
     posts: [],
-    myauth: false
+    myauth: false,
+    windowSize: window.innerWidth
   }),
   components: {
     Post,
     YimoVueEditor
+  },
+  created() {
   },
   mounted() {
     this.getPosts();

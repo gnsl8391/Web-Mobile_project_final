@@ -38,45 +38,13 @@
         >
           <v-icon size="18px">fas fa-bookmark</v-icon>
         </v-btn>
-        <v-btn
-          flat
-          v-if="chkUrlRes"
-          class="hidden-xs-only"
-          @click="$vuetify.goTo('#aboutMe', options)"
-        >
-          About Me
-        </v-btn>
-        <v-btn
-          v-if="chkUrlRes"
-          flat
-          class="hidden-xs-only linkText"
-          @click="$vuetify.goTo('#portfolio', options)"
-        >
+        <v-btn flat class="hidden-xs-only linkText" to="portfolio">
           Portfolio
         </v-btn>
-        <v-btn v-else flat class="hidden-xs-only linkText" to="portfolio">
-          Portfolio
-        </v-btn>
-        <v-btn
-          v-if="chkUrlRes"
-          flat
-          class="hidden-xs-only linkText"
-          @click="$vuetify.goTo('#post', options)"
-        >
+        <v-btn flat class="hidden-xs-only linkText" to="post">
           Post
         </v-btn>
-        <v-btn v-else flat class="hidden-xs-only linkText" to="post">
-          Post
-        </v-btn>
-        <v-btn
-          v-if="chkUrlRes"
-          flat
-          class="hidden-xs-only linkText"
-          @click="$vuetify.goTo('#github', options)"
-        >
-          Git
-        </v-btn>
-        <v-btn v-else flat class="hidden-xs-only linkText" to="git">
+        <v-btn flat class="hidden-xs-only linkText" to="git">
           Git
         </v-btn>
         <v-btn flat class="hidden-xs-only linkText" href="Management" v-if="callAuth">
@@ -284,10 +252,6 @@ export default {
         offset: this.offset,
         easing: this.easing
       };
-    },
-    chkUrlRes: function() {
-      if (window.location.pathname == "/") return true;
-      else return false;
     },
     callAuth: function() {
       return this.getAuth();
