@@ -1,4 +1,66 @@
 <template>
+  <div>
+    <v-layout>
+      <span style="color:#FFBF00; width:120px; font-size:20px; line-height:50px;" @click="goHome()">
+        <i class="fas fa-chevron-left"></i> HOME
+      </span>
+      <v-flex xs12 style="text-align:right;">
+        <v-dialog v-model="dialog" persistent max-width="800px" v-if="chkMyauth">
+          <template v-slot:activator="{ on }">
+            <v-btn
+              color="warning"
+              dark
+              v-on="on"
+              v-on:click="$EventBus.$emit('radio')"
+            >
+              <v-icon size="20px" class="mr-2">
+                fas fa-pen
+              </v-icon>
+              글 쓰기
+            </v-btn>
+          </template>
+          <v-card style="height:60%">
+            <v-card-title>
+              <span class="headline">CREATE PORTFOLIO</span>
+            </v-card-title>
+            <v-card-text>
+              <v-layout row wrap>
+                <v-flex xs12 md7>
+                  <form>
+                    <span style="margin-left:3%">TITLE : </span>
+                    <input v-model="title" type="text" id="title" />
+                    <input
+                      type="file"
+                      @change="onFileSelected"
+                      style="display: none; margin: 3%;"
+                      ref="fileInput"
+                      accept="image/*"
+                    />
+                    <div style="margin-left: 3%; margin-top : 3%">
+                      <ImgUpload />
+                    </div>
+                  </form>
+                </v-flex>
+                <v-flex xs12 md5 style="text-align:center;" id="preImg">
+                  <img :src="imageUrl" style="max-height:170px; max-width: 270px;" />
+                </v-flex>
+              </v-layout>
+              <yimo-vue-editor v-model="body"></yimo-vue-editor>
+
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click="dialog = false">
+                Close
+              </v-btn>
+              <v-btn color="blue darken-1" flat @click="onUpload">
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-flex>
+    </v-layout>
   <v-layout mt-5 wrap >
     <v-flex
       v-for="i in portfolios.length > limits ? limits : portfolios.length"
@@ -18,67 +80,16 @@
         :writer="portfolios[i - 1].dataMap.writer"
       />
     </v-flex>
+  </v-layout>
+  <v-layout>
     <v-flex xs12 text-xs-center round my-5 v-if="loadMore">
       <v-btn color="info" dark v-on:click="loadMorePortfolios">
         <v-icon size="25" class="mr-2">fa-plus</v-icon>
         더 보기
       </v-btn>
-      <v-dialog v-model="dialog" persistent max-width="800px" v-if="chkMyauth">
-        <template v-slot:activator="{ on }">
-          <v-btn
-            color="warning"
-            dark
-            v-on="on"
-            v-on:click="$EventBus.$emit('radio')"
-          >
-            <v-icon size="20px" class="mr-2">
-              fas fa-pen
-            </v-icon>
-            글 쓰기
-          </v-btn>
-        </template>
-        <v-card style="height:60%">
-          <v-card-title>
-            <span class="headline">CREATE PORTFOLIO</span>
-          </v-card-title>
-          <v-card-text>
-            <v-layout row wrap>
-              <v-flex xs12 md7>
-                <form>
-                  <span style="margin-left:3%">TITLE : </span>
-                  <input v-model="title" type="text" id="title" />
-                  <input
-                    type="file"
-                    @change="onFileSelected"
-                    style="display: none; margin: 3%;"
-                    ref="fileInput"
-                    accept="image/*"
-                  />
-                  <div style="margin-left: 3%; margin-top : 3%">
-                    <ImgUpload />
-                  </div>
-                </form>
-              </v-flex>
-              <v-flex xs12 md5 style="text-align:center;" id="preImg">
-                <img :src="imageUrl" style="max-height:170px; max-width: 270px;" />
-              </v-flex>
-            </v-layout>
-            <yimo-vue-editor v-model="body"></yimo-vue-editor>
-
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="dialog = false">
-              Close
-            </v-btn>
-            <v-btn color="blue darken-1" flat @click="onUpload">
-              Save
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </v-flex>
   </v-layout>
+</div>
 </template>
 
 <script>
@@ -136,6 +147,9 @@ export default {
     this.curAuthChk();
   },
   methods: {
+    goHome() {
+      this.$router.push("/");
+    },
     curAuthChk() {
       if (this.$store.state.user == "") this.myauth = false;
       else {
