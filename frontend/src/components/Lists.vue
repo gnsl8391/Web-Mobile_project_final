@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="write">
+      <v-flex xs12 sm6 md4>
+        <v-text-field
+        label="To Do를 작성해 주세요"
+        ></v-text-field>
+      </v-flex>
+    </div>
     <div style="width: 100%">
       <span class="listId"><h3>to do</h3></span>
       <span class="listId"><h3>progress</h3></span>
@@ -16,7 +23,6 @@
       </drag>
     </drop>
   </span>
-  <!-- <div class="clear"></div> -->
 </div>
 </template>
 
@@ -116,5 +122,9 @@ export default {
 }
 .card {
   width:90%;
+}
+.write {
+  margin: 50px;
+  margin-top: 70px;
 }
 </style>
