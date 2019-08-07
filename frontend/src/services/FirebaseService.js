@@ -45,16 +45,83 @@ export default {
     return usersCollection.get().then(docSnapshots => {
       return docSnapshots.docs.map(doc => {
         let data = doc.data();
-        return data;
+        var tmp = {
+          id: doc.id,
+          dataMap: data
+        };
+        return tmp;
       });
     });
+  },
+  discardCard(uid) {
+    var todo = firestore.collection(TODO).doc(uid).delete();
+    todo.then(r => {
+    }).catch(function(error) {
+      var progress = firestore.collection(PROGRESS).doc(uid).delete();
+      progress.then(r => {
+        console.log("progress");
+      }).catch(function(error) {
+        var complete = firestore.collection(COMPLETE).doc(uid).delete();
+        complete.then(r => {
+          console.log("complete");
+        }).catch(function(error) {
+          console.log(error);
+        });
+      });
+    });
+  },
+  postTodo(body, uid) {
+    if (uid != "") {
+      return firestore.collection(TODO).add({
+        body,
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } else {
+      const docRef = firestore.doc("todo/" + uid);
+      docRef.set({
+        body,
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+  },
+  postProgress(body, uid) {
+    if (uid != "") {
+      return firestore.collection(PROGRESS).add({
+        body,
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } else {
+      const docRef = firestore.doc("progress/" + uid);
+      docRef.set({
+        body,
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+  },
+  postComplete(body, uid) {
+    if (uid != "") {
+      return firestore.collection(COMPLETE).add({
+        body,
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } else {
+      const docRef = firestore.doc("complete/" + uid);
+      docRef.set({
+        body,
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
   },
   getProgress() {
     const usersCollection = firestore.collection(PROGRESS);
     return usersCollection.get().then(docSnapshots => {
       return docSnapshots.docs.map(doc => {
         let data = doc.data();
-        return data;
+        var tmp = {
+          id: doc.id,
+          dataMap: data
+        };
+        return tmp;
       });
     });
   },
@@ -63,7 +130,11 @@ export default {
     return usersCollection.get().then(docSnapshots => {
       return docSnapshots.docs.map(doc => {
         let data = doc.data();
-        return data;
+        var tmp = {
+          id: doc.id,
+          dataMap: data
+        };
+        return tmp;
       });
     });
   },

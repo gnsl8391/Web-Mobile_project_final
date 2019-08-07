@@ -1,28 +1,33 @@
 <template>
   <div>
     <div class="write">
-      <v-flex xs12 sm6 md4>
+      <v-flex>
         <v-text-field
         label="To Do를 작성해 주세요"
+        v-model="writeTodo"
+        style="float: left; width: 80%"
+        @keyup.enter="postTodo"
         ></v-text-field>
       </v-flex>
     </div>
-    <div style="width: 100%">
-      <span class="listId"><h3>to do</h3></span>
-      <span class="listId"><h3>progress</h3></span>
-      <span class="listId"><h3>complete</h3></span>
+    <div class="clear" style="width: 100%">
+      <span class="listId"><h2>to do</h2></span>
+      <span class="listId"><h2>progress</h2></span>
+      <span class="listId"><h2>complete</h2></span>
     </div>
     <span v-for="(list, i) in lists" :key="i" class="clear">
-      <drop class="drop list bord" @drop="handleDrop(list, ...arguments)">
+      <drop class="drop list bord" @drop="handleDrop(i, list, ...arguments)">
         <drag v-for="item in list"
-        class="drag card"
-        :key="item"
+        class="drag card cardstyle"
+        :key="item.id"
         :class="{ [item]: true }"
         :transfer-data="{ item: item, list: list, example: 'lists' }">
-        {{ item }}
+        <div class="right discard" @click="discard(item.id)"><i class="fas fa-times"></i></div>
+        {{ item.body }}
       </drag>
     </drop>
   </span>
+  <div class="clear"></div>
 </div>
 </template>
 
@@ -34,6 +39,7 @@ export default {
   components: { Drag, Drop },
   data() {
     return {
+      writeTodo: "",
       lists: [
         [],
         [],
@@ -47,11 +53,26 @@ export default {
     this.getComplete();
   },
   methods: {
+    count(i, item) {
+      console.log(i + " " + item);
+    },
+    discard(uid) {
+      FirebaseService.discardCard(uid);
+    },
+    postTodo(uid) {
+      FirebaseService.postTodo(this.writeTodo, uid).then(r => {
+        window.location.reload();
+      });
+    },
     getTodo() {
       let todo = FirebaseService.getTodo();
+      if (this.lists[0].length != 0) {
+        this.lists[0] = [];
+      }
       todo.then(r => {
         for (var i = 0; i < r.length; i++) {
-          this.lists[0].push(r[i].body);
+          var idandbody = { id: r[i].id, body: r[i].dataMap.body };
+          this.lists[0].push(idandbody);
         }
       });
     },
@@ -59,7 +80,8 @@ export default {
       let todo = FirebaseService.getProgress();
       todo.then(r => {
         for (var i = 0; i < r.length; i++) {
-          this.lists[1].push(r[i].body);
+          var idandbody = { id: r[i].id, body: r[i].dataMap.body };
+          this.lists[1].push(idandbody);
         }
       });
     },
@@ -67,11 +89,14 @@ export default {
       let todo = FirebaseService.getComplete();
       todo.then(r => {
         for (var i = 0; i < r.length; i++) {
-          this.lists[2].push(r[i].body);
+          var idandbody = { id: r[i].id, body: r[i].dataMap.body };
+          this.lists[2].push(idandbody);
         }
       });
     },
-    handleDrop(toList, data) {
+    handleDrop(index, toList, data) {
+      this.discard(data.item.id);
+      console.log(index);
       const fromList = data.list;
       if (fromList) {
         toList.push(data.item);
@@ -87,12 +112,6 @@ export default {
 .drag {
   display: inline-block;
 }
-.drag.A { background: #aaa; }
-.drag.B { background: #888; }
-.drag.C { background: #666; }
-.drag.D { background: #444; }
-.drag.E { background: #222; }
-.drag.F { background: #000; }
 .drop {
   display: inline-block;
   vertical-align: top;
@@ -123,8 +142,22 @@ export default {
 .card {
   width:90%;
 }
+.right {
+  float: right;
+}
 .write {
   margin: 50px;
   margin-top: 70px;
+  width: 60%;
+}
+.discard {
+  padding-right: 10px;
+  color: white;
+}
+.cardstyle {
+  background: #cfcfcf;
+  color: black;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px;
 }
 </style>
