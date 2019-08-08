@@ -6,17 +6,6 @@
           <img src="../assets/mainlogo.png" id="logoImg" />
         </a>
       </v-spacer>
-      <span class="hidden-md-and-down">
-        <span v-if="isLogin">
-          로그인을 해주세요
-        </span>
-        <span v-else-if="this.$store.state.user.displayName != undefined">
-          {{ this.$store.state.user.displayName }}
-        </span>
-        <span v-else>
-          {{ this.$store.state.accessToken }}
-        </span>
-      </span>
       <v-toolbar-items>
         <v-btn flat @click="Trans" v-on:click="$EventBus.$emit('click-icon')">
           <v-badge v-model="show" color="cyan" transition>
@@ -47,9 +36,6 @@
         <v-btn flat class="hidden-xs-only linkText" to="git">
           Git
         </v-btn>
-        <v-btn flat class="hidden-xs-only linkText" href="Management" v-if="callAuth">
-          Management
-        </v-btn>
         <!-- 로그인 Modal Popup -->
         <v-dialog
           v-model="dialog"
@@ -74,9 +60,59 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-btn flat class="hidden-xs-only linkText" v-else @click="logout">
-          LOGOUT
+        <!-- member -->
+        <v-menu v-else
+      v-model="menu"
+      :close-on-content-click="false"
+      :nudge-width="200"
+      offset-y
+    >
+      <template v-slot:activator="{ on }">
+        <v-btn
+          dark
+          flat
+          v-on="on"
+          style="color: black"
+          class="hidden-xs-only"
+        >
+          <i class="fas fa-user-alt"></i>
         </v-btn>
+      </template>
+      <v-card>
+        <v-list>
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <i class="fas fa-user-circle" style="font-size: 30px;"></i>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ this.$store.state.user.displayName }}</v-list-tile-title>
+              <v-list-tile-sub-title>{{ this.$store.state.user.email }}</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+        <v-divider></v-divider>
+        <v-list>
+          <v-list-tile href="/mypage">
+            <v-list-tile-action>
+              <i class="far fa-address-card"></i>
+            </v-list-tile-action>
+            <v-list-tile-title>My Page</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile href="Management" v-if="callAuth">
+            <v-list-tile-action>
+              <i class="fas fa-user-cog"></i>
+            </v-list-tile-action>
+            <v-list-tile-title >
+                Management
+            </v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" flat @click="logout()">LOGOUT</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-menu>
         <v-btn flat class="hidden-sm-and-up" @click.stop="drawer = !drawer">
           <v-icon size="18px">fas fa-bars</v-icon>
         </v-btn>
@@ -239,7 +275,8 @@ export default {
       x: null,
       mode: "",
       timeout: 6000,
-      text: ""
+      text: "",
+      menu: false
     };
   },
   components: {
@@ -345,10 +382,11 @@ export default {
       }
     },
     logout: async function() {
+      this.menu = false;
       FirebaseService.logout();
       this.text = "로그아웃되었습니다.";
       this.snackbar = true;
-      this.$router.push("/login");
+      this.$router.push("/");
     }
   }
 };

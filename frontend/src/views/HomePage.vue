@@ -4,14 +4,14 @@
     <div class="fullpage-wp" v-fullpage="opts" ref="example">
       <div class="page">
         <p sytle="margin-top: 30px;" id="firstPage">
-          <ImgBanner id="ImgBanner">
+          <ImgBanner id="ImgBanner" >
             <div id="banner" slot="text" class="animated bounceInDown">
               Think more strategically.<br />
               We always have.
             </div>
-            <ImgUpload slot="image" style="margin-left:2%; width : 98%; margin-top: 100px;" />
           </ImgBanner>
         </p>
+        <ImgUpload slot="image" style="margin-left:2%;" class="uploadPos"/>
       </div>
       <!-- 2 -->
       <div class="page-1 page">
@@ -74,17 +74,13 @@
             </h2>
             <v-flex hidden-xs-only style="width:80%; margin: 0 auto;">
               <vueper-slides class="no-shadow" :visible-slides="3" :slide-ratio="1/4" :dragging-distance="70">
-                <vueper-slide style="height:300px;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
-                  {{item.dataMap.title}}
+                <vueper-slide style="height:300px; margin: 0 5px;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
                 </vueper-slide>
               </vueper-slides>
             </v-flex>
             <v-flex hidden-sm-and-up>
               <vueper-slides class="no-shadow" :visible-slides="1" :slide-ratio="1/4" :dragging-distance="70">
                 <vueper-slide style="height:300px;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
-                  <div>
-                    {{item.dataMap.title}}
-                  </div>
                 </vueper-slide>
               </vueper-slides>
             </v-flex>
@@ -358,8 +354,13 @@ body {
 }
 .page {
   display: block;
-  background-image: url("https://source.unsplash.com/user/erondu/1600x900");
+  background-image: url("../assets/sky.gif");
   background: cover;
+  height: 100vh;
+  padding:0;
+  margin:0;
+  background-size:100%;
+  background-repeat: repeat-y;
 }
 .page-1 {
   padding-top: 100px;
@@ -540,5 +541,9 @@ body {
 }
 .vueperslides__bullet {
   border-color: #FA5882 !important;
+}
+.uploadPos {
+  position: absolute;
+  bottom : 2%;
 }
 </style>
