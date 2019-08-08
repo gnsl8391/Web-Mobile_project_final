@@ -1,4 +1,5 @@
 import firebase from "firebase/app";
+import "@firebase/messaging";
 import "firebase/firestore";
 import "firebase/auth";
 import store from "../store.js";
@@ -20,7 +21,7 @@ const config = {
 };
 
 firebase.initializeApp(config);
-
+const messaging = firebase.messaging();
 const firestore = firebase.firestore();
 
 firebase.firestore().enablePersistence()
@@ -327,6 +328,32 @@ export default {
         // ...
       }
     });
+  },
+  getUserState() {
+    return firebase.auth().currentUser;
+  },
+  getToken() {
+    return store.state.accessToken;
+  },
+  updateUserDeviceToken(uid) {
+    var idDetail = firestore.collection("auths").doc(uid);
+    var userToken = "";
+    messaging.requestPermission().then(function() {
+      console.log("Have permission");
+      return messaging
+        .getToken()
+        .then(function(token) {
+          userToken = token;
+          return idDetail
+            .update({ userToken: userToken })
+            .then(console.log(userToken))
+            .catch(function(error) {
+              console.error("Error Occured", error);
+            });
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    });
   }
-
 };
