@@ -10,8 +10,7 @@ import GitPage from "./views/GitPage.vue";
 import AdminPage from "./views/AdminPage.vue";
 import PortfolioDetail from "./views/PortfolioDetail.vue";
 import PostDetail from "./views/PostDetail.vue";
-import Test from "./views/test.vue";
-
+import Calendar from "./views/Calendar";
 Vue.use(Router);
 
 export default new Router({
@@ -71,9 +70,9 @@ export default new Router({
       props: true
     },
     {
-      path: "/test",
-      name: "test",
-      component: Test
+      path: "/calendar",
+      name: "calendar",
+      component: Calendar
     }
   ]
 });

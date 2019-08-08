@@ -14,7 +14,7 @@ public interface PostRepository {
 	public List<postComment> getAllPostComment(String pid);
 	public int addPostComment(HashMap<String, String> map);
 	public int delPostComment(int pc_id);
-	
+
 	// 포스트 대댓글 관리
 	public List<postSubComment> getAllPostSubComment(String pc_id);
 	public int addPostSubComment(HashMap<String, String> map);
