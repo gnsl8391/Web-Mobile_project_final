@@ -184,6 +184,7 @@ export default{
         url = "/regPostComment";
       }
       axios.post(url, formData).then(res => {
+        FirebaseService.postComment(this.comment);
         this.getComm();
       })
         .catch((ex) => {
