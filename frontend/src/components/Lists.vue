@@ -3,7 +3,7 @@
     <div class="write">
       <v-flex>
         <v-text-field
-        label="To Do를 작성해 주세요"
+        label="To Do를 작성 후 Enter를 입력하세요"
         v-model="writeTodo"
         style="float: left; width: 80%"
         @keyup.enter="postTodo"
@@ -18,7 +18,8 @@
     <span v-for="(list, i) in lists" :key="i" class="clear">
       <drop class="drop list bord" @drop="handleDrop(i, list, ...arguments)">
         <drag v-for="item in list"
-        class="drag card cardstyle"
+        @drag = "setDrag(i)"
+         class="drag card cardstyle"
         :key="item.id"
         :class="{ [item]: true }"
         :transfer-data="{ item: item, list: list, example: 'lists' }">
@@ -40,6 +41,8 @@ export default {
   data() {
     return {
       writeTodo: "",
+      drag: -1,
+      color: ["#ffeebf", "#fdd6ff", "#c2ebff", "#ceffc2"],
       lists: [
         [],
         [],
@@ -48,60 +51,119 @@ export default {
     };
   },
   mounted() {
-    this.getTodo();
-    this.getProgress();
-    this.getComplete();
+    this.getData();
   },
   methods: {
-    count(i, item) {
-      console.log(i + " " + item);
+    getData() {
+      this.getTodo();
+      this.getProgress();
+      this.getComplete();
+    },
+    setDrag(index) {
+      this.drag = index;
     },
     discard(uid) {
-      FirebaseService.discardCard(uid);
+      FirebaseService.discardinAll(uid).then(r => {
+        this.getData();
+      });
     },
-    postTodo(uid) {
-      FirebaseService.postTodo(this.writeTodo, uid).then(r => {
-        window.location.reload();
+    postTodo() {
+      FirebaseService.postTodo(this.writeTodo).then(r => {
+        this.getData();
       });
     },
     getTodo() {
-      let todo = FirebaseService.getTodo();
       if (this.lists[0].length != 0) {
         this.lists[0] = [];
       }
+      let todo = FirebaseService.getTodo();
       todo.then(r => {
         for (var i = 0; i < r.length; i++) {
-          var idandbody = { id: r[i].id, body: r[i].dataMap.body };
-          this.lists[0].push(idandbody);
+          if (r[i].dataMap.user == this.$store.state.user.uid) {
+            var idandbody = { id: r[i].id, body: r[i].dataMap.body };
+            this.lists[0].push(idandbody);
+          }
         }
       });
     },
     getProgress() {
-      let todo = FirebaseService.getProgress();
-      todo.then(r => {
+      if (this.lists[1].length != 0) {
+        this.lists[1] = [];
+      }
+      let progress = FirebaseService.getProgress();
+      progress.then(r => {
         for (var i = 0; i < r.length; i++) {
-          var idandbody = { id: r[i].id, body: r[i].dataMap.body };
-          this.lists[1].push(idandbody);
+          if (r[i].dataMap.user == this.$store.state.user.uid) {
+            var idandbody = { id: r[i].id, body: r[i].dataMap.body };
+            this.lists[1].push(idandbody);
+          }
         }
       });
     },
     getComplete() {
-      let todo = FirebaseService.getComplete();
-      todo.then(r => {
+      if (this.lists[2].length != 0) {
+        this.lists[2] = [];
+      }
+      let complete = FirebaseService.getComplete();
+      complete.then(r => {
         for (var i = 0; i < r.length; i++) {
-          var idandbody = { id: r[i].id, body: r[i].dataMap.body };
-          this.lists[2].push(idandbody);
+          if (r[i].dataMap.user == this.$store.state.user.uid) {
+            var idandbody = { id: r[i].id, body: r[i].dataMap.body };
+            this.lists[2].push(idandbody);
+          }
         }
       });
     },
     handleDrop(index, toList, data) {
-      this.discard(data.item.id);
-      console.log(index);
       const fromList = data.list;
       if (fromList) {
         toList.push(data.item);
         fromList.splice(fromList.indexOf(data.item), 1);
         toList.sort((a, b) => a > b);
+      }
+
+      if (this.drag == 0) {
+        if (index == 1) {
+          FirebaseService.postProgress(data.item.body).then(r => {
+            FirebaseService.discardTodo(data.item.id).then(r => {
+              window.location.reload();
+            });
+          });
+        } else if (index == 2) {
+          FirebaseService.postComplete(data.item.body).then(r => {
+            FirebaseService.discardTodo(data.item.id).then(r => {
+              window.location.reload();
+            });
+          });
+        }
+      } else if (this.drag == 1) {
+        if (index == 0) {
+          FirebaseService.postTodo(data.item.body).then(r => {
+            FirebaseService.discardProgress(data.item.id).then(r => {
+              window.location.reload();
+            });
+          });
+        } else if (index == 2) {
+          FirebaseService.postComplete(data.item.body).then(r => {
+            FirebaseService.discardProgress(data.item.id).then(r => {
+              window.location.reload();
+            });
+          });
+        }
+      } else if (this.drag == 2) {
+        if (index == 1) {
+          FirebaseService.postProgress(data.item.body).then(r => {
+            FirebaseService.discardComplete(data.item.id).then(r => {
+              window.location.reload();
+            });
+          });
+        } else if (index == 0) {
+          FirebaseService.postTodo(data.item.body).then(r => {
+            FirebaseService.discardComplete(data.item.id).then(r => {
+              window.location.reload();
+            });
+          });
+        }
       }
     }
   }

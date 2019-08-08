@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="schedule">
     <div class="section">
       <lists></lists>
     </div>
@@ -21,7 +21,7 @@ html {
   font-family: 'Arial', sans-serif;
 }
 body {
-  padding: 40px 90px;
+  padding: 40px 0;
   line-height: 1.5;
 }
 .section {
@@ -54,5 +54,9 @@ body {
   background: #eee;
   border-top: 2px solid #ccc;
   border-left: 2px solid #ddd;
+}
+#schedule {
+  padding: 10px 40px;
+  height: auto;
 }
 </style>
