@@ -7,6 +7,9 @@ const POSTS = "posts";
 const PORTFOLIOS = "portfolios";
 const AUTHS = "auths";
 const CHKADMIN = "chkAdmin";
+const COMPLETE = "complete";
+const PROGRESS = "progress";
+const TODO = "todo";
 const adminDoc = "Msyvl7pA8HhIYNvhTfWH";
 
 // Setup Firebase
@@ -38,6 +41,75 @@ firebase.firestore().enablePersistence()
   });
 
 export default {
+  discardTodo(uid) {
+    return firestore.collection(TODO).doc(uid).delete();
+  },
+  discardProgress(uid) {
+    return firestore.collection(PROGRESS).doc(uid).delete();
+  },
+  discardComplete(uid) {
+    return firestore.collection(COMPLETE).doc(uid).delete();
+  },
+  postTodo(body) {
+    return firestore.collection(TODO).add({
+      body,
+      user: store.state.user.uid,
+      created_at: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  },
+  postProgress(body) {
+    return firestore.collection(PROGRESS).add({
+      body,
+      user: store.state.user.uid,
+      created_at: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  },
+  postComplete(body) {
+    return firestore.collection(COMPLETE).add({
+      body,
+      user: store.state.user.uid,
+      created_at: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  },
+  getTodo() {
+    const usersCollection = firestore.collection(TODO);
+    return usersCollection.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        var tmp = {
+          id: doc.id,
+          dataMap: data
+        };
+        return tmp;
+      });
+    });
+  },
+  getProgress() {
+    const usersCollection = firestore.collection(PROGRESS);
+    return usersCollection.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        var tmp = {
+          id: doc.id,
+          dataMap: data
+        };
+        return tmp;
+      });
+    });
+  },
+  getComplete() {
+    const usersCollection = firestore.collection(COMPLETE);
+    return usersCollection.get().then(docSnapshots => {
+      return docSnapshots.docs.map(doc => {
+        let data = doc.data();
+        var tmp = {
+          id: doc.id,
+          dataMap: data
+        };
+        return tmp;
+      });
+    });
+  },
   cngAdminCnt(cnt, pm) {
     const docRef = firestore.doc(CHKADMIN + "/" + adminDoc);
     const cal = "";

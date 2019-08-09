@@ -1,6 +1,5 @@
 import App from "./App.vue";
 import router from "./router";
-
 import Vue from "vue";
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
@@ -10,16 +9,17 @@ import "font-awesome/css/font-awesome.min.css";
 import "animate.css";
 import "fullpage-vue/src/fullpage.css";
 import VueFullpage from "fullpage-vue";
-
 import VueResource from "vue-resource";
 import VueWeatherWidget from "vue-weather-widget";
 import "vue-weather-widget/dist/css/vue-weather-widget.css";
-
 import "@fortawesome/fontawesome-free/css/all.css";
 import VEditor from "yimo-vue-editor";
-
 import VueCarousel from "@chenfengyuan/vue-carousel";
 import VueAgile from "vue-agile";
+import { Drag, Drop } from "vue-drag-drop";
+
+Vue.component("drag", Drag);
+Vue.component("drop", Drop);
 Vue.use(VueAgile);
 
 Vue.component(VueCarousel.name, VueCarousel);
