@@ -24,6 +24,13 @@ exports.createPostNotif = functions.firestore
     return pushMessage(message);
   });
 
+exports.createCommentNotif = functions.firestore
+  .document("comments/{comment}")
+  .onCreate(async snap => {
+    var message = snap.data().body;
+    return pushComment(message);
+  });
+
 function pushMessage(message) {
   var payload = {
     notification: {
@@ -46,5 +53,30 @@ function pushMessage(message) {
     })
     .catch(err => {
       console.log("Error occured", err);
+    });
+}
+
+function pushComment(message) {
+  var payload = {
+    notification: {
+      body: message
+    }
+  };
+  const users = admin.firestore().collection("auths");
+  users
+    .get()
+    .then(user => {
+      user.forEach(info => {
+        if (info.data().myauth === admin) {
+          const token = info.data().userToken;
+          admin.messaging().sendToDevice(token, payload);
+        } else {
+          console.log(info.data().myauth);
+        }
+      });
+      return "push message sent complete !";
+    })
+    .catch(err => {
+      console.log("Error Occured", err);
     });
 }
