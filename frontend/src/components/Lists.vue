@@ -243,7 +243,7 @@ export default {
   text-align: center;
   float: left;
   color: #3d3d3d;
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Libre Caslon Text', serif;
 }
 .clear {
   clear: both;

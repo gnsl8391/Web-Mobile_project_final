@@ -170,23 +170,19 @@ export default{
       pfInfo: {},
       ptInfo: {},
       pfTitle: "",
-      ptTitle: ""
+      ptTitle: "",
+      emailId: ""
     };
   },
   created() {
     this.curAuthChk();
     this.getPort();
     this.getPost();
+    this.getEmailId();
   },
   computed: {
     chkMyauth() {
       return this.myauth;
-    },
-    emailId() {
-      if (this.$store.state.user.email != "") {
-        return this.$store.state.user.email.split("@")[0];
-      }
-      else return null;
     },
     email() {
       if (this.$store.state.user.email == "") {
@@ -202,14 +198,22 @@ export default{
     }
   },
   methods: {
+    getEmailId() {
+      if (this.$store.state.user.email != "") {
+        this.emailId = this.$store.state.user.email.split("@")[0];
+      }
+      else this.emailId = null;
+    },
     curAuthChk() {
-      const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
+      var uid = this.$store.state.user.uid;
+      const auths = FirebaseService.getOneMembers(uid);
       auths.then(auth => {
         this.myauth = auth.myauth;
       });
     },
     getPort() {
-      var myPf = FirebaseService.getOnePortfolio(this.$store.state.user.uid);
+      var uid = this.$store.state.user.uid;
+      var myPf = FirebaseService.getOnePortfolio(uid);
       myPf.then(data => {
         var count = 0;
         var res = true;
@@ -230,7 +234,8 @@ export default{
       });
     },
     getPost() {
-      var myPt = FirebaseService.getOnePost(this.$store.state.user.uid);
+      var uid = this.$store.state.user.uid;
+      var myPt = FirebaseService.getOnePost(uid);
       myPt.then(data => {
         var count = 0;
         var res = true;

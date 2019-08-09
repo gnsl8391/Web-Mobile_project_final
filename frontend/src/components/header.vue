@@ -98,6 +98,12 @@
             </v-list-tile-action>
             <v-list-tile-title>My Page</v-list-tile-title>
           </v-list-tile>
+          <v-list-tile href="/schedule" v-if="width">
+            <v-list-tile-action>
+              <i class="fas fa-list-ul"></i>
+            </v-list-tile-action>
+            <v-list-tile-title>To do</v-list-tile-title>
+          </v-list-tile>
           <v-list-tile href="Management" v-if="callAuth">
             <v-list-tile-action>
               <i class="fas fa-user-cog"></i>
@@ -243,6 +249,7 @@ import "firebase/auth";
 export default {
   data() {
     return {
+      width: true,
       chkAuth: "",
       isFixed: false,
       drawer: null,
@@ -316,8 +323,18 @@ export default {
         header.style.backgroundColor = "#ffffff00";
       }
     });
+
+    this.widthChk();
   },
   methods: {
+    widthChk: function() {
+      var w = window.innerWidth;
+      if (w < 1280) {
+        this.width = false;
+      } else {
+        this.width = true;
+      }
+    },
     getAuth: function() {
       const uid = this.$store.state.uid;
       if (uid != "") {
