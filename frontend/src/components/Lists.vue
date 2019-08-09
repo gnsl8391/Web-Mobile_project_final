@@ -7,6 +7,7 @@
         v-model="writeTodo"
         style="float: left; width: 80%"
         @keyup.enter="postTodo"
+        :rules="textRule"
         ></v-text-field>
       </v-flex>
     </div>
@@ -19,15 +20,31 @@
       <drop class="drop list bord" @drop="handleDrop(i, list, ...arguments)">
         <drag v-for="item in list"
         @drag = "setDrag(i)"
-         class="drag card cardstyle"
+         class="drag card cardstyle text-truncate"
+        :style="{ background: cardColors[i%9] }"
         :key="item.id"
         :class="{ [item]: true }"
         :transfer-data="{ item: item, list: list, example: 'lists' }">
-        <div class="right discard" @click="discard(item.id)"><i class="fas fa-times"></i></div>
+        <div class="right discard" @click="discard(item.id, i)"><i class="fas fa-times margin"></i></div>
         {{ item.body }}
       </drag>
     </drop>
   </span>
+  <v-card
+  color="#FACC2E"
+  dark
+  v-if="loading"
+  class="load"
+  >
+  <v-card-text>
+    처리 중...
+    <v-progress-linear
+    indeterminate
+    color="white"
+    class="mb-0"
+    ></v-progress-linear>
+  </v-card-text>
+</v-card>
   <div class="clear"></div>
 </div>
 </template>
@@ -40,9 +57,24 @@ export default {
   components: { Drag, Drop },
   data() {
     return {
+      textRule: [
+        v => (v && v.length < 20) || "you can write in 20 characters"
+      ],
+      cardColors: [
+        "azure",
+        "beige",
+        "bisque",
+        "blanchedalmond",
+        "burlywood",
+        "cornsilk",
+        "gainsboro",
+        "ghostwhite",
+        "ivory",
+        "khaki"
+      ],
+      loading: false,
       writeTodo: "",
       drag: -1,
-      color: ["#ffeebf", "#fdd6ff", "#c2ebff", "#ceffc2"],
       lists: [
         [],
         [],
@@ -54,6 +86,10 @@ export default {
     this.getData();
   },
   methods: {
+    pickColor() {
+      const rand = Math.floor(Math.random() * 10);
+      return this.cardColors[rand];
+    },
     getData() {
       this.getTodo();
       this.getProgress();
@@ -62,14 +98,26 @@ export default {
     setDrag(index) {
       this.drag = index;
     },
-    discard(uid) {
-      FirebaseService.discardinAll(uid).then(r => {
-        this.getData();
-      });
+    discard(uid, i) {
+      this.loading = true;
+      if (i == 0) {
+        FirebaseService.discardTodo(uid).then(r => {
+          window.location.reload();
+        });
+      } else if (i == 1) {
+        FirebaseService.discardProgress(uid).then(r => {
+          window.location.reload();
+        });
+      } else {
+        FirebaseService.discardComplete(uid).then(r => {
+          window.location.reload();
+        });
+      }
     },
     postTodo() {
+      this.loading = true;
       FirebaseService.postTodo(this.writeTodo).then(r => {
-        this.getData();
+        window.location.reload();
       });
     },
     getTodo() {
@@ -124,12 +172,14 @@ export default {
 
       if (this.drag == 0) {
         if (index == 1) {
+          this.loading = true;
           FirebaseService.postProgress(data.item.body).then(r => {
             FirebaseService.discardTodo(data.item.id).then(r => {
               window.location.reload();
             });
           });
         } else if (index == 2) {
+          this.loading = true;
           FirebaseService.postComplete(data.item.body).then(r => {
             FirebaseService.discardTodo(data.item.id).then(r => {
               window.location.reload();
@@ -138,12 +188,14 @@ export default {
         }
       } else if (this.drag == 1) {
         if (index == 0) {
+          this.loading = true;
           FirebaseService.postTodo(data.item.body).then(r => {
             FirebaseService.discardProgress(data.item.id).then(r => {
               window.location.reload();
             });
           });
         } else if (index == 2) {
+          this.loading = true;
           FirebaseService.postComplete(data.item.body).then(r => {
             FirebaseService.discardProgress(data.item.id).then(r => {
               window.location.reload();
@@ -152,12 +204,14 @@ export default {
         }
       } else if (this.drag == 2) {
         if (index == 1) {
+          this.loading = true;
           FirebaseService.postProgress(data.item.body).then(r => {
             FirebaseService.discardComplete(data.item.id).then(r => {
               window.location.reload();
             });
           });
         } else if (index == 0) {
+          this.loading = true;
           FirebaseService.postTodo(data.item.body).then(r => {
             FirebaseService.discardComplete(data.item.id).then(r => {
               window.location.reload();
@@ -217,9 +271,21 @@ export default {
   color: white;
 }
 .cardstyle {
-  background: #cfcfcf;
+  /* background: #cfcfcf; */
   color: black;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 16px;
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 18px;
+}
+.load {
+  width: 35%;
+  z-index: 100;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-top: -100px;
+  margin-left: -260px;
+}
+.margin {
+  margin-left: 10px;
 }
 </style>

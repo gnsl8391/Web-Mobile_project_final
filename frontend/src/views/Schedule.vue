@@ -47,13 +47,13 @@ body {
   color: #fff;
   cursor: move;
   background: #777;
-  border-right: 2px solid #666;
-  border-bottom: 2px solid #666;
+  border-right: 2px solid #a1a1a1;
+  border-bottom: 2px solid #a1a1a1;
 }
 .drop {
   background: #eee;
-  border-top: 2px solid #ccc;
-  border-left: 2px solid #ddd;
+  border-top: 3px solid #ccc;
+  border-left: 3px solid #ddd;
 }
 #schedule {
   padding: 10px 40px;

@@ -40,15 +40,6 @@ firebase.firestore().enablePersistence()
   });
 
 export default {
-  discardinAll(uid) {
-    return firestore.collection(TODO).doc(uid).delete().catch(function(error) {
-      return firestore.collection(PROGRESS).doc(uid).delete().catch(function(error) {
-        return firestore.collection(COMPLETE).doc(uid).delete().catch(function(error) {
-          console.log(error);
-        });
-      });
-    });
-  },
   discardTodo(uid) {
     return firestore.collection(TODO).doc(uid).delete();
   },
