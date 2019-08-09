@@ -629,7 +629,7 @@ export default {
     },
     getCat () {
       const axios = require("axios");
-      axios.post("/getCatList").then(res => {
+      axios.get("http://192.168.100.86:8082/getCatList").then(res => {
         this.categories = res.data;
       }).catch((ex) => {
         console.log(ex);
@@ -638,14 +638,15 @@ export default {
     saveList() {
       this.loading = true;
       const axios = require("axios");
-      let formData = new FormData();
-      formData.append("sche_title", this.title);
-      formData.append("sche_details", this.description);
-      formData.append("sche_date", this.date + " " + this.picker + ":00");
-      formData.append("scheCat_id", this.category + "");
-      formData.append("uid", this.$store.state.user.uid);
-      console.log(formData);
-      axios.post("/regToDoList", formData).then(res => {
+      axios.get("http://192.168.100.86:8082/regToDoList", {
+        params: {
+          sche_title: this.title,
+          sche_details: this.description,
+          sche_date: this.date + " " + this.picker + ":00",
+          scheCat_id: this.category + "",
+          uid: this.$store.state.user.uid
+        }
+      }).then(res => {
         this.getList();
         this.loading = false;
         this.writeDialog = false;
@@ -658,7 +659,11 @@ export default {
       const axios = require("axios");
       let formData = new FormData();
       formData.append("uid", this.$store.state.user.uid);
-      axios.post("/getToDoList", formData).then(res => {
+      axios.get("http://192.168.100.86:8082/getToDoList", {
+        params: {
+          uid: this.$store.state.user.uid
+        }
+      }).then(res => {
         this.events = [];
         res.data.forEach(e => this.events.push({ title: e.sche_title,
           details: e.sche_details,
@@ -669,8 +674,6 @@ export default {
           eventId: e.sche_id,
           open: false
         }));
-        console.log("리스트 가져오기 성공");
-        console.log(this.events);
       }).catch((ex) => {
         console.log(ex);
       });
@@ -691,7 +694,11 @@ export default {
         const axios = require("axios");
         let formData = new FormData();
         formData.append("sche_id", eventId);
-        axios.post("/delToDoList", formData).then(res => {
+        axios.get("http://192.168.100.86:8082/delToDoList", {
+          params: {
+            sche_id: eventId
+          }
+        }).then(res => {
           this.getList();
         }).catch((ex) => {
           console.log(ex);

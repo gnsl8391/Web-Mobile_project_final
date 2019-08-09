@@ -109,7 +109,8 @@ export default{
       subcomment: "",
       email: this.$store.state.user.email.split("@")[0],
       displayName: this.$store.state.user.displayName,
-      myauth: false
+      myauth: false,
+      crossUrl: "http://192.168.100.86:8082"
     };
   },
   created() {
@@ -155,7 +156,7 @@ export default{
       else {
         url = "/getPostComment";
       }
-      axios.post(url, formData).then(res => {
+      axios.post(this.crossUrl + url, formData).then(res => {
         this.comm = res.data;
         this.comment = "";
       })
@@ -184,7 +185,7 @@ export default{
       else {
         url = "/regPostComment";
       }
-      axios.post(url, formData).then(res => {
+      axios.post(this.crossUrl + url, formData).then(res => {
         this.getComm();
       })
         .catch((ex) => {
@@ -204,7 +205,7 @@ export default{
       else {
         url = "/delPostComment";
       }
-      axios.post(url, formData).then(res => {
+      axios.post(this.crossUrl + url, formData).then(res => {
         this.getComm();
       })
         .catch((ex) => {
@@ -225,7 +226,7 @@ export default{
       else {
         url = "/getPostSubComment";
       }
-      axios.post(url, formData).then(res => {
+      axios.post(this.crossUrl + url, formData).then(res => {
         this.subcomm = res.data;
         this.subcomment = "";
       })
@@ -256,7 +257,7 @@ export default{
       else {
         url = "/regPostSubComment";
       }
-      axios.post(url, formData).then(res => {
+      axios.post(this.crossUrl + url, formData).then(res => {
         this.getSubComm(id);
       })
         .catch((ex) => {
@@ -278,7 +279,7 @@ export default{
       else {
         url = "/delPostSubComment";
       }
-      axios.post(url, formData).then(res => {
+      axios.post(this.crossUrl + url, formData).then(res => {
         this.getSubComm(id);
       })
         .catch((ex) => {
