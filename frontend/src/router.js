@@ -11,6 +11,7 @@ import AdminPage from "./views/AdminPage.vue";
 import PortfolioDetail from "./views/PortfolioDetail.vue";
 import PostDetail from "./views/PostDetail.vue";
 import Test from "./views/test.vue";
+import Schedule from "./views/Schedule.vue";
 
 Vue.use(Router);
 
@@ -74,6 +75,11 @@ export default new Router({
       path: "/test",
       name: "test",
       component: Test
+    },
+    {
+      path: "/schedule",
+      name: "schedule",
+      component: Schedule
     }
   ]
 });
