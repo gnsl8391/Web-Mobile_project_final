@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ssafy.webmobilefinal.dao.scheduleRepository">
-<select id="getAllSchedule" parameterType="Integer" resultType="com.ssafy.webmobilefinal.vo.userSchedule">
-		select * from userSchedule where uid = #{uid}
+<mapper namespace="com.ssafy.webmobilefinal.dao.ScheduleRepository">
+<select id="getAllSchedule" parameterType="String" resultType="com.ssafy.webmobilefinal.vo.userSchedule">
+		select s.sche_id, s.sche_title, s.sche_details, s.sche_date, c.scheCat_id, c.scheCat_name, c.scheCat_img, s.uid
+		from userSchedule s, scheduleCategory c
+		where s.scheCat_id = c.scheCat_id and s.uid = #{uid}
 </select>
 <select id="getOneSchedule" parameterType="Integer" resultType="com.ssafy.webmobilefinal.vo.userSchedule">
 		select * from userSchedule where sche_id = #{sche_id}
+</select>
+<insert id="regToDoList" parameterType="hashmap">
+		insert into userSchedule values (0, #{sche_title}, #{sche_details},#{sche_date},#{scheCat_id},#{uid})
+</insert>
+<delete id="deleteScehdule" parameterType="Integer" >
+		delete from userSchedule where sche_id = #{sche_id}
+</delete>
+<select id="getCatList" resultType="com.ssafy.webmobilefinal.vo.userSchedule"> 
+		select * from scheduleCategory;
 </select>
 </mapper>

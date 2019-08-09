@@ -7,7 +7,12 @@ import org.apache.ibatis.annotations.Mapper;
 import com.ssafy.webmobilefinal.vo.userSchedule;
 
 @Mapper
-public interface scheduleRepository {
-	public List<userSchedule> getAllSchedule(int uid);
+public interface ScheduleRepository {
+	public List<userSchedule> getAllSchedule(String uid);
   public userSchedule getOneSchedule(int sche_id);
+  public int regToDoList(HashMap<String,String> hm);
+  public int deleteScehdule(int sche_id);
+
+  public List<userSchedule> getCatList();
 }
+ 

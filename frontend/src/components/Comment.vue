@@ -125,6 +125,7 @@ export default{
       else {
         const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
         auths.then(auth => {
+          console.log(auth);
           if (auth == null) this.myauth = false;
           else this.myauth = true;
         });

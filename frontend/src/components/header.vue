@@ -27,6 +27,9 @@
         >
           <v-icon size="18px">fas fa-bookmark</v-icon>
         </v-btn>
+        <v-btn flat class="hidden-xs-only linkText" to="calendar" v-if="this.$store.state.accessToken != ''">
+          Calendar
+        </v-btn>
         <v-btn flat class="hidden-xs-only linkText" to="portfolio">
           Portfolio
         </v-btn>

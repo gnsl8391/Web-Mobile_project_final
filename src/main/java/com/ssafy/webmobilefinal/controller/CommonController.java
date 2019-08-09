@@ -6,10 +6,12 @@ import java.util.List;
 
 import com.ssafy.webmobilefinal.dao.PortfolioRepository;
 import com.ssafy.webmobilefinal.dao.PostRepository;
+import com.ssafy.webmobilefinal.dao.ScheduleRepository;
 import com.ssafy.webmobilefinal.vo.pfComment;
 import com.ssafy.webmobilefinal.vo.pfSubComment;
 import com.ssafy.webmobilefinal.vo.postComment;
 import com.ssafy.webmobilefinal.vo.postSubComment;
+import com.ssafy.webmobilefinal.vo.userSchedule;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,9 @@ public class CommonController {
 	@Autowired
     private PostRepository postRepo;
 
+	@Autowired
+	private ScheduleRepository scheRepo;
+
 	// @RequestMapping(value="/PortfolioDetail", method=RequestMethod.POST)
 	// public ModelAndView getpf(String portfolioUrl){
 	// 	System.out.println("!!!************************************************!!!!!!!!!!");
@@ -35,16 +40,16 @@ public class CommonController {
 	// 	return mav;
 	// }
 
-	// const axios = require("axios");
-	// let formData = new FormData();
-	// formData.append("portfolioUrl", uid);
-	// axios.post("/PortfolioDetail"
-	// 	, formData)
-	// 	.then((Resopnse) => {
-	// 		console.log(Response);
-	// 	}).catch((ex) => {
-	// 		console.log(ex);
-	// 	});
+		// const axios = require("axios");
+		// let formData = new FormData();
+		// formData.append("portfolioUrl", uid);
+		// axios.post("/PortfolioDetail"
+		// 	, formData)
+		// 	.then((Resopnse) => {
+		// 		console.log(Response);
+		// 	}).catch((ex) => {
+		// 		console.log(ex);
+		// 	});
 
 	/***********포트폴리오 댓글***********/
 	/*
@@ -198,21 +203,35 @@ public class CommonController {
 	 * 일정 등록 : regToDoList
 	 * 일정 수정 : uptTODOList
 	 * 일정 삭제 : delToDoList
+	 * 카테고리 조회 : getCatList
 	 */
-	 @RequestMapping(value="/getToDoList", method=RequestMethod.POST)
-	 public @ResponseBody int getToDoList(String uid){
+	@RequestMapping(value="/getToDoList", method=RequestMethod.POST)
+	public @ResponseBody List<userSchedule> getToDoList(String uid){
 		 // uid 회원의 일정 목록 가져오기
+		return scheRepo.getAllSchedule(uid);
+	}
+	@RequestMapping(value="/regToDoList", method=RequestMethod.POST)
+	public @ResponseBody int regToDoList(String sche_title, String sche_details, String sche_date, String scheCat_id, String uid){
+		// uid 회원의 일정 등록하기
+		System.out.println(sche_title+" / "+sche_details+" / "+sche_date+" / "+scheCat_id+" / "+uid);
+		HashMap<String, String> hm = new HashMap<>();
+		hm.put("sche_title", sche_title);
+		hm.put("sche_details", sche_details);
+		hm.put("sche_date", sche_date);
+		hm.put("scheCat_id", scheCat_id);
+		hm.put("uid", uid);
+		return scheRepo.regToDoList(hm);
+	}
+	@RequestMapping(value="/delToDoList", method=RequestMethod.POST)
+	public @ResponseBody int delToDoList(int sche_id){
+	  // uid 회원의 일정 삭제하기
+		return scheRepo.deleteScehdule(sche_id);
+	}
 
+	
+	@RequestMapping(value="/getCatList", method=RequestMethod.POST)
+	 public @ResponseBody List<userSchedule> getCatList(String uid){
+		 // 카테고리 목록 가져오기
+		return scheRepo.getCatList();
 	 }
-	 @RequestMapping(value="/regToDoList", method=RequestMethod.POST)
-	 public @ResponseBody int regToDoList(String uid){
-		 // uid 회원의 일정 등록하기
-
-	 }
-	 @RequestMapping(value="/delToDoList", method=RequestMethod.POST)
-	 public @ResponseBody int delToDoList(String uid){
-		 // uid 회원의 일정 삭제하기
-
-	 }
-
 }

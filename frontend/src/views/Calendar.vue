@@ -143,13 +143,13 @@
     <!-- 전체 화면 이외 -->
     <v-flex
       hidden-lg-and-up
-      style="margin-bottom:20px; text-align: center;"
+      style="text-align: center;"
     >
     <v-btn
       fab
       outline
       small
-      color="orange"
+      :color="color"
       @click="$refs.calendar.prev()"
       style="float:left;"
     >
@@ -162,7 +162,7 @@
       fab
       outline
       small
-      color="orange"
+      :color="color"
       @click="$refs.calendar.next()"
       style="float:right;"
     >
@@ -174,7 +174,6 @@
     </v-btn>
     <br><br><br>
     </v-flex>
-
     <!-- 달력 -->
     <v-flex
       sm12
@@ -203,7 +202,6 @@
           <template v-for="event in eventsMap[date]">
             <v-menu
               :key="event.title"
-              v-model="event.open"
               full-width
               offset-x
             >
@@ -226,7 +224,7 @@
                 <v-toolbar :color="color" dark>
                   <v-bottom-sheet v-model="sheet">
                     <template v-slot:activator>
-                      <v-btn icon>
+                      <v-btn icon @click="printValue(event)">
                         <v-icon>fas fa-ellipsis-h</v-icon>
                       </v-btn>
                     </template>
@@ -235,7 +233,7 @@
                       <v-list-tile
                         v-for="tile in tiles"
                         :key="tile.title"
-                        @click="sheet = false"
+                        @click="tileFunc(tile.id)"
                       >
                         <v-list-tile-avatar>
                           <v-avatar size="32px" tile>
@@ -245,7 +243,7 @@
                               >
                             </v-avatar>
                           </v-list-tile-avatar>
-                        <v-list-tile-title>{{ tile.title }}</v-list-tile-title>
+                        <v-list-tile-title>{{ tile.title }} {{ event.eventId }}</v-list-tile-title>
                       </v-list-tile>
                     </v-list>
                   </v-bottom-sheet>
@@ -256,36 +254,204 @@
                   </v-btn>
                 </v-toolbar>
                 <!-- 세부정보 -->
-                <v-list three-line >
-                  <template v-for="(item, index) in items">
-                    <v-list-tile v-if="item.action" :key="item.title">
+                <v-list two-line >
+                    <v-list-tile>
                       <v-list-tile-avatar>
-                        <v-icon>{{ item.action }}</v-icon>
+                        <v-icon>far fa-clock</v-icon>
                       </v-list-tile-avatar>
                       <v-list-tile-content>
-                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                        <v-list-tile-sub-title>{{ item.title }}</v-list-tile-sub-title>
+                        <v-list-tile-title>Time</v-list-tile-title>
+                        <v-list-tile-sub-title>{{ event.dateDetail }}</v-list-tile-sub-title>
                       </v-list-tile-content>
                     </v-list-tile>
-                    <v-divider v-else-if="item.divider" :key="index"></v-divider>
-                    <v-subheader v-else-if="item.header" :key="item.header" class="grey--text text--lighten-4">{{ item.header }}</v-subheader>
-                    <v-divider :key="index" />
-                  </template>
+                    <v-divider ></v-divider>
+                    <v-list-tile>
+                      <v-list-tile-avatar>
+                        <v-icon>far fa-file-alt</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>Description</v-list-tile-title>
+                        <v-list-tile-sub-title>{{ event.details }}</v-list-tile-sub-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                    <v-divider ></v-divider>
+                    <v-list-tile>
+                      <v-list-tile-avatar>
+                        <v-icon>{{ event.catImg }}</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>Category</v-list-tile-title>
+                        <v-list-tile-sub-title>{{ event.category }}</v-list-tile-sub-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
                 </v-list>
-                <v-card-actions>
-                    <v-btn flat :color="color" >
-                      수정
-                    </v-btn>
-                    <v-btn flat :color="color" >
-                      삭제
-                    </v-btn>
-                  </v-card-actions>
                 </v-card>
               </v-menu>
             </template>
           </template>
         </v-calendar>
       </v-sheet>
+    </v-flex>
+    <v-flex xs12>
+      <v-btn
+      :color="color"
+      dark
+      @click.stop="writeDialog = true"
+      style="margin: 20px;"
+    >
+      일정 등록
+    </v-btn>
+
+    <v-dialog
+      v-model="writeDialog"
+      max-width="350"
+    >
+      <v-card>
+        <v-toolbar :color="color " dark flat>
+          <v-toolbar-title v-if="this.$store.state.user.displayName!=''">{{ this.$store.state.user.displayName }}님의 일정 등록하기</v-toolbar-title>
+          <v-toolbar-title v-else>{{ this.$store.state.user.email.split('@')[0] }}님의 일정 등록하기</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+
+        <v-list two-line >
+            <v-list-tile style="margin-top: 10px;">
+              <v-list-tile-avatar>
+                <v-icon>far fa-calendar-alt</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                  <v-menu
+                  ref="menu1"
+                  v-model="menu1"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  lazy
+                  transition="scale-transition"
+                  offset-y
+                  full-width
+                  max-width="290px"
+                  min-width="290px"
+                  >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                    v-model="dateFormatted"
+                    label="DATE"
+                    hint="MM/DD/YYYY format"
+                    persistent-hint
+                    @blur="date = parseDate(dateFormatted)"
+                    v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
+                </v-menu>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider ></v-divider>
+            <v-list-tile>
+              <v-list-tile-avatar>
+                <v-icon>far fa-clock</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-sub-title>
+                  <v-menu bottom offset-y>
+                    <template v-slot:activator="{ on }">
+                      <span v-on="on" style="text-align:left; font-size:16px; color:black;">
+                        <span v-if="picker==null">--:--</span>
+                        <span v-else>{{picker}}</span>
+                         <i class="fas fa-check"></i></span>
+                    </template>
+                    <div>
+                      <v-time-picker v-model="picker"></v-time-picker>
+                    </div>
+                  </v-menu>
+                </v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider ></v-divider>
+            <v-list-tile>
+              <v-list-tile-avatar>
+                <v-icon>far fa-file</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>TITLE</v-list-tile-title>
+                <v-list-tile-sub-title><input type="text" style="background: #F2F2F2; width:90%;" v-model="title"></v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider ></v-divider>
+            <v-list-tile>
+              <v-list-tile-avatar>
+                <v-icon>far fa-file-alt</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>DESCRIPTION</v-list-tile-title>
+                <v-list-tile-sub-title><input type="text" style="background: #F2F2F2; width:90%;" v-model="description"></v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider ></v-divider>
+            <v-list-tile>
+              <v-list-tile-avatar>
+                <v-icon>fas fa-cat</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-sub-title>
+                  <v-menu bottom offset-y>
+                    <template v-slot:activator="{ on }">
+                      <v-btn flat v-on="on">{{catName}}</v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-tile v-for="(item, i) in categories" :key="i" @click="category=item.scheCat_id ; catName = item.scheCat_name">
+                        <v-list-tile-avatar>
+                          <v-icon>{{item.scheCat_img}}</v-icon>
+                        </v-list-tile-avatar>
+                        <v-list-tile-title>
+                          {{item.scheCat_name}}
+                        </v-list-tile-title>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
+                </v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+        </v-list>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+          :disabled="!checkEmpty"
+          :loading="loading"
+          flat
+          color="warning darken-1"
+          @click="saveList()"
+          >저장</v-btn>
+            <v-dialog
+            v-model="loading"
+            hide-overlay
+            persistent
+            width="300"
+            >
+            <v-card
+            :color="color"
+            dark
+            >
+            <v-card-text>
+              처리 중...
+              <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+          <v-btn
+            color="warning darken-1"
+            flat="flat"
+            @click="writeDialog = false"
+          >
+            닫기
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     </v-flex>
   </v-layout>
 </template>
@@ -327,11 +493,12 @@ const stylings = {
 
 export default {
   data: () => ({
+    writeDialog: false,
     dark: false,
     startMenu: false,
-    start: "2019-01-12",
+    start: "2019-08-01",
     endMenu: false,
-    end: "2019-01-27",
+    end: "2019-08-15",
     nowMenu: false,
     now: null,
     type: "month",
@@ -389,79 +556,37 @@ export default {
       {
         title: "Vacation",
         details: "Going to the beach!",
-        date: "2018-12-30",
-        open: false
-      },
-      {
-        title: "Vacation",
-        details: "Going to the beach!",
-        date: "2018-12-31",
-        open: false
-      },
-      {
-        title: "Vacation",
-        details: "Going to the beach!",
-        date: "2019-01-01",
-        open: false
-      },
-      {
-        title: "Meeting",
-        details: "Spending time on how we do not have enough time",
-        date: "2019-01-07",
-        open: false
-      },
-      {
-        title: "30th Birthday",
-        details: "Celebrate responsibly",
-        date: "2019-01-03",
-        open: false
-      },
-      {
-        title: "New Year",
-        details: "Eat chocolate until you pass out",
-        date: "2019-01-01",
-        open: false
-      },
-      {
-        title: "Conference",
-        details: "Mute myself the whole time and wonder why I am on this call",
-        date: "2019-01-21",
-        open: false
-      },
-      {
-        title: "Hackathon",
-        details: "Code like there is no tommorrow",
-        date: "2019-02-01",
+        date: "2000-08-17",
+        dateDetail: "2000-08-17 08:15:00",
+        category: "TRAVEL",
+        catImg: "fas fa-plane",
+        eventId: 1,
         open: false
       }
     ],
     sheet: false,
     tiles: [ /* 특정날짜 세부 옵션지정 */
-      { img: "keep.png", title: "Keep" },
-      { img: "inbox.png", title: "Inbox" },
-      { img: "hangouts.png", title: "Hangouts" },
-      { img: "messenger.png", title: "Messenger" },
-      { img: "google.png", title: "Google+" }
+      { img: "messenger.png", title: "일정 수정하기", id: "edit" },
+      { img: "inbox.png", title: "일정 삭제하기", id: "delete" },
+      { img: "keep.png", title: "일정 알람설정", id: "alarm" },
+      { img: "hangouts.png", title: "팀원에게 공지하기", id: "notice" }
     ],
-    items: [
-      {
-        action: "far fa-clock",
-        title: "Time"
-      },
-      {
-        action: "far fa-file-alt",
-        title: "Detail"
-      },
-      {
-        action: "fas fa-tag",
-        title: "Category"
-      },
-      {
-        action: "fas fa-user-plus",
-        title: "Member"
-      }
-    ]
+    date: new Date().toISOString().substr(0, 10),
+    dateFormatted: "",
+    menu1: false,
+    picker: null,
+    title: "",
+    description: "",
+    categories: ["없음"],
+    category: 1,
+    catName: "CATEGORY",
+    loading: false,
+    obj: {}
   }),
+  created() {
+    this.getList();
+    this.getCat();
+  },
   computed: {
     intervalStyle () {
       return stylings[ this.styleInterval ].bind(this);
@@ -470,14 +595,114 @@ export default {
       const map = {};
       this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e));
       return map;
+    },
+    computedDateFormatted () {
+      return this.formatDate(this.date);
+    },
+    checkEmpty () {
+      if (this.dateFormatted == "" || this.picker == null || this.title == "" || this.description == "") {
+        return false;
+      }
+      else return true;
+    }
+  },
+  watch: {
+    date (val) {
+      this.dateFormatted = this.formatDate(this.date);
     }
   },
   methods: {
+    printValue (obj) {
+      this.obj = obj;
+    },
+    formatDate (date) {
+      if (!date) return null;
+
+      const [year, month, day] = date.split("-");
+      return `${month}/${day}/${year}`;
+    },
+    parseDate (date) {
+      if (!date) return null;
+
+      const [month, day, year] = date.split("/");
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    },
+    getCat () {
+      const axios = require("axios");
+      axios.post("/getCatList").then(res => {
+        this.categories = res.data;
+      }).catch((ex) => {
+        console.log(ex);
+      });
+    },
+    saveList() {
+      this.loading = true;
+      const axios = require("axios");
+      let formData = new FormData();
+      formData.append("sche_title", this.title);
+      formData.append("sche_details", this.description);
+      formData.append("sche_date", this.date + " " + this.picker + ":00");
+      formData.append("scheCat_id", this.category + "");
+      formData.append("uid", this.$store.state.user.uid);
+      console.log(formData);
+      axios.post("/regToDoList", formData).then(res => {
+        this.getList();
+        this.loading = false;
+        this.writeDialog = false;
+      }).catch((ex) => {
+        console.log(ex);
+      });
+    },
+    getList () {
+      console.log("리스트 가져오기");
+      const axios = require("axios");
+      let formData = new FormData();
+      formData.append("uid", this.$store.state.user.uid);
+      axios.post("/getToDoList", formData).then(res => {
+        this.events = [];
+        res.data.forEach(e => this.events.push({ title: e.sche_title,
+          details: e.sche_details,
+          date: e.sche_date.substring(0, 10),
+          dateDetail: e.sche_date,
+          category: e.scheCat_name,
+          catImg: e.scheCat_img,
+          eventId: e.sche_id,
+          open: false
+        }));
+        console.log("리스트 가져오기 성공");
+        console.log(this.events);
+      }).catch((ex) => {
+        console.log(ex);
+      });
+    },
     showIntervalLabel (interval) {
       return interval.minute === 0;
     },
     open (event) {
       alert(event.title);
+    },
+    tileFunc (id) {
+      var eventId = this.obj.eventId;
+      console.log(this.obj);
+      if (id == "edit") {
+
+      }
+      else if (id == "delete") {
+        const axios = require("axios");
+        let formData = new FormData();
+        formData.append("sche_id", eventId);
+        axios.post("/delToDoList", formData).then(res => {
+          this.getList();
+        }).catch((ex) => {
+          console.log(ex);
+        });
+      }
+      else if (id == "alarm") {
+      }
+      else { // notice
+
+      }
+      this.sheet = false;
     }
   }
 };

@@ -1,9 +1,9 @@
 <template>
   <div class="fullpage-container">
-    <!-- 1 -->
     <div class="fullpage-wp" v-fullpage="opts" ref="example">
+      <!-- 1 -->
       <div class="page">
-        <p sytle="margin-top: 30px;" id="firstPage">
+        <p sytle="margin-top: 30px !important;" id="firstPage">
           <ImgBanner id="ImgBanner" >
             <div id="banner" slot="text" class="animated bounceInDown">
               Think more strategically.<br />
@@ -11,11 +11,10 @@
             </div>
           </ImgBanner>
         </p>
-        <ImgUpload slot="image" style="margin-left:2%;" class="uploadPos"/>
       </div>
       <!-- 2 -->
-      <div class="page-1 page">
-        <p sytle="margin-top: 30px" class="part-1" v-animate="{value: 'bounceInLeft'}">
+      <div class="page-1">
+        <p sytle="margin-top: 30px !important;" class="part-1" v-animate="{value: 'bounceInLeft'}">
           <!-- About Me -->
           <v-layout class="homePage">
             <v-flex sm1 hidden-xs-only/>
@@ -25,7 +24,7 @@
                 <template v-slot:activator="{ on }">
                   <v-btn flat dark v-on="on" >
                     <span  class="eachPageFont">About me</span>
-                     <v-icon style="margin-left: 10px;" class="aNone">fas fa-chevron-down</v-icon>
+                     <v-icon style="margin-left: 10px !important;" class="aNone">fas fa-chevron-down</v-icon>
                   </v-btn>
                 </template>
                 <v-list>
@@ -53,7 +52,7 @@
               src="../assets/team.jpg"
               id="introImg"
               aspect-ratio="0.6"
-              style="width:20vw; height:25vw"
+              style="width:20vw !important; height:25vw !important;"
               />
             </div>
           </v-flex>
@@ -61,26 +60,26 @@
       </p>
     </div>
     <!-- 3 -->
-    <div class="page-2 page" style="background: #FAFAFA">
+    <div class="page-2" style="background: #FAFAFA !important;">
       <p class="part-2" v-animate="{value: 'bounceInRight'}">
         <!-- Portfolio -->
         <v-layout id="portfolio">
           <v-flex xs12>
-            <h2 class=" text-xs-center eachPageFont" style="margin-bottom:80px;">
+            <h2 class=" text-xs-center eachPageFont" style="margin-bottom:80px !important;">
               Portfolio
               <a href="/portfolio" class="aNone">
                 <i class="fas fa-angle-right"></i>
               </a>
             </h2>
-            <v-flex hidden-xs-only style="width:80%; margin: 0 auto;">
+            <v-flex hidden-xs-only style="width:80% !important; margin: 0 auto !important;">
               <vueper-slides class="no-shadow" :visible-slides="3" :slide-ratio="1/4" :dragging-distance="70">
-                <vueper-slide style="height:300px; margin: 0 5px;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
+                <vueper-slide style="height:300px !important; margin: 0 5px!important;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
                 </vueper-slide>
               </vueper-slides>
             </v-flex>
             <v-flex hidden-sm-and-up>
               <vueper-slides class="no-shadow" :visible-slides="1" :slide-ratio="1/4" :dragging-distance="70">
-                <vueper-slide style="height:300px;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
+                <vueper-slide style="height:300px !important;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
                 </vueper-slide>
               </vueper-slides>
             </v-flex>
@@ -89,11 +88,11 @@
       </p>
     </div>
     <!-- 4 -->
-    <div class="page-3 page" style="background-color: #FAFAFA;">
+    <div class="page-3" style="background-color: #FAFAFA !important;">
       <p class="part-3" v-animate="{value: 'bounceInLeft', delay: 0}">
         <!-- Post -->
         <v-layout id="post" class="homePage" >
-          <v-flex xs12 sm10 style="margin: 0 auto;">
+          <v-flex xs12 sm10 style="margin: 0 auto !important;">
             <h2 class="text-xs-center eachPageFont">
               Post
               <a href="/post" class="aNone">
@@ -105,7 +104,7 @@
         </v-layout>
       </p>
     </div>
-    <div class="page-3 page" style="background: #FAFAFA;">
+    <div class="page-3" style="background: #FAFAFA !important;">
       <p class="part-1" v-animate="{value: 'bounceInLeft', delay: 0}">
         <v-layout my-5 id="github">
           <v-flex xs12>
@@ -116,18 +115,18 @@
               </a>
             </h2>
             <!-- git profile -->
-            <v-layout row wrap class="align-center gitprofile" style="width:80%;">
+            <v-layout row wrap class="align-center gitprofile" style="width:80% !important;">
               <v-flex v-for="(mem, i) in member" :index="i" v-bind:key="i" class="align-center" >
                 <v-layout class="slideCard my-1 text-xs-center" v-animate="{value: 'zoomInDown', delay: i * 600}" style="margin:0 auto">
                   <v-flex sm4>
-                    <img v-bind:src="mem.avatar_url" style="width : 50px" />
+                    <img v-bind:src="mem.avatar_url" style="width : 50px !important;" />
                   </v-flex>
                   <v-flex sm8>
-                    <a v-bind:href="mem.web_url" style="color: #FE2E64 !important; text-decoration:none;">
+                    <a v-bind:href="mem.web_url" style="color: #FE2E64 !important; text-decoration:none !important;">
                       <span class="title">{{ mem.name }}</span>
                     </a>
                     <br />
-                    <span style="font-size:10px; color:gray;">└ GitHub 바로 이동하기</span>
+                    <span style="font-size:10px !important; color:gray !important;">└ GitHub 바로 이동하기</span>
                     <br />
                     <span>@{{ mem.username }}</span>
                   </v-flex>
@@ -148,7 +147,6 @@ import animateCss from "../css/animate.css";
 import ImgBanner from "../components/ImgBanner";
 import PortfolioList from "../components/PortfolioList";
 import PostList from "../components/PostList";
-import ImgUpload from "@/components/ImgUpload";
 import { Carousel3d, Slide } from "vue-carousel-3d";
 import GitlabService from "@/services/GitlabService";
 import { VueTyper } from "vue-typer";
@@ -160,7 +158,6 @@ export default {
   name: "HomePage",
   components: {
     ImgBanner,
-    ImgUpload,
     PostList,
     VueTyper,
     VueperSlides,
@@ -354,13 +351,11 @@ body {
 }
 .page {
   display: block;
-  background-image: url("../assets/sky.gif");
-  background: cover;
-  height: 100vh;
-  padding:0;
-  margin:0;
-  background-size:100%;
-  background-repeat: repeat-y;
+  background: url("../assets/sky.gif") no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 .page-1 {
   padding-top: 100px;
@@ -545,5 +540,8 @@ body {
 .uploadPos {
   position: absolute;
   bottom : 2%;
+}
+svg {
+  margin: 0 !important;
 }
 </style>

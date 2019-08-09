@@ -7,6 +7,8 @@ public class userSchedule {
 	String sche_date;
 	int scheCat_id;
 	String scheCat_name;
+	String scheCat_img;
+	String uid;
 	
 	public String getScheCat_name() {
 		return scheCat_name;
@@ -14,7 +16,12 @@ public class userSchedule {
 	public void setScheCat_name(String scheCat_name) {
 		this.scheCat_name = scheCat_name;
 	}
-	String uid;
+	public String getScheCat_img() {
+		return scheCat_img;
+	}
+	public void setScheCat_img(String scheCat_img) {
+		this.scheCat_img = scheCat_img;
+	}
 	
 	public int getSche_id() {
 		return sche_id;
