@@ -11,6 +11,9 @@ import AdminPage from "./views/AdminPage.vue";
 import PortfolioDetail from "./views/PortfolioDetail.vue";
 import PostDetail from "./views/PostDetail.vue";
 import Calendar from "./views/Calendar";
+import Schedule from "./views/Schedule.vue";
+import Test from "./views/test.vue";
+
 Vue.use(Router);
 
 export default new Router({
@@ -70,9 +73,19 @@ export default new Router({
       props: true
     },
     {
+      path: "/test",
+      name: "test",
+      component: Test
+    },
+    {
       path: "/calendar",
       name: "calendar",
       component: Calendar
+    },
+    {
+      path: "/schedule",
+      name: "schedule",
+      component: Schedule
     }
   ]
 });
