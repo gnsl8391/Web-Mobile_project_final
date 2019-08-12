@@ -1,5 +1,5 @@
 <template>
-  <div class="fullpage-container">
+  <div class="fullpage-container" style="max-height: 722px !important;">
     <div class="fullpage-wp" v-fullpage="opts" ref="example">
       <!-- 1 -->
       <div class="page">
@@ -73,13 +73,13 @@
             </h2>
             <v-flex hidden-xs-only style="width:80% !important; margin: 0 auto !important;">
               <vueper-slides class="no-shadow" :visible-slides="3" :slide-ratio="1/4" :dragging-distance="70">
-                <vueper-slide style="height:300px !important; margin: 0 5px!important;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
+                <vueper-slide style="height:300px !important; margin: 0 5px!important;" v-for="(item,index) in data" :key="index" :image="item.dataMap.img" :title="item.dataMap.title" >
                 </vueper-slide>
               </vueper-slides>
             </v-flex>
             <v-flex hidden-sm-and-up>
               <vueper-slides class="no-shadow" :visible-slides="1" :slide-ratio="1/4" :dragging-distance="70">
-                <vueper-slide style="height:300px !important;" v-for="item in data" :key="item.id" :image="item.dataMap.img" :title="item.dataMap.title" >
+                <vueper-slide style="height:300px !important;" v-for="(item,index) in data" :key="index" :image="item.dataMap.img" :title="item.dataMap.title" >
                 </vueper-slide>
               </vueper-slides>
             </v-flex>
@@ -169,7 +169,15 @@ export default {
       drawer: true,
       slides: 3,
       name: "Team",
-      data: [],
+      data: [
+        {
+          id: "No Id",
+          dataMap: {
+            title: "No Title",
+            img: "https://uradi-sam.rs/UserFiles/products/details/"
+          }
+        }
+      ],
       items: [
         {
           title: "Team",
@@ -356,6 +364,7 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  max-height: 722px !important;
 }
 .page-1 {
   padding-top: 100px;
