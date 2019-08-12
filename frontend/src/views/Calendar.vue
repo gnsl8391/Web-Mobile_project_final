@@ -582,7 +582,8 @@ export default {
     category: 1,
     catName: "CATEGORY",
     loading: false,
-    obj: {}
+    obj: {},
+    crossUrl: "http://13.58.134.195:8082/"
   }),
   created() {
     this.getList();
@@ -630,7 +631,7 @@ export default {
     },
     getCat () {
       const axios = require("axios");
-      axios.get("http://192.168.100.86:8082/getCatList").then(res => {
+      axios.get(this.crossUrl + "/getCatList").then(res => {
         this.categories = res.data;
       }).catch((ex) => {
         console.log(ex);
@@ -639,7 +640,7 @@ export default {
     saveList() {
       this.loading = true;
       const axios = require("axios");
-      axios.get("http://192.168.100.86:8082/regToDoList", {
+      axios.get(this.crossUrl + "/regToDoList", {
         params: {
           sche_title: this.title,
           sche_details: this.description,
@@ -659,7 +660,7 @@ export default {
       const axios = require("axios");
       let formData = new FormData();
       formData.append("uid", this.$store.state.user.uid);
-      axios.get("http://192.168.100.86:8082/getToDoList", {
+      axios.get(this.crossUrl + "/getToDoList", {
         params: {
           uid: this.$store.state.user.uid
         }
@@ -693,7 +694,7 @@ export default {
         const axios = require("axios");
         let formData = new FormData();
         formData.append("sche_id", eventId);
-        axios.get("http://192.168.100.86:8082/delToDoList", {
+        axios.get(this.crossUrl + "/delToDoList", {
           params: {
             sche_id: eventId
           }
