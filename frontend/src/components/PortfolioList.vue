@@ -45,8 +45,7 @@
                   <img :src="imageUrl" style="max-height:170px; max-width: 270px;" />
                 </v-flex>
               </v-layout>
-              <yimo-vue-editor v-model="body"></yimo-vue-editor>
-
+              <input v-model="body" type="text" class="pfListBody" />
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -93,7 +92,6 @@
 </template>
 
 <script>
-import YimoVueEditor from "yimo-vue-editor";
 import animateCss from "../css/animate.css";
 import Portfolio from "@/components/Portfolio";
 import FirebaseService from "@/services/FirebaseService";
@@ -120,8 +118,7 @@ export default {
   },
   components: {
     Portfolio,
-    ImgUpload,
-    YimoVueEditor
+    ImgUpload
   },
   created() {
     this.$EventBus.$on("ImgSign", link => {
@@ -257,5 +254,12 @@ export default {
   width: 80%;
   border: 1px solid #bdbdbd;
   border-radius: 5px;
+}
+.pfListBody {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid #bdbdbd;
+  border-radius: 5px;
+  height: 300px;
 }
 </style>

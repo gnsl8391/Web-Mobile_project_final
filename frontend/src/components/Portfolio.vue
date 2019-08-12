@@ -6,7 +6,7 @@
       <div style="margin:5px;">
         <div class="headline pfTitle">{{ title }}</div>
 
-        <span class="grey--text pfContent">{{ getBody }}</span>
+        <span class="grey--text pfContent">{{ formatBody }}</span>
       </div>
     </v-card-title>
   </v-card>
@@ -26,7 +26,8 @@ export default {
   },
   data() {
     return {
-      lang: "ko"
+      lang: "ko",
+      formatBody: "No Items"
     };
   },
   created() {
@@ -44,13 +45,14 @@ export default {
         }
       }
     });
+    this.getBody();
   },
   computed: {
-    getBody() {
-      return this.body.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "").replace(/&nbsp;/gi, "");
-    }
   },
   methods: {
+    getBody() {
+      this.formatBody = this.body.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "").replace(/&nbsp;/gi, "");
+    },
     translateText(sourceText, tagId, tagIdIdx, target) {
       var url =
         "https://www.googleapis.com/language/translate/v2?key=AIzaSyA0_KdshFIp0aoX7fbaKVTZmuvk3GBrlls&target=" +

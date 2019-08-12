@@ -24,8 +24,10 @@
             <v-flex xs12 sm8  />
             <v-flex xs12 sm4 style="font-size:14px; text-align:right;">Posted By {{ pfdetail.writer  }}</v-flex>
             <ImgUpload v-if="isUpdate" />
-            <div v-if="!isUpdate" id="pfbody" style="margin: 4% 0; font-size:17px;" v-html="pfbody"> </div>
-            <yimo-vue-editor v-else v-model="pfbody"></yimo-vue-editor>
+            <div v-if="!isUpdate" id="pfbody" style="margin: 4% 0; font-size:17px;">
+              <vue-markdown :source="getpfbody"></vue-markdown>
+            </div>
+            <input v-else v-model="pfbody" type="text" class="pfListBody" />
              <br />
           </v-layout>
         </v-card-title>
@@ -80,9 +82,9 @@
 
 <script>
 import FirebaseService from "@/services/FirebaseService";
-import YimoVueEditor from "yimo-vue-editor";
 import ImgUpload from "../components/ImgUpload";
 import Comment from "../components/Comment";
+import VueMarkdown from "vue-markdown";
 export default {
   name: "PortfolioDetail",
   data () {
@@ -100,8 +102,8 @@ export default {
     };
   },
   components: {
-    YimoVueEditor,
     ImgUpload,
+    VueMarkdown,
     Comment
   },
   created() {
@@ -123,6 +125,9 @@ export default {
   computed: {
     isUpdate() {
       return this.update;
+    },
+    getpfbody() {
+      return this.pfbody.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "").replace(/&nbsp;/gi, "");
     }
   },
   mounted() {
@@ -192,5 +197,12 @@ export default {
   #portfolioCard{
     margin-top: 110px;
   }
+}
+.pfListBody {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid #bdbdbd;
+  border-radius: 5px;
+  height: 300px;
 }
 </style>
