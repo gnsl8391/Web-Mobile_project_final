@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "./store.js";
 import HomePage from "./views/HomePage.vue";
 import PostPage from "./views/PostPage.vue";
 import PortfolioPage from "./views/PortfolioPage.vue";
@@ -12,10 +13,16 @@ import PortfolioDetail from "./views/PortfolioDetail.vue";
 import PostDetail from "./views/PostDetail.vue";
 import Calendar from "./views/Calendar";
 import Schedule from "./views/Schedule.vue";
-import Test from "./views/test.vue";
 
 Vue.use(Router);
 
+const requireAuth = () => (to, from, next) => {
+  alert(store.state.accessToken);
+  if (store.state.accessToken !== "") {
+    return next();
+  }
+  next("/");
+};
 export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
@@ -71,11 +78,6 @@ export default new Router({
       name: "postDetail",
       component: PostDetail,
       props: true
-    },
-    {
-      path: "/test",
-      name: "test",
-      component: Test
     },
     {
       path: "/calendar",

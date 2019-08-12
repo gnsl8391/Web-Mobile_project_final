@@ -21,7 +21,7 @@ html {
   font-family: 'Arial', sans-serif;
 }
 body {
-  padding: 40px 0;
+  padding: 40px 0 0 0;
   line-height: 1.5;
 }
 .section {

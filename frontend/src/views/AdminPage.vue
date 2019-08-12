@@ -1,5 +1,5 @@
 <template>
-  <div style="background: #5e717d;" xs12 sm8>
+  <div style="background: #040024;" xs12 sm8>
     <ImgBanner>
       <div id="bannerTxt" slot="text">Members</div>
     </ImgBanner>
@@ -132,3 +132,15 @@ export default {
   }
 };
 </script>
+<style>
+tbody td {
+  font-size: 15px;
+}
+#bannerTxt {
+  line-height: 1.2em;
+  font-size: 5vw;
+  text-shadow: 6px 6px 6px grey;
+  font-weight: bold;
+  color: #ffffff;
+}
+</style>
