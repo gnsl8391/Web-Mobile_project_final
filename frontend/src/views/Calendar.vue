@@ -243,7 +243,7 @@
                               >
                             </v-avatar>
                           </v-list-tile-avatar>
-                        <v-list-tile-title>{{ tile.title }} {{ event.eventId }}</v-list-tile-title>
+                        <v-list-tile-title>{{ tile.title }}</v-list-tile-title>
                       </v-list-tile>
                     </v-list>
                   </v-bottom-sheet>
@@ -686,7 +686,6 @@ export default {
     },
     tileFunc (id) {
       var eventId = this.obj.eventId;
-      console.log(this.obj);
       if (id == "edit") {
 
       }

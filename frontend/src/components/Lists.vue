@@ -102,22 +102,22 @@ export default {
       this.loading = true;
       if (i == 0) {
         FirebaseService.discardTodo(uid).then(r => {
-          window.location.reload();
+          location.reload();
         });
       } else if (i == 1) {
         FirebaseService.discardProgress(uid).then(r => {
-          window.location.reload();
+          location.reload();
         });
       } else {
         FirebaseService.discardComplete(uid).then(r => {
-          window.location.reload();
+          location.reload();
         });
       }
     },
     postTodo() {
       this.loading = true;
       FirebaseService.postTodo(this.writeTodo).then(r => {
-        window.location.reload();
+        location.reload();
       });
     },
     getTodo() {
@@ -175,14 +175,14 @@ export default {
           this.loading = true;
           FirebaseService.postProgress(data.item.body).then(r => {
             FirebaseService.discardTodo(data.item.id).then(r => {
-              window.location.reload();
+              location.reload();
             });
           });
         } else if (index == 2) {
           this.loading = true;
           FirebaseService.postComplete(data.item.body).then(r => {
             FirebaseService.discardTodo(data.item.id).then(r => {
-              window.location.reload();
+              location.reload();
             });
           });
         }
@@ -191,14 +191,14 @@ export default {
           this.loading = true;
           FirebaseService.postTodo(data.item.body).then(r => {
             FirebaseService.discardProgress(data.item.id).then(r => {
-              window.location.reload();
+              location.reload();
             });
           });
         } else if (index == 2) {
           this.loading = true;
           FirebaseService.postComplete(data.item.body).then(r => {
             FirebaseService.discardProgress(data.item.id).then(r => {
-              window.location.reload();
+              location.reload();
             });
           });
         }
@@ -207,14 +207,14 @@ export default {
           this.loading = true;
           FirebaseService.postProgress(data.item.body).then(r => {
             FirebaseService.discardComplete(data.item.id).then(r => {
-              window.location.reload();
+              location.reload();
             });
           });
         } else if (index == 0) {
           this.loading = true;
           FirebaseService.postTodo(data.item.body).then(r => {
             FirebaseService.discardComplete(data.item.id).then(r => {
-              window.location.reload();
+              location.reload();
             });
           });
         }

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import store from "./store.js";
+import FirebaseService from "@/services/FirebaseService";
 import HomePage from "./views/HomePage.vue";
 import PostPage from "./views/PostPage.vue";
 import PortfolioPage from "./views/PortfolioPage.vue";
@@ -65,7 +66,12 @@ export default new Router({
     {
       path: "/Management",
       name: "Management",
-      component: AdminPage
+      component: AdminPage,
+      beforeEnter: (to, from, next) => {
+        console.log(store.state.user);
+        // var auth = FirebaseService.getOneMembers(this.$store.state.user.uid);
+        // console.log(this.auth);
+      }
     },
     {
       path: "/portfolioDetail",

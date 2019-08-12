@@ -1,8 +1,8 @@
-<template>
-  <div class="fullpage-container" style="max-height: 722px !important;">
+<template style="padding:0px !important;">
+  <div class="fullpage-container" style="max-height: 762px !important;">
     <div class="fullpage-wp" v-fullpage="opts" ref="example">
       <!-- 1 -->
-      <div class="page">
+      <v-layout class="page">
         <p sytle="margin-top: 30px !important;" id="firstPage">
           <ImgBanner id="ImgBanner" >
             <div id="banner" slot="text" class="animated bounceInDown">
@@ -11,9 +11,9 @@
             </div>
           </ImgBanner>
         </p>
-      </div>
+      </v-layout>
       <!-- 2 -->
-      <div class="page-1">
+      <v-layout class="page-1">
         <p sytle="margin-top: 30px !important;" class="part-1" v-animate="{value: 'bounceInLeft'}">
           <!-- About Me -->
           <v-layout class="homePage">
@@ -58,9 +58,9 @@
           </v-flex>
         </v-layout>
       </p>
-    </div>
+    </v-layout>
     <!-- 3 -->
-    <div class="page-2" style="background: #FAFAFA !important;">
+    <v-layout class="page-2" style="background: #FAFAFA !important;">
       <p class="part-2" v-animate="{value: 'bounceInRight'}">
         <!-- Portfolio -->
         <v-layout id="portfolio">
@@ -86,9 +86,9 @@
           </v-flex>
         </v-layout>
       </p>
-    </div>
+    </v-layout>
     <!-- 4 -->
-    <div class="page-3" style="background-color: #FAFAFA !important;">
+    <v-layout class="page-3" style="background-color: #FAFAFA !important;">
       <p class="part-3" v-animate="{value: 'bounceInLeft', delay: 0}">
         <!-- Post -->
         <v-layout id="post" class="homePage" >
@@ -103,8 +103,8 @@
           </v-flex>
         </v-layout>
       </p>
-    </div>
-    <div class="page-3" style="background: #FAFAFA !important;">
+    </v-layout>
+    <v-layout class="page-3" style="background: #FAFAFA !important;">
       <p class="part-1" v-animate="{value: 'bounceInLeft', delay: 0}">
         <v-layout my-5 id="github">
           <v-flex xs12>
@@ -137,7 +137,7 @@
           </v-flex>
         </v-layout>
       </p>
-    </div>
+    </v-layout>
   </div>
 </div>
 </template>
@@ -364,7 +364,7 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  max-height: 722px !important;
+  max-height: 762px !important;
 }
 .page-1 {
   padding-top: 100px;
