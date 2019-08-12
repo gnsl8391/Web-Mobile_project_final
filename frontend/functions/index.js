@@ -13,28 +13,30 @@ admin.initializeApp();
 exports.createPortfolioNotif = functions.firestore
   .document("portfolios/{portfolio}")
   .onCreate(async snap => {
-    var message = snap.data().title;
+    var message = "새 포트폴리오 : " + snap.data().title;
     return pushMessage(message);
   });
 
 exports.createPostNotif = functions.firestore
   .document("posts/{post}")
   .onCreate(async snap => {
-    var message = snap.data().title;
+    var message = "새 포스트 : " + snap.data().title;
     return pushMessage(message);
   });
 
 exports.createCommentNotif = functions.firestore
   .document("comments/{comment}")
   .onCreate(async snap => {
-    var message = snap.data().body;
+    var message = "새 댓글 : " + snap.data().body;
     return pushComment(message);
   });
 
 function pushMessage(message) {
   var payload = {
     notification: {
-      title: message
+      title: message,
+      icon: "../src/fruit.png",
+      clickAction: "http://localhost:8080"
     }
   };
   const users = admin.firestore().collection("auths");
@@ -59,7 +61,9 @@ function pushMessage(message) {
 function pushComment(message) {
   var payload = {
     notification: {
-      body: message
+      body: message,
+      icon: "../src/fruit.png",
+      clickAction: "http://localhost:8080"
     }
   };
   const users = admin.firestore().collection("auths");
