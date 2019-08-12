@@ -126,7 +126,6 @@ export default{
       else {
         const auths = FirebaseService.getOneMembers(this.$store.state.user.uid);
         auths.then(auth => {
-          console.log(auth);
           if (auth == null) this.myauth = false;
           else this.myauth = true;
         });
@@ -185,7 +184,7 @@ export default{
       else {
         url = "/regPostComment";
       }
-      axios.post(url, formData).then(res => {
+      axios.post(this.crossUrl + url, formData).then(res => {
         FirebaseService.postComment(this.comment);
         this.getComm();
       })

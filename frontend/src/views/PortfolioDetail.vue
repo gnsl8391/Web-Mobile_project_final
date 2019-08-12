@@ -105,7 +105,6 @@ export default {
     Comment
   },
   created() {
-    console.log(this.$route.params);
     if (typeof this.$route.params.pfid == "undefined") {
       this.$router.go(-1);
     }

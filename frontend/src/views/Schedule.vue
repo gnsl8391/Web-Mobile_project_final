@@ -17,14 +17,9 @@ export default {
 </script>
 
 <style>
-html {
-  font-family: 'Arial', sans-serif;
-}
-body {
+.section {
   padding: 40px 0 0 0;
   line-height: 1.5;
-}
-.section {
   margin-top: 30px;
   margin-bottom: 50px;
 }
