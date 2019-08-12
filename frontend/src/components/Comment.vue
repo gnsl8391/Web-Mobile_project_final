@@ -110,7 +110,7 @@ export default{
       email: this.$store.state.user.email.split("@")[0],
       displayName: this.$store.state.user.displayName,
       myauth: false,
-      crossUrl: "http://192.168.100.86:8082"
+      crossUrl: "http://13.58.134.195:8082/"
     };
   },
   created() {
@@ -235,7 +235,6 @@ export default{
         });
     },
     regSubComm(id) {
-      console.log(id);
       const axios = require("axios");
       let formData = new FormData();
       formData.append("wid", this.pfid);
