@@ -655,7 +655,6 @@ export default {
       });
     },
     getList () {
-      console.log("리스트 가져오기");
       const axios = require("axios");
       let formData = new FormData();
       formData.append("uid", this.$store.state.user.uid);
