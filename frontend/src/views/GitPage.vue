@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     go() {
-      const projectID = "6081";
+      const projectID = "7547";
       const event_3 = GitlabService.getBranches(projectID, 3);
       this.commits.push(event_3);
       const event_2 = GitlabService.getBranches(projectID, 2);
@@ -48,19 +48,19 @@ export default {
       });
       const master = gitgraph.branch({
         name: "master",
-        author: "tastera <SONG KUNHEE>"
+        author: "gayeong <정가영>"
       });
       master.commit({
         subject: "Start project",
-        author: "tastera <SONG KUNHEE>"
+        author: "gayeong <정가영>"
       });
       const develop = gitgraph.branch({
         name: "develop",
-        author: "tastera <SONG KUNHEE>"
+        author: "gayeong <정가영>"
       });
       develop.commit({
         subject: "Develop branch generate",
-        author: "tastera <SONG KUNHEE>"
+        author: "gayeong <정가영>"
       });
       const commits = this.commits;
       const merges = this.merges;
@@ -86,14 +86,14 @@ export default {
                     }>`,
                     onClick() {
                       window.open(
-                        `https://lab.ssafy.com/tastera/webmobile-sub2/commit/${
+                        `https://lab.ssafy.com/gayeong/webmobile-final/commit/${
                           response.data[i].push_data.commit_to
                         }`
                       );
                     },
                     onMessageClick() {
                       window.open(
-                        `https://lab.ssafy.com/tastera/webmobile-sub2/commit/${
+                        `https://lab.ssafy.com/gayeong/webmobile-final/commit/${
                           response.data[i].push_data.commit_to
                         }`
                       );

@@ -150,20 +150,20 @@
       outline
       small
       :color="color"
-      @click="$refs.calendar.prev()"
+      @click="$refs.calendar.prev(); prev()"
       style="float:left;"
     >
       <v-icon dark>
         fas fa-chevron-left
       </v-icon>
     </v-btn>
-    <span style="font-size:20px;"> 10월 </span>
+    <span style="font-size:20px;"> {{ this.curMonth + 1 }}월 </span>
     <v-btn
       fab
       outline
       small
       :color="color"
-      @click="$refs.calendar.next()"
+      @click="$refs.calendar.next(); next()"
       style="float:right;"
     >
       <v-icon
@@ -572,6 +572,7 @@ export default {
       { img: "hangouts.png", title: "팀원에게 공지하기", id: "notice" }
     ],
     date: new Date().toISOString().substr(0, 10),
+    curMonth: new Date().getMonth(),
     dateFormatted: "",
     menu1: false,
     picker: null,
@@ -708,6 +709,20 @@ export default {
 
       }
       this.sheet = false;
+    },
+    prev () {
+      if (this.curMonth < 1) {
+        this.curMonth = 11;
+      } else {
+        this.curMonth -= 1;
+      }
+    },
+    next () {
+      if (this.curMonth > 10) {
+        this.curMonth = 0;
+      } else {
+        this.curMonth += 1;
+      }
     }
   }
 };
