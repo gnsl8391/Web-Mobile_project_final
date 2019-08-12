@@ -95,17 +95,25 @@
         </v-list>
         <v-divider></v-divider>
         <v-list>
-          <v-list-tile href="/mypage">
+          <v-list-tile>
             <v-list-tile-action>
               <i class="far fa-address-card"></i>
             </v-list-tile-action>
-            <v-list-tile-title>My Page</v-list-tile-title>
+            <v-list-tile-title>
+              <router-link :to="{ path: '/mypage' }" class="linkText">
+                My Page
+              </router-link>
+            </v-list-tile-title>
           </v-list-tile>
-          <v-list-tile href="/schedule" v-if="width">
+          <v-list-tile v-if="returnWidth">
             <v-list-tile-action>
               <i class="fas fa-list-ul"></i>
             </v-list-tile-action>
-            <v-list-tile-title>To do</v-list-tile-title>
+            <v-list-tile-title>
+              <router-link :to="{ path: '/schedule' }" class="linkText">
+                To do
+              </router-link>
+            </v-list-tile-title>
           </v-list-tile>
           <v-list-tile href="Management" v-if="callAuth">
             <v-list-tile-action>
@@ -305,6 +313,9 @@ export default {
     },
     isLogin: function() {
       return this.$store.getters.isLogin;
+    },
+    returnWidth () {
+      return this.width;
     }
   },
   mounted() {
