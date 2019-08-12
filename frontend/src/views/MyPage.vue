@@ -174,7 +174,7 @@ export default{
       emailId: ""
     };
   },
-  updated() {
+  mounted() {
     this.curAuthChk();
     this.getPort();
     this.getPost();
