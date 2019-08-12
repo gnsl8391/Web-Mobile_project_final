@@ -427,5 +427,10 @@ export default {
           console.log(err);
         });
     });
+  },
+  postComment(body) {
+    return firestore.collection("comments").add({
+      body: body
+    });
   }
 };
