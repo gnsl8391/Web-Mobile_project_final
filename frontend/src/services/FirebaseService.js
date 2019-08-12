@@ -297,7 +297,6 @@ export default {
       .auth()
       .signInWithPopup(provider)
       .then(function(result) {
-        console.log(result);
         return result;
       });
   },
@@ -387,7 +386,7 @@ export default {
       .catch(function() {
         // An error happened.
       });
-    store.dispatch("logout");
+    store.commit("logout");
   },
   authChk() {
     firebase.auth().onAuthStateChanged(function(user) {
