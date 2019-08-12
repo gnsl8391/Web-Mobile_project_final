@@ -108,7 +108,7 @@ export default {
     },
     async loginWithGoogle() {
       const result = await FirebaseService.loginWithGoogle();
-      this.$store.dispatch("login", {
+      this.$store.commit("authChk", {
         accessToken: result.credential.accessToken,
         user: result.user,
         uid: result.user.uid
@@ -130,7 +130,7 @@ export default {
     },
     async loginWithFacebook() {
       const result = await FirebaseService.loginWithFacebook();
-      this.$store.dispatch("login", {
+      this.$store.commit("authChk", {
         accessToken: result.credential.accessToken,
         user: result.user,
         uid: result.user.uid
@@ -161,23 +161,21 @@ export default {
       });
     },
     async loginWithEmail() {
-      const result = FirebaseService.loginWithEmail(this.email, this.password);
-      await result.then(r => {
-        if (r.user == null) {
-          this.text = r;
-          this.snackbar = true;
-          this.error = true;
-        } else {
-          this.$store.dispatch("authChk", {
-            accessToken: this.email,
-            user: result,
-            uid: r.user.uid
-          });
-          FirebaseService.updateUserDeviceToken(r.user.uid);
-          this.text = "로그인되었습니다.";
-          this.snackbar = true;
-        }
-      });
+      const result = await FirebaseService.loginWithEmail(this.email, this.password);
+      if (result.user == null) {
+        this.text = result;
+        this.snackbar = true;
+        this.error = true;
+      } else {
+        this.$store.commit("authChk", {
+          accessToken: this.email,
+          user: result.user,
+          uid: result.user.uid
+        });
+        FirebaseService.updateUserDeviceToken(result.user.uid);
+        this.text = "로그인되었습니다.";
+        this.snackbar = true;
+      }
     },
     async logout() {
       firebase

@@ -68,9 +68,15 @@ export default new Router({
       name: "Management",
       component: AdminPage,
       beforeEnter: (to, from, next) => {
-        console.log(store.state.user);
-        // var auth = FirebaseService.getOneMembers(this.$store.state.user.uid);
-        // console.log(this.auth);
+        var uid = store.state.uid;
+        var auth = FirebaseService.getOneMembers(uid);
+        auth.then(r => {
+          if (r.myauth == "admin") {
+            next();
+          } else {
+            next("/");
+          }
+        });
       }
     },
     {
