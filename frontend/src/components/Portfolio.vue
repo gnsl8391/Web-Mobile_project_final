@@ -6,7 +6,7 @@
       <div style="margin:5px;">
         <div class="headline pfTitle">{{ title }}</div>
 
-        <span class="grey--text pfContent">{{ compiledMarkdown }}</span>
+        <span class="grey--text pfContent">{{ getBody }}</span>
       </div>
     </v-card-title>
   </v-card>
@@ -47,21 +47,7 @@ export default {
   },
   computed: {
     getBody() {
-      var tmp = this.body.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
-      return tmp.replace(/&nbsp;/gi, "");
-    },
-    previewText() {
-      marked.setOptions({
-        renderer: new marked.Renderer(),
-        gfm: true,
-        tables: true,
-        breaks: true,
-        pedantic: false,
-        sanitize: true,
-        smartLists: true,
-        smartypants: false
-      });
-      return marked(this.md_text)
+      return this.body.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "").replace(/&nbsp;/gi, "");
     }
   },
   methods: {
