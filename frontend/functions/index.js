@@ -35,7 +35,7 @@ function pushMessage(message) {
   var payload = {
     notification: {
       title: message,
-      icon: "../src/fruit.png",
+      icon: "fruit.png",
       clickAction: "http://localhost:8080"
     }
   };
@@ -51,7 +51,7 @@ function pushMessage(message) {
           console.log(info.data().myauth);
         }
       });
-      return "push message sent complete !";
+      return console.log("push message sent complete !");
     })
     .catch(err => {
       console.log("Error occured", err);
@@ -62,7 +62,7 @@ function pushComment(message) {
   var payload = {
     notification: {
       body: message,
-      icon: "../src/fruit.png",
+      icon: "fruit.png",
       clickAction: "http://localhost:8080"
     }
   };
@@ -78,7 +78,7 @@ function pushComment(message) {
           console.log(info.data().myauth);
         }
       });
-      return "push message sent complete !";
+      return console.log("push message sent complete !");
     })
     .catch(err => {
       console.log("Error Occured", err);
