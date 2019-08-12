@@ -67,7 +67,7 @@ function pushComment(message) {
     .get()
     .then(user => {
       user.forEach(info => {
-        if (info.data().myauth === admin) {
+        if (info.data().myauth === "admin") {
           const token = info.data().userToken;
           admin.messaging().sendToDevice(token, payload);
         } else {
