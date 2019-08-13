@@ -42,7 +42,6 @@
       </template>
       <v-card>
         <v-card-text class="lighten-3" style="background-color: #F2F2F2;">
-          <!-- 대댓글 입력 -->
           <v-layout row wrap style="width:100%; height: 48px;">
             <v-flex xs2 style="text-align: center; line-height: 48px;">
               <b>
@@ -68,7 +67,6 @@
             </v-flex>
           </v-layout>
           <br />
-          <!-- 대댓글 -->
           <div v-for="(idx, i) in subcomm" :key="i">
             <v-layout>
               <v-flex xs2>
@@ -86,7 +84,6 @@
               </v-flex>
             </v-layout>
           </div>
-          <!-- 대댓글 -->
         </v-card-text>
       </v-card>
     </v-expansion-panel-content>
@@ -114,7 +111,6 @@ export default{
     };
   },
   created() {
-    // axios로 댓글 내용 가져오기
     this.getComm();
   },
   beforeUpdate() {
@@ -142,8 +138,6 @@ export default{
       else return false;
     },
     getComm() {
-      // portfolio인지 post인지
-      // 글 id
       const axios = require("axios");
       let formData = new FormData();
       formData.append("id", this.pfid);
@@ -213,8 +207,6 @@ export default{
         });
     },
     getSubComm(id) {
-      // portfolio인지 post인지
-      // 댓글 id
       const axios = require("axios");
       let formData = new FormData();
       formData.append("id", id);
@@ -247,7 +239,6 @@ export default{
       formData.append("writerUid", this.$store.state.user.uid);
       formData.append("content", this.subcomment);
       formData.append("id", id);
-      console.log(id);
       var category = window.location.pathname.split("/")[1];
       var url = "";
       if (category == "portfolioDetail") {

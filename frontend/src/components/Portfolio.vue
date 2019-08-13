@@ -12,6 +12,7 @@
   </v-card>
 </v-hover>
 </template>
+
 <script>
 export default {
   name: "Portfolio",
@@ -79,6 +80,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .pfTitle {
   text-overflow: ellipsis;
@@ -89,7 +91,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* 라인수 */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   line-height: 1.2em;

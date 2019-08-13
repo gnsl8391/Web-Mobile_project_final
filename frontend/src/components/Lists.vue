@@ -271,7 +271,6 @@ export default {
   color: white;
 }
 .cardstyle {
-  /* background: #cfcfcf; */
   color: black;
   font-family: 'Do Hyeon', sans-serif;
   font-size: 18px;

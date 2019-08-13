@@ -4,7 +4,6 @@
       <v-card-actions class=" darken-3 justify-center footBack">
         &copy;2019 — <strong>SSAFY Gwangju Team No.2</strong>
       </v-card-actions>
-
       <v-card-actions class="footBackUp">
         <div style="float:left; width:50%;" v-if="lang == 'ko'">
           <weather

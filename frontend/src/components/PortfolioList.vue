@@ -210,7 +210,6 @@ export default {
     loadMorePortfolios() {
       this.thisLimit += 6;
     },
-
     onCreatePortfolio() {
       if (!this.formIsValid) {
         return;
@@ -302,6 +301,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .mw-700 {
   max-width: 700px;
