@@ -2,7 +2,7 @@
   <div id="header">
     <v-toolbar fixed id="headerBar">
       <v-spacer>
-        <a href="/" v-on:click.native="chkUrl" style="text-decoration:none;">
+        <a href="/home" v-on:click.native="chkUrl" style="text-decoration:none;">
           <img src="../assets/mainlogo.png" id="logoImg" />
         </a>
       </v-spacer>
@@ -220,7 +220,7 @@
                 LOGIN
               </router-link>
               <router-link
-                :to="{ path: '/' }"
+                :to="{ path: '/home' }"
                 class="linkText"
                 v-else-if="this.$store.state.user != undefined"
               >
@@ -320,7 +320,7 @@ export default {
   },
   mounted() {
     var header = document.getElementById("headerBar");
-    if (this.last_known_scroll_position == 0 && window.location.pathname == "/") {
+    if (this.last_known_scroll_position == 0 && window.location.pathname == "/home") {
       header.classList.add("elevation-0");
       header.style.backgroundColor = "#ffffff00";
     } else {
@@ -332,7 +332,7 @@ export default {
       if (this.last_known_scroll_position > 0) {
         header.classList.remove("elevation-0");
         header.style.backgroundColor = "#F7D358";
-      } else if (this.last_known_scroll_position == 0 && window.location.pathname == "/") {
+      } else if (this.last_known_scroll_position == 0 && window.location.pathname == "/home") {
         header.classList.add("elevation-0");
         header.style.backgroundColor = "#ffffff00";
       }
@@ -417,7 +417,7 @@ export default {
       FirebaseService.logout();
       this.text = "로그아웃되었습니다.";
       this.snackbar = true;
-      this.$router.push("/");
+      this.$router.push("/home");
     }
   }
 };

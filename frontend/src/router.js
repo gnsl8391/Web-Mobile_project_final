@@ -14,7 +14,7 @@ import PortfolioDetail from "./views/PortfolioDetail.vue";
 import PostDetail from "./views/PostDetail.vue";
 import Calendar from "./views/Calendar";
 import Schedule from "./views/Schedule.vue";
-
+import Intro from "./views/Intro.vue";
 Vue.use(Router);
 
 const requireAuth = () => (to, from, next) => {
@@ -30,6 +30,11 @@ export default new Router({
   routes: [
     {
       path: "/",
+      name: "Intro",
+      component: Intro
+    },
+    {
+      path: "/home",
       name: "home",
       component: HomePage
     },
@@ -74,7 +79,7 @@ export default new Router({
           if (r.myauth == "admin") {
             next();
           } else {
-            next("/");
+            next("/home");
           }
         });
       }
