@@ -205,12 +205,12 @@ public class CommonController {
 	 * 일정 삭제 : delToDoList
 	 * 카테고리 조회 : getCatList
 	 */
-	@RequestMapping(value="/getToDoList", method=RequestMethod.POST)
+	@RequestMapping(value="/getToDoList", method=RequestMethod.GET)
 	public @ResponseBody List<userSchedule> getToDoList(String uid){
 		 // uid 회원의 일정 목록 가져오기
 		return scheRepo.getAllSchedule(uid);
 	}
-	@RequestMapping(value="/regToDoList", method=RequestMethod.POST)
+	@RequestMapping(value="/regToDoList", method=RequestMethod.GET)
 	public @ResponseBody int regToDoList(String sche_title, String sche_details, String sche_date, String scheCat_id, String uid){
 		// uid 회원의 일정 등록하기
 		System.out.println(sche_title+" / "+sche_details+" / "+sche_date+" / "+scheCat_id+" / "+uid);
@@ -222,14 +222,14 @@ public class CommonController {
 		hm.put("uid", uid);
 		return scheRepo.regToDoList(hm);
 	}
-	@RequestMapping(value="/delToDoList", method=RequestMethod.POST)
+	@RequestMapping(value="/delToDoList", method=RequestMethod.GET)
 	public @ResponseBody int delToDoList(int sche_id){
 	  // uid 회원의 일정 삭제하기
 		return scheRepo.deleteScehdule(sche_id);
 	}
 
 	
-	@RequestMapping(value="/getCatList", method=RequestMethod.POST)
+	@RequestMapping(value="/getCatList", method=RequestMethod.GET)
 	 public @ResponseBody List<userSchedule> getCatList(String uid){
 		 // 카테고리 목록 가져오기
 		return scheRepo.getCatList();

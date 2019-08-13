@@ -580,7 +580,7 @@ export default {
     catName: "CATEGORY",
     loading: false,
     obj: {},
-    crossUrl: "http://13.58.134.195:8082/"
+    crossUrl: "http://13.58.134.195:8082/" // local: http://192.168.100.86:8082
   }),
   created() {
     this.getList();
