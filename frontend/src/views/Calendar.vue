@@ -140,7 +140,6 @@
         label="Weekdays"
       ></v-select>
     </v-flex>
-    <!-- 전체 화면 이외 -->
     <v-flex
       hidden-lg-and-up
       style="text-align: center;"
@@ -174,7 +173,6 @@
     </v-btn>
     <br><br><br>
     </v-flex>
-    <!-- 달력 -->
     <v-flex
       sm12
       lg9
@@ -253,7 +251,6 @@
                     <v-icon>fas fa-times</v-icon>
                   </v-btn>
                 </v-toolbar>
-                <!-- 세부정보 -->
                 <v-list two-line >
                     <v-list-tile>
                       <v-list-tile-avatar>

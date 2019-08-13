@@ -21,239 +21,229 @@
           </v-badge>
         </v-btn>
         <v-btn
-          flat
-          @click="bookmarksite('포트폴리오', '/portfolio')"
-          class="hidden-xs-only"
+        flat
+        @click="bookmarksite('포트폴리오', '/portfolio')"
+        class="hidden-xs-only"
         >
-          <v-icon size="18px">fas fa-bookmark</v-icon>
-        </v-btn>
-        <v-btn flat class="hidden-xs-only linkText" to="calendar" v-if="this.$store.state.accessToken != ''">
-          Calendar
-        </v-btn>
-        <v-btn flat class="hidden-xs-only linkText" to="portfolio">
-          Portfolio
-        </v-btn>
-        <v-btn flat class="hidden-xs-only linkText" to="post">
-          Post
-        </v-btn>
-        <v-btn flat class="hidden-xs-only linkText" to="git">
-          Git
-        </v-btn>
-        <!-- 로그인 Modal Popup -->
-        <v-dialog
-          v-model="dialog"
-          persistent
-          max-width="500px"
-          v-if="this.$store.state.accessToken == ''"
-        >
-          <template v-slot:activator="{ on }">
-            <v-btn v-on="on" flat class="hidden-xs-only linkText">
-              LOGIN
-            </v-btn>
-          </template>
-          <v-card style="height:60%">
-            <v-card-text>
-              <app-loginPop />
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="dialog = false">
-                Close
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <!-- member -->
-        <v-menu v-else
-      v-model="menu"
-      :close-on-content-click="false"
-      :nudge-width="200"
-      offset-y
-    >
+        <v-icon size="18px">fas fa-bookmark</v-icon>
+      </v-btn>
+      <v-btn flat class="hidden-xs-only linkText" to="calendar" v-if="this.$store.state.accessToken != ''">
+        Calendar
+      </v-btn>
+      <v-btn flat class="hidden-xs-only linkText" to="portfolio">
+        Portfolio
+      </v-btn>
+      <v-btn flat class="hidden-xs-only linkText" to="post">
+        Post
+      </v-btn>
+      <v-btn flat class="hidden-xs-only linkText" to="git">
+        Git
+      </v-btn>
+      <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="500px"
+      v-if="this.$store.state.accessToken == ''"
+      >
       <template v-slot:activator="{ on }">
-        <v-btn
-          dark
-          flat
-          v-on="on"
-          style="color: black"
-          class="hidden-xs-only"
-        >
-          <i class="fas fa-user-alt"></i>
+        <v-btn v-on="on" flat class="hidden-xs-only linkText">
+          LOGIN
         </v-btn>
       </template>
-      <v-card>
-        <v-list>
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <i class="fas fa-user-circle" style="font-size: 30px;"></i>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ this.$store.state.user.displayName }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ this.$store.state.user.email }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-        <v-divider></v-divider>
-        <v-list>
-          <v-list-tile>
-            <v-list-tile-action>
-              <i class="far fa-address-card"></i>
-            </v-list-tile-action>
-            <v-list-tile-title>
-              <router-link :to="{ path: '/mypage' }" class="linkText">
-                My Page
-              </router-link>
-            </v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile v-if="returnWidth">
-            <v-list-tile-action>
-              <i class="fas fa-list-ul"></i>
-            </v-list-tile-action>
-            <v-list-tile-title>
-              <router-link :to="{ path: '/schedule' }" class="linkText">
-                To do
-              </router-link>
-            </v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile href="Management" v-if="callAuth">
-            <v-list-tile-action>
-              <i class="fas fa-user-cog"></i>
-            </v-list-tile-action>
-            <v-list-tile-title >
-                Management
-            </v-list-tile-title>
-          </v-list-tile>
-        </v-list>
+      <v-card style="height:60%">
+        <v-card-text>
+          <app-loginPop />
+        </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" flat @click="logout()">LOGOUT</v-btn>
+          <v-btn color="blue darken-1" flat @click="dialog = false">
+            Close
+          </v-btn>
         </v-card-actions>
       </v-card>
-    </v-menu>
-        <v-btn flat class="hidden-sm-and-up" @click.stop="drawer = !drawer">
-          <v-icon size="18px">fas fa-bars</v-icon>
-        </v-btn>
-      </v-toolbar-items>
-    </v-toolbar>
-    <!-- login in sidebar-->
-    <v-navigation-drawer v-model="drawer" fixed temporary>
-      <v-list class="pa-1">
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
-            <v-icon size="30px">far fa-laugh-wink</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title v-if="this.$store.getters.isLogin">
-              <span>로그인을 해주세요</span>
-            </v-list-tile-title>
-            <v-list-tile-title
-              v-else-if="this.$store.state.user.displayName != undefined"
-            >
-              {{ this.$store.state.user.displayName }}
-            </v-list-tile-title>
-            <v-list-tile-title v-else>
-              {{ this.$store.state.accessToken }}
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-      <!-- mobile sidebar -->
-      <v-list class="pt-0" dense>
-        <v-divider></v-divider>
-        <v-list-tile v-for="item in items" :key="item.title">
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              <router-link :to="{ path: item.title }" class="linkText">
-                {{ item.title }}
-              </router-link>
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <!-- Management condition in sidebar -->
-        <v-list-tile v-if="callAuth">
-        <v-list-tile-action>
-          <v-icon>fas fa-users-cog</v-icon>
-        </v-list-tile-action>
+    </v-dialog>
+    <v-menu v-else
+    v-model="menu"
+    :close-on-content-click="false"
+    :nudge-width="200"
+    offset-y
+    >
+    <template v-slot:activator="{ on }">
+      <v-btn
+      dark
+      flat
+      v-on="on"
+      style="color: black"
+      class="hidden-xs-only"
+      >
+      <i class="fas fa-user-alt"></i>
+    </v-btn>
+  </template>
+  <v-card>
+    <v-list>
+      <v-list-tile avatar>
+        <v-list-tile-avatar>
+          <i class="fas fa-user-circle" style="font-size: 30px;"></i>
+        </v-list-tile-avatar>
         <v-list-tile-content>
-          <v-list-tile-title>
-            <router-link
-              :to="{ path: '/Management' }"
-              class="linkText"
-            >
-              MANAGEMENT
-            </router-link>
-          </v-list-tile-title>
+          <v-list-tile-title>{{ this.$store.state.user.displayName }}</v-list-tile-title>
+          <v-list-tile-sub-title>{{ this.$store.state.user.email }}</v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
-      <!-- Mypage -->
-      <v-list-tile v-if="this.$store.state.user != ''">
-      <v-list-tile-action>
-        <v-icon>fas fa-user</v-icon>
-      </v-list-tile-action>
-      <v-list-tile-content>
+    </v-list>
+    <v-divider></v-divider>
+    <v-list>
+      <v-list-tile>
+        <v-list-tile-action>
+          <i class="far fa-address-card"></i>
+        </v-list-tile-action>
         <v-list-tile-title>
-          <router-link
-            :to="{ path: '/mypage' }"
-            class="linkText"
-          >
-            MY PAGE
+          <router-link :to="{ path: '/mypage' }" class="linkText">
+            My Page
           </router-link>
         </v-list-tile-title>
-      </v-list-tile-content>
-    </v-list-tile>
-          <!-- login condition in sidebar -->
-          <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>fas fa-user</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              <router-link
-                :to="{ path: '/login' }"
-                class="linkText"
-                v-if="this.$store.state.user == ''"
-              >
-                LOGIN
-              </router-link>
-              <router-link
-                :to="{ path: '/home' }"
-                class="linkText"
-                v-else-if="this.$store.state.user != undefined"
-              >
-                <span @click="logout">LOGOUT</span>
-              </router-link>
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-snackbar
-      v-model="snackbar"
-      :multi-line="mode === 'multi-line'"
-      :timeout="timeout"
-      :top="true"
-    >
-      {{ text }}
-      <v-btn
-        color="pink"
-        flat
-        @click="snackbar = false"
+      </v-list-tile>
+      <v-list-tile v-if="returnWidth">
+        <v-list-tile-action>
+          <i class="fas fa-list-ul"></i>
+        </v-list-tile-action>
+        <v-list-tile-title>
+          <router-link :to="{ path: '/schedule' }" class="linkText">
+            To do
+          </router-link>
+        </v-list-tile-title>
+      </v-list-tile>
+      <v-list-tile href="Management" v-if="callAuth">
+        <v-list-tile-action>
+          <i class="fas fa-user-cog"></i>
+        </v-list-tile-action>
+        <v-list-tile-title >
+          Management
+        </v-list-tile-title>
+      </v-list-tile>
+    </v-list>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn color="error" flat @click="logout()">LOGOUT</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-menu>
+<v-btn flat class="hidden-sm-and-up" @click.stop="drawer = !drawer">
+  <v-icon size="18px">fas fa-bars</v-icon>
+</v-btn>
+</v-toolbar-items>
+</v-toolbar>
+<v-navigation-drawer v-model="drawer" fixed temporary>
+  <v-list class="pa-1">
+    <v-list-tile avatar>
+      <v-list-tile-avatar>
+        <v-icon size="30px">far fa-laugh-wink</v-icon>
+      </v-list-tile-avatar>
+      <v-list-tile-content>
+        <v-list-tile-title v-if="this.$store.getters.isLogin">
+          <span>로그인을 해주세요</span>
+        </v-list-tile-title>
+        <v-list-tile-title
+        v-else-if="this.$store.state.user.displayName != undefined"
+        >
+        {{ this.$store.state.user.displayName }}
+      </v-list-tile-title>
+      <v-list-tile-title v-else>
+        {{ this.$store.state.accessToken }}
+      </v-list-tile-title>
+    </v-list-tile-content>
+  </v-list-tile>
+</v-list>
+<v-list class="pt-0" dense>
+  <v-divider></v-divider>
+  <v-list-tile v-for="item in items" :key="item.title">
+    <v-list-tile-action>
+      <v-icon>{{ item.icon }}</v-icon>
+    </v-list-tile-action>
+    <v-list-tile-content>
+      <v-list-tile-title>
+        <router-link :to="{ path: item.title }" class="linkText">
+          {{ item.title }}
+        </router-link>
+      </v-list-tile-title>
+    </v-list-tile-content>
+  </v-list-tile>
+  <v-list-tile v-if="callAuth">
+    <v-list-tile-action>
+      <v-icon>fas fa-users-cog</v-icon>
+    </v-list-tile-action>
+    <v-list-tile-content>
+      <v-list-tile-title>
+        <router-link
+        :to="{ path: '/Management' }"
+        class="linkText"
+        >
+        MANAGEMENT
+      </router-link>
+    </v-list-tile-title>
+  </v-list-tile-content>
+</v-list-tile>
+<v-list-tile v-if="this.$store.state.user != ''">
+  <v-list-tile-action>
+    <v-icon>fas fa-user</v-icon>
+  </v-list-tile-action>
+  <v-list-tile-content>
+    <v-list-tile-title>
+      <router-link
+      :to="{ path: '/mypage' }"
+      class="linkText"
       >
-        Close
-      </v-btn>
-    </v-snackbar>
-  </div>
+      MY PAGE
+    </router-link>
+  </v-list-tile-title>
+</v-list-tile-content>
+</v-list-tile>
+<v-list-tile>
+  <v-list-tile-action>
+    <v-icon>fas fa-user</v-icon>
+  </v-list-tile-action>
+  <v-list-tile-content>
+    <v-list-tile-title>
+      <router-link
+      :to="{ path: '/login' }"
+      class="linkText"
+      v-if="this.$store.state.user == ''"
+      >
+      LOGIN
+    </router-link>
+    <router-link
+    :to="{ path: '/home' }"
+    class="linkText"
+    v-else-if="this.$store.state.user != undefined"
+    >
+    <span @click="logout">LOGOUT</span>
+  </router-link>
+</v-list-tile-title>
+</v-list-tile-content>
+</v-list-tile>
+</v-list>
+</v-navigation-drawer>
+<v-snackbar
+v-model="snackbar"
+:multi-line="mode === 'multi-line'"
+:timeout="timeout"
+:top="true"
+>
+{{ text }}
+<v-btn
+color="pink"
+flat
+@click="snackbar = false"
+>
+Close
+</v-btn>
+</v-snackbar>
+</div>
 </template>
 
 <script>
 import FirebaseService from "@/services/FirebaseService";
 import LoginPage from "../views/LoginPage.vue";
-// import animateCss from "../css/animate.css";
-// import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 
@@ -383,25 +373,19 @@ export default {
       }
     },
     bookmarksite: function(title, url) {
-      // Internet Explorer
       if (document.all) {
         window.external.AddFavorite(url, title);
       }
-      // Google Chrome
       else if (window.chrome) {
         alert(
           "현재 주소 : " +
-            window.location.href +
-            "\nCtrl+D키를 누르시면 즐겨찾기에 추가하실 수 있습니다."
+          window.location.href +
+          "\nCtrl+D키를 누르시면 즐겨찾기에 추가하실 수 있습니다."
         );
       }
-
-      // Firefox
       else if (window.sidebar) {
         window.sidebar.addPanel(title, url, "");
       }
-
-      // Opera
       else if (window.opera && window.print) {
         var elem = document.createElement("a");
         elem.setAttribute("href", url);

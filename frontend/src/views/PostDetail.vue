@@ -131,7 +131,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.pfdate);
     this.getpfdate = this.pfdate.toString().substring(0, 25);
   },
   methods: {

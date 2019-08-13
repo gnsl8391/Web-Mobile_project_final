@@ -41,13 +41,11 @@ export default {
   background-image: url("https://thumbs.gfycat.com/HarmlessPlainCobra-size_restricted.gif");
   background-size: cover;
 }
-
 .startBody {
   width: 100%;
   height: 100%;
   margin: 0;
 }
-
 .spaceships {
   position: absolute;
   top: calc(50% - 100px);
@@ -159,7 +157,6 @@ export default {
   position: absolute;
   content: "";
 }
-
 .alien {
   position: absolute;
   width: 110px;
@@ -228,7 +225,6 @@ export default {
   border-radius: 50%;
   content: "";
 }
-
 @-webkit-keyframes spaceships {
   0% {
     -webkit-transform: scale(0.5) translate(0, 0) rotate(0);
@@ -247,7 +243,6 @@ export default {
             transform: scale(0.5) translate(0, 0) rotate(-10deg);
   }
 }
-
 @keyframes spaceships {
   0% {
     -webkit-transform: scale(0.5) translate(0, 0) rotate(0);
@@ -318,5 +313,4 @@ export default {
   font-size: 100px;
   z-index: 200;
 }
-
 </style>

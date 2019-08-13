@@ -1,19 +1,18 @@
 <template>
   <div>
-    <ImgBanner imgSrc="http://www.urbanbrush.net/web/wp-content/uploads/edd/2018/07/web-20180704072858108862.png
-">
-      <div id="bannerTxt" slot="text">
-        Post
-      </div>
-    </ImgBanner>
-    <v-container>
-      <v-layout>
-        <v-flex xs12>
-          <PostList :limits="6" :load-more="true"></PostList>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
+    <ImgBanner imgSrc="http://www.urbanbrush.net/web/wp-content/uploads/edd/2018/07/web-20180704072858108862.png">
+    <div id="bannerTxt" slot="text">
+      Post
+    </div>
+  </ImgBanner>
+  <v-container>
+    <v-layout>
+      <v-flex xs12>
+        <PostList :limits="6" :load-more="true"></PostList>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</div>
 </template>
 
 <script>

@@ -9,40 +9,40 @@
     <v-container>
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-text-field
-          v-model="name"
-          :counter="10"
-          :rules="nameRules"
-          label="이름"
-          required
+        v-model="name"
+        :counter="10"
+        :rules="nameRules"
+        label="이름"
+        required
         ></v-text-field>
         <v-text-field
-          v-model="email"
-          :rules="emailRules"
-          label="E-mail"
-          required
+        v-model="email"
+        :rules="emailRules"
+        label="E-mail"
+        required
         ></v-text-field>
         <v-layout row wrap>
           <v-flex xs12 sm5>
             <v-text-field
-              :append-icon="show3 ? 'fas fa-eye' : 'fas fa-eye-slash'"
-              :rules="[rules.required, rules.min]"
-              :type="show3 ? 'text' : 'password'"
-              label="비밀번호"
-              hint="At least 8 characters"
-              class="input-group--focused"
-              @click:append="show3 = !show3"
-              v-model="password"
+            :append-icon="show3 ? 'fas fa-eye' : 'fas fa-eye-slash'"
+            :rules="[rules.required, rules.min]"
+            :type="show3 ? 'text' : 'password'"
+            label="비밀번호"
+            hint="At least 8 characters"
+            class="input-group--focused"
+            @click:append="show3 = !show3"
+            v-model="password"
             ></v-text-field>
           </v-flex>
           <v-flex hidden-xs-only sm2 />
           <v-flex xs12 sm5>
             <v-text-field
-              :append-icon="show4 ? 'fas fa-eye' : 'fas fa-eye-slash'"
-              :rules="[rules.required, passChk]"
-              :type="show4 ? 'text' : 'password'"
-              label="비밀번호 확인"
-              @click:append="show4 = !show4"
-              v-model="passwordChk"
+            :append-icon="show4 ? 'fas fa-eye' : 'fas fa-eye-slash'"
+            :rules="[rules.required, passChk]"
+            :type="show4 ? 'text' : 'password'"
+            label="비밀번호 확인"
+            @click:append="show4 = !show4"
+            v-model="passwordChk"
             ></v-text-field>
           </v-flex>
         </v-layout>
@@ -53,49 +53,49 @@
           outline color="indigo"
           @click="validate"
           >회원가입</v-btn>
-            <v-dialog
-            v-model="loading"
-            hide-overlay
-            persistent
-            width="300"
-            >
-            <v-card
-            color="#FACC2E"
-            dark
-            >
-            <v-card-text>
-              처리 중...
-              <v-progress-linear
-              indeterminate
-              color="white"
-              class="mb-0"
-              ></v-progress-linear>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-          <v-btn outline color="warning" @click="reset">
-            초기화
-          </v-btn>
-        </v-layout>
-        <div style="clear:both;" />
-      </v-form>
-    </v-container>
-    <v-snackbar
-      v-model="snackbar"
-      :multi-line="mode === 'multi-line'"
-      :timeout="timeout"
-      :top="true"
-    >
-      {{ text }}
-      <v-btn
-        color="pink"
-        flat
-        @click="moveHome()"
-      >
-        Close
+          <v-dialog
+          v-model="loading"
+          hide-overlay
+          persistent
+          width="300"
+          >
+          <v-card
+          color="#FACC2E"
+          dark
+          >
+          <v-card-text>
+            처리 중...
+            <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+            ></v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-btn outline color="warning" @click="reset">
+        초기화
       </v-btn>
-    </v-snackbar>
-  </div>
+    </v-layout>
+    <div style="clear:both;" />
+  </v-form>
+</v-container>
+<v-snackbar
+v-model="snackbar"
+:multi-line="mode === 'multi-line'"
+:timeout="timeout"
+:top="true"
+>
+{{ text }}
+<v-btn
+color="pink"
+flat
+@click="moveHome()"
+>
+Close
+</v-btn>
+</v-snackbar>
+</div>
 </template>
 
 <script>

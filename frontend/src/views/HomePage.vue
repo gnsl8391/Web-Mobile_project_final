@@ -1,7 +1,6 @@
 <template style="padding:0px !important;">
   <div class="fullpage-container" style="max-height: 762px !important;">
     <div class="fullpage-wp" v-fullpage="opts" ref="example">
-      <!-- 1 -->
       <v-layout class="page">
         <p sytle="margin-top: 30px !important;" id="firstPage">
           <ImgBanner id="ImgBanner" >
@@ -12,14 +11,11 @@
           </ImgBanner>
         </p>
       </v-layout>
-      <!-- 2 -->
       <v-layout class="page-1">
         <p sytle="margin-top: 30px !important;" class="part-1" v-animate="{value: 'bounceInLeft'}">
-          <!-- About Me -->
           <v-layout class="homePage">
             <v-flex sm1 hidden-xs-only/>
             <v-flex sm7 xs12>
-              <!--소개 -->
               <v-menu offset-y>
                 <template v-slot:activator="{ on }">
                   <v-btn flat dark v-on="on" >
@@ -37,7 +33,6 @@
                 </v-list-tile>
               </v-list>
             </v-menu>
-            <!--소개끝-->
             <div class="introDiv">
               <h2 id="introTitle">Team 2. 야망</h2>
               <p id="intro">
@@ -59,10 +54,8 @@
         </v-layout>
       </p>
     </v-layout>
-    <!-- 3 -->
     <v-layout class="page-2" style="background: #FAFAFA !important;">
       <p class="part-2" v-animate="{value: 'bounceInRight'}">
-        <!-- Portfolio -->
         <v-layout id="portfolio">
           <v-flex xs12>
             <h2 class=" text-xs-center eachPageFont" style="margin-bottom:80px !important;">
@@ -87,10 +80,8 @@
         </v-layout>
       </p>
     </v-layout>
-    <!-- 4 -->
     <v-layout class="page-3" style="background-color: #FAFAFA !important;">
       <p class="part-3" v-animate="{value: 'bounceInLeft', delay: 0}">
-        <!-- Post -->
         <v-layout id="post" class="homePage" >
           <v-flex xs12 sm10 style="margin: 0 auto !important;">
             <h2 class="text-xs-center eachPageFont">
@@ -114,7 +105,6 @@
                 <i class="fas fa-angle-right"></i>
               </a>
             </h2>
-            <!-- git profile -->
             <v-layout row wrap class="align-center gitprofile" style="width:80% !important;">
               <v-flex v-for="(mem, i) in member" :index="i" v-bind:key="i" class="align-center" >
                 <v-layout class="slideCard my-1 text-xs-center" v-animate="{value: 'zoomInDown', delay: i * 600}" style="margin:0 auto">
@@ -133,7 +123,6 @@
                 </v-layout>
               </v-flex>
             </v-layout>
-            <!--end git profile -->
           </v-flex>
         </v-layout>
       </p>
@@ -267,7 +256,6 @@ export default {
   },
   mounted() {
     this.getGitMember();
-  //  this.slidePF();
   },
   computed: {
     getTags() {
@@ -368,7 +356,6 @@ body {
 }
 .page-1 {
   padding-top: 100px;
-  /* background-image: url("../assets/img/space.png"); */
   background: #FAFAFA;
   background-size: cover;
 }
