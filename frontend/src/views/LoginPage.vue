@@ -103,7 +103,7 @@ export default {
     moveHome() {
       this.snackbar = false;
       if (!this.error) {
-        this.$router.push("/");
+        this.$router.push("/home");
       }
     },
     async loginWithGoogle() {

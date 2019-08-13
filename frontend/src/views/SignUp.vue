@@ -150,7 +150,7 @@ export default {
     moveHome() {
       this.snackbar = false;
       if (this.goHome) {
-        this.$router.push("/");
+        this.$router.push("/home");
       }
       else {
         this.reset();

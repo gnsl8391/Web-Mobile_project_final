@@ -154,7 +154,7 @@ export default {
   },
   postAuth(uid, myauth, id, root) {
     const docRef = firestore.doc("auths/" + uid);
-    docRef.set({
+    docRef.update({
       uid: uid,
       myauth: myauth,
       id: id,

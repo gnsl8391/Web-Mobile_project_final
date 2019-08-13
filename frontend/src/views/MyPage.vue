@@ -278,7 +278,7 @@ export default{
     goHome() {
       this.snackbar = false;
       FirebaseService.logout();
-      this.$router.push("/");
+      this.$router.push("/home");
     },
     getPfDetail() {
       if (this.pfCount != 0) {

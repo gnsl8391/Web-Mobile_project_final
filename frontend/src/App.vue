@@ -1,11 +1,11 @@
 <template>
   <v-app>
     <v-content>
-      <app-header />
-      <app-topBut v-if="this.$route.path !== '/'"/>
-      <app-chatbot />
+      <app-header v-if="this.$route.path !== '/'"/>
+      <app-topBut v-if="this.$route.path !== '/' && this.$route.path !== '/home'"/>
+      <app-chatbot v-if="this.$route.path !== '/'"/>
       <router-view />
-      <app-footer v-if="this.$route.path !== '/'"/>
+      <app-footer v-if="this.$route.path !== '/' && this.$route.path !== '/home'"/>
     </v-content>
   </v-app>
 </template>
