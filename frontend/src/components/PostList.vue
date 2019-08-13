@@ -5,7 +5,6 @@
         <i class="fas fa-chevron-left"></i> HOME
       </span>
       <v-flex xs12 style="text-align:right;">
-        <!--글작성-->
         <v-dialog v-model="dialog" persistent max-width="800px" v-if="chkMyauth">
           <template v-slot:activator="{ on }">
             <v-btn color="warning" dark v-on="on">
@@ -271,6 +270,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .mw-700 {
   max-width: 700px;

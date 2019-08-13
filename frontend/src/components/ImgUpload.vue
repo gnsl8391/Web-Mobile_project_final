@@ -86,13 +86,11 @@ export default {
         (this.switch1 && imgSelect != "Gallery" && imgSelect != "Desktop") ||
         imgSelect == "Random"
       ) {
-        // 랜덤으로 이미지 가져오기
         this.$EventBus.$emit(
           "ImgSign",
           "https://source.unsplash.com/user/erondu/1600x900"
         );
       } else if (imgSelect == "Gallery" || !this.switch1) {
-        // Imgur에서 이미지 가져오기
         const axios = require("axios");
         let formData = new FormData();
         formData.append("image", this.image);
@@ -104,7 +102,7 @@ export default {
           }
         }).then(res => {
           this.imgObj = res.data;
-          this.dialog = true; // modal
+          this.dialog = true;
         });
       } else if (imgSelect == "Desktop") {
         this.$EventBus.$emit("desktopImg");

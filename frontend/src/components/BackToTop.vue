@@ -66,10 +66,6 @@ export default {
     window.removeEventListener("scroll", this.catchScroll);
   },
   methods: {
-    /**
-     * Catch window scroll event
-     * @return {void}
-     */
     catchScroll() {
       const pastTopOffset = window.pageYOffset > parseInt(this.visibleoffset);
       const pastBottomOffset =
@@ -81,10 +77,6 @@ export default {
           : pastTopOffset;
       this.scrollFn(this);
     },
-    /**
-     * The functi"scrolled"); the magics
-     * @return {void}
-     */
     backToTop () {
       window.smoothscroll();
       this.$emit("scrolled");

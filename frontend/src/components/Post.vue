@@ -71,6 +71,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .color-666 {
   color: #666;
@@ -81,7 +82,6 @@ export default {
 .h-100 {
   height: 100%;
 }
-
 #postTitle {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -91,7 +91,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* 라인수 */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   line-height: 1.2em;
