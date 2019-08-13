@@ -66,9 +66,10 @@
               <v-list-tile-sub-title>
                 <input
                   type="password"
-                  placeholder="변경할 비밀번호를 입력하세요."
+                  :placeholder= "message"
                   v-model="password"
                   style="width:90%; backgroundColor:#F2F2F2;"
+                  :readonly="isOK"
                 >
               </v-list-tile-sub-title>
             </v-list-tile-content>
@@ -171,7 +172,9 @@ export default{
       ptInfo: {},
       pfTitle: "",
       ptTitle: "",
-      emailId: ""
+      emailId: "",
+      message: "비밀번호를 변경할 수 없습니다.",
+      isOK: true
     };
   },
   mounted() {
@@ -209,6 +212,10 @@ export default{
       const auths = FirebaseService.getOneMembers(uid);
       auths.then(auth => {
         this.myauth = auth.myauth;
+        if (auth.root == "email") {
+          this.isOK = false;
+          this.message = "변경할 비밀번호를 입력하세요.";
+        }
       });
     },
     getPort() {

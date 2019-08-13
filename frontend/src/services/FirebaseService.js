@@ -373,6 +373,8 @@ export default {
           return "잘못된 비밀번호입니다.";
         } else if (errorCode === "auth/email-already-in-use") {
           return "이미 사용중인 이메일입니다.";
+        } else {
+          return "존재하지 않는 아이디입니다";
         }
       });
   },
