@@ -107,7 +107,7 @@ export default{
       email: this.$store.state.user.email.split("@")[0],
       displayName: this.$store.state.user.displayName,
       myauth: false,
-      crossUrl: "http://13.58.134.195:8082/"
+      crossUrl: "http://13.58.134.195:8082" // http://192.168.100.86:8082 또는 http://13.58.134.195:8082/
     };
   },
   created() {
