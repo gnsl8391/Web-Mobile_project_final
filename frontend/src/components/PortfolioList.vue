@@ -62,7 +62,7 @@
     </v-layout>
   <v-layout mt-5 wrap >
     <v-flex
-      v-for="i in portfolios.length > limits ? limits : portfolios.length"
+      v-for="i in getLimits"
       v-bind:key="i"
       xs12
       sm6
@@ -88,6 +88,41 @@
       </v-btn>
     </v-flex>
   </v-layout>
+  <v-dialog
+  v-model="loading"
+  hide-overlay
+  persistent
+  width="300"
+  >
+  <v-card
+  color="#FACC2E"
+  dark
+  >
+  <v-card-text>
+    처리 중...
+    <v-progress-linear
+    indeterminate
+    color="white"
+    class="mb-0"
+    ></v-progress-linear>
+  </v-card-text>
+</v-card>
+</v-dialog>
+<v-snackbar
+  v-model="snackbar"
+  :multi-line="mode === 'multi-line'"
+  :timeout="timeout"
+  :top="true"
+>
+  {{ text }}
+  <v-btn
+    color="#FACC2E"
+    flat
+    @click="renewal()"
+  >
+    Close
+  </v-btn>
+</v-snackbar>
 </div>
 </template>
 
@@ -113,7 +148,16 @@ export default {
       switchDiv: true,
       imgurImg: [],
       url: "",
-      myauth: false
+      myauth: false,
+      thisLimit: this.limits,
+      loading: false,
+      snackbar: false,
+      y: "top",
+      x: null,
+      mode: "",
+      timeout: 6000,
+      text: "등록되었습니다.",
+      error: false
     };
   },
   components: {
@@ -138,6 +182,9 @@ export default {
     },
     chkMyauth() {
       return this.myauth;
+    },
+    getLimits() {
+      return this.portfolios.length > this.thisLimit ? this.thisLimit : this.portfolios.length;
     }
   },
   beforeUpdate() {
@@ -161,7 +208,7 @@ export default {
       this.portfolios = await FirebaseService.getPortfolios();
     },
     loadMorePortfolios() {
-      this.limits += 6;
+      this.thisLimit += 6;
     },
 
     onCreatePortfolio() {
@@ -202,45 +249,55 @@ export default {
         alert("내용을 입력해주세요.");
         return false;
       }
-      const axios = require("axios");
-      let formData = new FormData();
-      formData.append("image", this.image);
-      await axios({
-        method: "POST",
-        url: "https://api.imgur.com/3/image",
-        data: formData,
-        headers: {
-          Authorization: "Client-ID 031f94c0b39fe5f"
-        },
-        mimeType: "multipart/form-data"
-      })
-        .then(res => {
-          var userName = "";
-          if (this.$store.state.user.displayName == "") {
-            userName = this.$store.state.user.email;
-          }
-          else {
-            userName = this.$store.state.user.displayName;
-          }
-          FirebaseService.postPortfolio(
-            this.title,
-            this.body,
-            res.data.data.link,
-            this.$store.state.uid,
-            userName
-          )
-            .then(function() {
-              alert("저장되었습니다!");
-              location.reload();
-              this.dialog = false;
-            });
+      this.loading = true;
+      setTimeout(() => (this.loading = false
+      ), 2000);
+      setTimeout(() => (this.snackbar = true
+      ), 2000);
+      var userName = "";
+      if (this.$store.state.user.displayName == "") {
+        userName = this.$store.state.user.email;
+      }
+      else {
+        userName = this.$store.state.user.displayName;
+      }
+      if (this.image == null) {
+        FirebaseService.postPortfolio(
+          this.title,
+          this.body,
+          "https://source.unsplash.com/random/1600x900",
+          this.$store.state.uid,
+          userName
+        );
+      }
+      else {
+        const axios = require("axios");
+        let formData = new FormData();
+        formData.append("image", this.image);
+        await axios({
+          method: "POST",
+          url: "https://api.imgur.com/3/image",
+          data: formData,
+          headers: {
+            Authorization: "Client-ID 031f94c0b39fe5f"
+          },
+          mimeType: "multipart/form-data"
         })
-        .catch(() => {
-          FirebaseService.postPortfolio(
-            this.body,
-            "https://source.unsplash.com/random/1600x900"
-          );
-        });
+          .then(res => {
+            FirebaseService.postPortfolio(
+              this.title,
+              this.body,
+              res.data.data.link,
+              this.$store.state.uid,
+              userName
+            );
+          });
+      }
+    },
+    renewal() {
+      this.snackbar = false;
+      this.dialog = false;
+      this.getPortfolios();
     }
   }
 };

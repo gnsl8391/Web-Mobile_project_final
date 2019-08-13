@@ -64,7 +64,7 @@ export default {
       radioSel: ["Desktop", "Gallery", "Random"]
     };
   },
-  created() {
+  mounted() {
     this.$EventBus.$on("radio", () => {
       this.radio = true;
     });
