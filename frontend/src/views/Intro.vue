@@ -48,11 +48,6 @@ export default {
   margin: 0;
 }
 
-*:before, *:after {
-  position: absolute;
-  content: "";
-}
-
 .spaceships {
   position: absolute;
   top: calc(50% - 100px);
@@ -89,6 +84,8 @@ export default {
   height: 181px;
   border-radius: 50%;
   background-color: #3f4952;
+  position: absolute;
+  content: "";
 }
 .spaceships__body {
   position: absolute;
@@ -109,6 +106,7 @@ export default {
   border-radius: 50%;
   background-color: #13a79d;
   top: -8px;
+  content: "";
 }
 .spaceships__body:after {
   top: 10px;
@@ -117,6 +115,8 @@ export default {
   height: 50px;
   border-radius: 50% 50% 20% 20%;
   background-color: #3f4952;
+  position: absolute;
+  content: "";
 }
 .spaceships__light {
   width: 0;
@@ -144,6 +144,8 @@ export default {
           transform: rotateZ(10deg);
   border-radius: 50%;
   background-color: #f4ca5a;
+  position: absolute;
+  content: "";
 }
 .spaceships__foot:after {
   left: 73px;
@@ -154,6 +156,8 @@ export default {
           transform: rotateZ(-10deg);
   border-radius: 50%;
   background-color: #f4ca5a;
+  position: absolute;
+  content: "";
 }
 
 .alien {
@@ -190,6 +194,7 @@ export default {
   height: 35px;
   background-color: #000;
   border-radius: 50%;
+  content: "";
 }
 .alien__eye:after {
   position: absolute;
@@ -199,6 +204,7 @@ export default {
   height: 62px;
   background-color: #e86e7b;
   border-radius: 50%;
+  content: "";
   -webkit-animation: eye 3s infinite alternate;
           animation: eye 3s infinite alternate;
 }
@@ -220,6 +226,7 @@ export default {
   height: 30px;
   background-color: #e86e7b;
   border-radius: 50%;
+  content: "";
 }
 
 @-webkit-keyframes spaceships {
