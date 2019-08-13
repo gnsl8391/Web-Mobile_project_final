@@ -45,7 +45,7 @@
     <v-flex  hidden-xs-only>
   <v-timeline id="timeLine" xs12>
     <v-timeline-item
-      v-for="i in posts.length > limits ? limits : posts.length"
+      v-for="i in getLimits"
       v-bind:key="i"
       :color="years[i%5].color"
       small
@@ -101,6 +101,41 @@
       </v-btn>
     </v-flex>
 </v-layout>
+<v-dialog
+v-model="loading"
+hide-overlay
+persistent
+width="300"
+>
+<v-card
+color="#FACC2E"
+dark
+>
+<v-card-text>
+  처리 중...
+  <v-progress-linear
+  indeterminate
+  color="white"
+  class="mb-0"
+  ></v-progress-linear>
+</v-card-text>
+</v-card>
+</v-dialog>
+<v-snackbar
+v-model="snackbar"
+:multi-line="mode === 'multi-line'"
+:timeout="timeout"
+:top="true"
+>
+{{ text }}
+<v-btn
+  color="#FACC2E"
+  flat
+  @click="renewal()"
+>
+  Close
+</v-btn>
+</v-snackbar>
 </div>
 </template>
 
@@ -116,36 +151,45 @@ export default {
     limits: { type: Number, default: 3 },
     loadMore: { type: Boolean, default: false }
   },
-  data: () => ({
-    years: [
-      {
-        color: "cyan"
-      },
-      {
-        color: "green"
-      },
-      {
-        color: "pink"
-      },
-      {
-        color: "amber"
-      },
-      {
-        color: "orange"
-      }
-    ],
-    title: "",
-    body: "",
-    dialog: false,
-    posts: [],
-    myauth: false,
-    windowSize: window.innerWidth
-  }),
+  data() {
+    return {
+      years: [
+        {
+          color: "cyan"
+        },
+        {
+          color: "green"
+        },
+        {
+          color: "pink"
+        },
+        {
+          color: "amber"
+        },
+        {
+          color: "orange"
+        }
+      ],
+      title: "",
+      body: "",
+      dialog: false,
+      posts: [],
+      myauth: false,
+      windowSize: window.innerWidth,
+      thisLimit: this.limits,
+      loading: false,
+      snackbar: false,
+      y: "top",
+      x: null,
+      mode: "",
+      timeout: 6000,
+      text: "등록되었습니다.",
+      error: false
+    };
+  },
   components: {
     Post,
     YimoVueEditor
-  },
-  created() {
   },
   mounted() {
     this.getPosts();
@@ -162,6 +206,9 @@ export default {
         return true;
       }
       else return false;
+    },
+    getLimits() {
+      return this.posts.length > this.thisLimit ? this.thisLimit : this.posts.length;
     }
   },
   methods: {
@@ -185,7 +232,7 @@ export default {
       this.posts = await FirebaseService.getPosts();
     },
     loadMorePosts() {
-      this.limits += 6;
+      this.thisLimit += 6;
     },
     onUpload: async function() {
       if (this.title.length == 0) {
@@ -196,6 +243,13 @@ export default {
         alert("내용을 입력해주세요.");
         return false;
       }
+      this.loading = true;
+      setTimeout(() => (this.loading = false
+      ), 2000);
+      setTimeout(() => (this.snackbar = true
+      ), 2000);
+      setTimeout(() => (this.getPosts()
+      ), 2000);
       var userName = "";
       if (this.$store.state.user.displayName == "") {
         userName = this.$store.state.user.email;
@@ -208,12 +262,11 @@ export default {
         this.body,
         this.$store.state.uid,
         userName
-      )
-        .then(function() {
-          alert("저장되었습니다!");
-          location.reload();
-          this.dialog = false;
-        });
+      );
+    },
+    renewal() {
+      this.dialog = false;
+      this.snackbar = false;
     }
   }
 };

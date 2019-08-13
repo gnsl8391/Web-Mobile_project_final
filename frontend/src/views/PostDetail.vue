@@ -33,14 +33,25 @@
           </v-btn>
           <template>
             <div class="text-xs-center">
-              <v-btn flat
-              :disabled="loading"
-              :loading="loading"
-              color="orange"
-              @click="ClickDel"
-              >
-              삭제
-            </v-btn>
+            <v-dialog v-model="pfDelDialog" persistent max-width="290">
+              <template v-slot:activator="{ on }">
+                <v-btn
+                flat
+                color="orange"
+                v-on="on"
+                >
+                삭제
+              </v-btn>
+              </template>
+              <v-card>
+                <v-card-text>삭제하시겠습니까?</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="orange darken-1" flat @click="ClickDel">예</v-btn>
+                  <v-btn color="orange darken-1" flat @click="pfDelDialog = false">아니요</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
             <v-dialog
             v-model="loading"
             hide-overlay
@@ -92,7 +103,8 @@ export default {
       lang: "ko",
       loading: false,
       update: false,
-      getpfdate: ""
+      getpfdate: "",
+      pfDelDialog: false
     };
   },
   components: {
@@ -148,16 +160,13 @@ export default {
       });
     },
     ClickDel() {
-      var res = confirm("삭제하시겠습니까?");
-      if (res) {
-        this.loading = true;
-        setTimeout(() => (this.loading = false
-        ), 2000);
-        FirebaseService.deletePost(this.pfdetail.pid);
-        setTimeout(() => (
-          this.$router.go(-1)
-        ), 2000);
-      }
+      this.loading = true;
+      setTimeout(() => (this.loading = false
+      ), 2000);
+      FirebaseService.deletePost(this.pfdetail.pid);
+      setTimeout(() => (
+        this.$router.go(-1)
+      ), 2000);
     },
     ClickUp() {
       this.loading = true;
