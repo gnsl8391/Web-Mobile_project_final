@@ -12,7 +12,6 @@ const PROGRESS = "progress";
 const TODO = "todo";
 const adminDoc = "Msyvl7pA8HhIYNvhTfWH";
 
-// Setup Firebase
 const config = {
   projectId: "ssafy-2team-dc2b4",
   authDomain: "ssafy-2team-dc2b4.firebaseapp.com",
@@ -29,15 +28,7 @@ const firestore = firebase.firestore();
 
 firebase.firestore().enablePersistence()
   .catch(function(err) {
-    if (err.code == "failed-precondition") {
-      // Multiple tabs open, persistence can only be enabled
-      // in one tab at a a time.
-      // ...
-    } else if (err.code == "unimplemented") {
-      // The current browser does not support all of the
-      // features required to enable persistence
-      // ...
-    }
+    console.log(err);
   });
 
 export default {
@@ -217,18 +208,6 @@ export default {
       body: body
     }, {merge: true});
   },
-  // getOnePf(uid) {
-  //   var pf = firestore.collection(PORTFOLIOS).doc(uid);
-  //   var getDoc = "";
-  //   return pf.get().then(doc => {
-  //     if (!doc.exists) {
-  //       return null;
-  //     } else {
-  //       getDoc = doc.data();
-  //       return getDoc;
-  //     }
-  //   });
-  // },
   getPortfolios() {
     const postsCollection = firestore.collection(PORTFOLIOS);
     return postsCollection
@@ -317,10 +296,8 @@ export default {
         return user;
       })
       .catch(function(error) {
-        // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        // [START_EXCLUDE]
         if (errorCode == "auth/weak-password") {
           var alertMsg = "비밀번호를 다시 입력하세요.";
           return alertMsg;
@@ -332,19 +309,16 @@ export default {
   },
   updatePassword(newPassword) {
     var user = firebase.auth().currentUser;
-    user.updatePassword(newPassword).then(function() {
-      // Update successful.
-    }).catch(function(error) {
-      // An error happened.
+    user.updatePassword(newPassword).catch(function(error) {
+      console.log(error);
     });
   },
   deleteAccount() {
     var user = firebase.auth().currentUser;
     user.delete().then(function() {
-      // User deleted.
       firestore.collection(AUTHS).doc(user.uid).delete();
     }).catch(function(error) {
-      // An error happened.
+      console.log(error);
     });
   },
   updateProfile(user, name) {
@@ -382,11 +356,8 @@ export default {
     firebase
       .auth()
       .signOut()
-      .then(function() {
-        // Sign-out successful.
-      })
-      .catch(function() {
-        // An error happened.
+      .catch(function(err) {
+        console.log(err);
       });
     store.commit("logout");
   },
@@ -396,9 +367,6 @@ export default {
         store.state.user = user;
         store.state.accessToken = user.email;
         store.state.uid = user.uid;
-      } else {
-        // User is signed out.
-        // ...
       }
     });
   },
@@ -412,14 +380,12 @@ export default {
     var idDetail = firestore.collection("auths").doc(uid);
     var userToken = "";
     messaging.requestPermission().then(function() {
-      console.log("Have permission");
       return messaging
         .getToken()
         .then(function(token) {
           userToken = token;
           return idDetail
             .update({ userToken: userToken })
-            .then(console.log(userToken))
             .catch(function(error) {
               console.error("Error Occured", error);
             });

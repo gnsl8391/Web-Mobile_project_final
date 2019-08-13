@@ -16,10 +16,7 @@
             </v-card-title>
           </v-layout>
         </v-img>
-
-        <!-- 이름 -->
         <v-list two-line>
-          <!-- 회원 등급 -->
           <v-list-tile class="listTile">
             <v-list-tile-action>
               <v-icon class="fas fa-crown" size="30px"></v-icon>
@@ -45,7 +42,6 @@
             </v-list-tile-content>
           </v-list-tile>
           <v-divider inset></v-divider>
-          <!-- 메일 -->
           <v-list-tile class="listTile">
             <v-list-tile-action>
               <v-icon class="far fa-envelope" size="30px"></v-icon>
@@ -56,7 +52,6 @@
             </v-list-tile-content>
           </v-list-tile>
           <v-divider inset></v-divider>
-          <!-- 패스워드 -->
           <v-list-tile class="listTile">
             <v-list-tile-action>
               <v-icon class="fas fa-key" size="30px"></v-icon>
@@ -75,7 +70,6 @@
             </v-list-tile-content>
           </v-list-tile>
           <v-divider inset></v-divider>
-          <!-- 포트폴리오 -->
           <v-list-tile class="listTile">
             <v-list-tile-action>
               <v-icon class="fas fa-file-powerpoint" size="30px"></v-icon>
@@ -97,7 +91,6 @@
             </v-list-tile-content>
           </v-list-tile>
           <v-divider inset></v-divider>
-          <!-- 포스트 -->
           <v-list-tile class="listTile">
             <v-list-tile-action>
               <v-icon class="fas fa-file-alt" size="30px"></v-icon>
