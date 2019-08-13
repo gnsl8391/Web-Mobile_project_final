@@ -320,7 +320,7 @@ export default {
   },
   mounted() {
     var header = document.getElementById("headerBar");
-    if (this.last_known_scroll_position == 0 && window.location.pathname == "/home") {
+    if (this.last_known_scroll_position == 0) {
       header.classList.add("elevation-0");
       header.style.backgroundColor = "#ffffff00";
     } else {

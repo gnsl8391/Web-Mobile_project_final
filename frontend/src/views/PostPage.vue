@@ -1,6 +1,7 @@
 <template>
   <div>
-    <ImgBanner imgSrc="https://source.unsplash.com/5brvJbR1Pn8/1600x900">
+    <ImgBanner imgSrc="http://www.urbanbrush.net/web/wp-content/uploads/edd/2018/07/web-20180704072858108862.png
+">
       <div id="bannerTxt" slot="text">
         Post
       </div>
@@ -31,7 +32,7 @@ export default {
 <style>
 #bannerTxt {
   line-height: 1.2em;
-  font-size: 5vw;
+  font-size: 7vw;
   text-shadow: 6px 6px 6px gray;
   font-weight: bold;
   color: #ffffff;

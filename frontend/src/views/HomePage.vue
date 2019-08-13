@@ -72,7 +72,7 @@
               </a>
             </h2>
             <v-flex hidden-xs-only style="width:80% !important; margin: 0 auto !important;">
-              <vueper-slides class="no-shadow" :visible-slides="3" :slide-ratio="1/4" :dragging-distance="70">
+              <vueper-slides class="no-shadow" :visible-slides="3" slide-multiple :slide-ratio="1/4" :dragging-distance="200" :breakpoints="{ 800: { visibleSlides: 2 } }">
                 <vueper-slide style="height:300px !important; margin: 0 5px!important;" v-for="(item,index) in data" :key="index" :image="item.dataMap.img" :title="item.dataMap.title" >
                 </vueper-slide>
               </vueper-slides>
@@ -484,6 +484,9 @@ body {
   .current {
     background: white !important;
     margin-top: 15px;
+  }
+  .vueperslide {
+    width: 32.5% !important;
   }
 }
 .right {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ImgBanner imgSrc="https://source.unsplash.com/5brvJbR1Pn8/1600x900">
+    <ImgBanner imgSrc="https://i0.wp.com/static.vecteezy.com/system/resources/previews/000/117/397/original/free-summer-beach-vector-illustration.jpg">
       <div id="bannerTxt" slot="text">Portfolio</div>
     </ImgBanner>
     <v-container>
